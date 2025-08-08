@@ -107,6 +107,7 @@ export const useInteractionStateMachine = () => {
 
   // Track if we're currently in a touch interaction to prevent synthetic mouse events
   const touchInProgress = useRef(false);
+  const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // State machine with game logic injected
   const [state, dispatch] = useReducer((state: InteractionState, event: InteractionEvent) => interactionReducer(state, event, gameLogic), { type: 'idle' } as InteractionState);
@@ -142,6 +143,15 @@ export const useInteractionStateMachine = () => {
     }
   }, [gameResult, state.type, setShowGameResult]);
 
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (touchTimeoutRef.current) {
+        clearTimeout(touchTimeoutRef.current);
+      }
+    };
+  }, []);
+
   // Event handlers
   const handleMouseDown = useCallback((voter: Voter, event: React.MouseEvent) => {
     // Ignore synthetic mouse events from touch
@@ -161,6 +171,12 @@ export const useInteractionStateMachine = () => {
   }, []);
 
   const handleMouseUp = useCallback(() => {
+    // Clear timeout when interaction ends
+    if (touchTimeoutRef.current) {
+      clearTimeout(touchTimeoutRef.current);
+      touchTimeoutRef.current = null;
+    }
+
     // If this is the end of a touch interaction, process it and clear the flag
     if (touchInProgress.current) {
       dispatch({ type: 'MOUSE_UP' });
@@ -171,14 +187,20 @@ export const useInteractionStateMachine = () => {
   }, []);
 
   const handleTouchStart = useCallback((voter: Voter, event: React.TouchEvent) => {
+    // Clear any existing timeout
+    if (touchTimeoutRef.current) {
+      clearTimeout(touchTimeoutRef.current);
+    }
+
     touchInProgress.current = true;
     event.preventDefault();
     event.stopPropagation();
     dispatch({ type: 'MOUSE_DOWN', voter });
 
     // Safety timeout to clear touch flag in case touchend doesn't fire
-    setTimeout(() => {
+    touchTimeoutRef.current = setTimeout(() => {
       touchInProgress.current = false;
+      touchTimeoutRef.current = null;
     }, 1000);
   }, []);
 

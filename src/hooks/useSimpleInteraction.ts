@@ -89,12 +89,16 @@ export const useSimpleInteraction = () => {
 
     setIsDragging(false);
 
-    // Check if game should end
-    setTimeout(() => {
+    // Check if game should end (using setTimeout to allow state to settle)
+    const checkGameEnd = () => {
       if (gameResult?.isComplete) {
         setShowGameResult(true);
       }
-    }, 50);
+    };
+    const timeoutId = setTimeout(checkGameEnd, 50);
+
+    // Cleanup function - though this timeout is very short, cleanup is good practice
+    return () => clearTimeout(timeoutId);
   }, [state.mode, state.startVoter, addVoterToDistrict, setIsDragging, gameResult, setShowGameResult]);
 
   // Touch handlers - same logic as mouse
