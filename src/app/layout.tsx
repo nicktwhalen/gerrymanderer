@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'The Gerrymanderer',
-  description: 'A messy comic book style gerrymandering game',
+  description: 'A game that teaches and plays with the concept of gerrymandering.',
 };
 
 export default function RootLayout({

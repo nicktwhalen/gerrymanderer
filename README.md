@@ -1,6 +1,6 @@
 # Gerrymanderer
 
-A game that plays with the concept of gerrymandering.
+A game that teaches and plays with the concept of gerrymandering.
 
 ## Getting Started
 
