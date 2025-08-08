@@ -1,5 +1,7 @@
 'use client';
 
+import { useModal } from '@/hooks/useModal';
+
 interface GameResultProps {
   blueWins: number;
   redWins: number;
@@ -13,9 +15,11 @@ interface GameResultProps {
 }
 
 export default function GameResult({ blueWins, redWins, ties, playerWon, onNewGame, onNextLevel, redCount, blueCount, hasNextLevel }: GameResultProps) {
+  const { handleBackdropClick, handleModalClick } = useModal(true);
+
   return (
-    <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}>
-      <div className="comic-instructions p-6 max-w-sm w-full text-center">
+    <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }} onClick={handleBackdropClick}>
+      <div className="comic-instructions p-6 max-w-sm w-full text-center" onClick={handleModalClick}>
         <h2 className={`comic-title text-3xl sm:text-4xl mb-4 ${playerWon ? 'text-green-600' : 'text-red-600'}`}>{playerWon ? 'VICTORY!' : 'DEFEAT!'}</h2>
 
         <div className="mb-6">

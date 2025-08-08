@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useModal } from '@/hooks/useModal';
 
 interface TutorialProps {
   onClose: () => void;
@@ -9,6 +10,7 @@ interface TutorialProps {
 export default function Tutorial({ onClose }: TutorialProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
+  const { handleBackdropClick, handleModalClick } = useModal(true, onClose);
 
   const nextStep = () => {
     if (currentStep < totalSteps) {
@@ -142,15 +144,21 @@ export default function Tutorial({ onClose }: TutorialProps) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}>
-      <div className="comic-instructions p-4 sm:p-6 max-w-lg w-full relative max-h-[95vh] flex flex-col">
+    <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }} onClick={handleBackdropClick}>
+      <div
+        className="comic-instructions w-full max-w-md sm:max-w-lg relative"
+        onClick={handleModalClick}
+        style={{
+          height: '400px', // Fixed height - no shrinking allowed
+        }}
+      >
         {/* Close button */}
         <button
           onClick={onClose}
           className="absolute w-8 h-8 comic-tile comic-red-tile text-white text-xl font-bold hover:scale-110 transition-all flex items-center justify-center z-10"
           style={{
-            top: '8px',
-            right: '8px',
+            top: '12px',
+            right: '12px',
             position: 'absolute',
           }}
           aria-label="Close tutorial"
@@ -158,13 +166,13 @@ export default function Tutorial({ onClose }: TutorialProps) {
           ✕
         </button>
 
-        {/* Tutorial content */}
-        <div className="flex-1 flex flex-col justify-center min-h-0 pr-10 sm:pr-0">
-          <div className="overflow-y-auto">{renderStep()}</div>
+        {/* Tutorial content - uses available space between header and navigation */}
+        <div className="absolute inset-x-0 top-4 bottom-16 px-4 sm:px-6 pr-12 sm:pr-14 overflow-y-auto">
+          <div className="h-full flex flex-col justify-center">{renderStep()}</div>
         </div>
 
-        {/* Navigation */}
-        <div className="flex-shrink-0 mt-4 sm:mt-6">
+        {/* Navigation - fixed at bottom */}
+        <div className="absolute inset-x-0 bottom-0 px-4 sm:px-6 pb-4">
           <div className="flex items-center justify-between">
             {/* Back button or spacer */}
             <div className="flex-1">
