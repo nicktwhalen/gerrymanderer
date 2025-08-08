@@ -248,7 +248,7 @@ export default function Tutorial({ onClose }: TutorialProps) {
         className="comic-instructions w-full max-w-md sm:max-w-lg relative"
         onClick={handleModalClick}
         style={{
-          height: '400px', // Fixed height - no shrinking allowed
+          height: '420px', // Fixed height - no shrinking allowed
         }}
       >
         {/* Close button */}
