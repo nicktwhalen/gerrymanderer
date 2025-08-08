@@ -1,10 +1,140 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useModal } from '@/hooks/useModal';
 
 interface TutorialProps {
   onClose: () => void;
+}
+
+// Animation phases for the district demonstration
+type AnimationPhase = 'initial' | 'cursor-appear' | 'cursor-click' | 'drag-to-second' | 'drag-to-third' | 'final';
+
+function DistrictAnimation() {
+  const [phase, setPhase] = useState<AnimationPhase>('initial');
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const sequence = [
+      { phase: 'initial', duration: 1500 },
+      { phase: 'cursor-appear', duration: 800 },
+      { phase: 'cursor-click', duration: 600 },
+      { phase: 'drag-to-second', duration: 800 },
+      { phase: 'drag-to-third', duration: 800 },
+      { phase: 'final', duration: 2000 },
+    ] as const;
+
+    let currentStep = 0;
+
+    const runAnimation = () => {
+      if (currentStep >= sequence.length) {
+        // Reset animation
+        currentStep = 0;
+      }
+
+      const step = sequence[currentStep];
+      setPhase(step.phase);
+
+      // Update cursor position based on phase (adjusted for w-12 h-12 squares with gap-1)
+      if (step.phase === 'cursor-appear' || step.phase === 'cursor-click') {
+        setCursorPosition({ x: 24, y: 24 }); // Center of first square
+      } else if (step.phase === 'drag-to-second') {
+        setCursorPosition({ x: 76, y: 24 }); // Center of second square (48 + 4 gap + 24)
+      } else if (step.phase === 'drag-to-third' || step.phase === 'final') {
+        setCursorPosition({ x: 128, y: 24 }); // Center of third square (96 + 8 gap + 24)
+      }
+
+      currentStep++;
+      setTimeout(runAnimation, step.duration);
+    };
+
+    const timer = setTimeout(runAnimation, 500); // Initial delay
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div>
+      <h2 className="comic-title text-xl sm:text-3xl mb-4 sm:mb-6 text-center">DISTRICTING MAGIC</h2>
+
+      {/* Dictionary-style definition */}
+      <div className="bg-yellow-50 p-3 mb-4 font-serif text-sm italic shadow-inner" style={{ border: '3px solid #000' }}>
+        <div className="font-bold not-italic">District</div>
+        <div className="text-xs text-gray-600 not-italic">/ˈdistrikt/ (noun)</div>
+        <div className="mt-1">A group of voters where the majority wins—often drawn with the creativity of a villainous Michelangelo.</div>
+      </div>
+
+      <div className="flex justify-center mt-10 mb-2">
+        <div className="relative">
+          {/* Cursor */}
+          {(phase === 'cursor-appear' || phase === 'cursor-click' || phase === 'drag-to-second' || phase === 'drag-to-third' || phase === 'final') && (
+            <div
+              className="absolute pointer-events-none transition-all duration-300 ease-in-out z-20"
+              style={{
+                left: `${cursorPosition.x}px`,
+                top: `${cursorPosition.y}px`,
+                transform: 'translate(-50%, -50%)',
+              }}
+            >
+              <div className="text-2xl">👆</div>
+            </div>
+          )}
+
+          {/* Individual speech bubbles for initial state */}
+          {(phase === 'initial' || phase === 'cursor-appear' || phase === 'cursor-click' || phase === 'drag-to-second' || phase === 'drag-to-third') && (
+            <>
+              {/* Red square 1 bubble */}
+              <div className="absolute -top-8 transform -translate-x-1/2 bg-white border-2 border-black px-2 py-1 rounded text-xs font-bold whitespace-nowrap" style={{ left: '-12px' }}>
+                I vote red!
+                <div className="absolute top-full right-2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-black"></div>
+                <div className="absolute top-full right-2 translate-y-[-2px] w-0 h-0 border-l-5 border-r-5 border-t-5 border-transparent border-t-white"></div>
+              </div>
+
+              {/* Red square 2 bubble */}
+              <div className="absolute -top-8 transform -translate-x-1/2 bg-white border-2 border-black px-2 py-1 rounded text-xs font-bold whitespace-nowrap" style={{ left: '76px' }}>
+                I vote red!
+                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-black"></div>
+                <div className="absolute top-full left-1/2 transform -translate-x-1/2 translate-y-[-2px] w-0 h-0 border-l-5 border-r-5 border-t-5 border-transparent border-t-white"></div>
+              </div>
+
+              {/* Blue square bubble */}
+              <div className="absolute -top-8 transform -translate-x-1/2 bg-white border-2 border-black px-2 py-1 rounded text-xs font-bold whitespace-nowrap" style={{ left: '164px' }}>
+                I vote blue!
+                <div className="absolute top-full left-2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-black"></div>
+                <div className="absolute top-full left-2 translate-y-[-2px] w-0 h-0 border-l-5 border-r-5 border-t-5 border-transparent border-t-white"></div>
+              </div>
+            </>
+          )}
+
+          {/* Combined speech bubble for final state */}
+          {phase === 'final' && (
+            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-white border-2 border-black px-3 py-1 rounded text-xs font-bold whitespace-nowrap">
+              Together, we vote red!
+              {/* Multiple carets pointing to each square */}
+              <div className="absolute top-full left-4 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-black"></div>
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-black"></div>
+              <div className="absolute top-full right-4 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-black"></div>
+              {/* White inner carets */}
+              <div className="absolute top-full left-4 translate-y-[-2px] w-0 h-0 border-l-5 border-r-5 border-t-5 border-transparent border-t-white"></div>
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 translate-y-[-2px] w-0 h-0 border-l-5 border-r-5 border-t-5 border-transparent border-t-white"></div>
+              <div className="absolute top-full right-4 translate-y-[-2px] w-0 h-0 border-l-5 border-r-5 border-t-5 border-transparent border-t-white"></div>
+            </div>
+          )}
+
+          {/* The three voting squares */}
+          <div className="flex gap-1">
+            <div
+              className={`w-12 h-12 comic-tile comic-red-tile transition-all duration-300 ${phase === 'cursor-click' || phase === 'drag-to-second' || phase === 'drag-to-third' || phase === 'final' ? 'comic-tile-selected transform scale-105' : ''}`}
+            ></div>
+            <div className={`w-12 h-12 comic-tile comic-red-tile transition-all duration-300 ${phase === 'drag-to-second' || phase === 'drag-to-third' || phase === 'final' ? 'comic-tile-selected transform scale-105' : ''}`}></div>
+            <div className={`w-12 h-12 comic-tile comic-blue-tile transition-all duration-300 ${phase === 'drag-to-third' || phase === 'final' ? 'comic-tile-selected transform scale-105' : ''}`}></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="text-center text-sm sm:text-base mt-2">Click and drag to create a district of voters.</div>
+    </div>
+  );
 }
 
 export default function Tutorial({ onClose }: TutorialProps) {
@@ -84,38 +214,7 @@ export default function Tutorial({ onClose }: TutorialProps) {
         );
 
       case 3:
-        return (
-          <div>
-            <h2 className="comic-title text-xl sm:text-3xl mb-4 sm:mb-6 text-center">DISTRICTING MAGIC</h2>
-
-            {/* Dictionary-style definition */}
-            <div className="bg-yellow-50 p-3 mb-4 font-serif text-sm italic shadow-inner" style={{ border: '3px solid #000' }}>
-              <div className="font-bold not-italic">District</div>
-              <div className="text-xs text-gray-600 not-italic">/ˈdistrikt/ (noun)</div>
-              <div className="mt-1">A carefully carved chunk of map used to group voters into one deciding vote - often done with the creativity of a villainous Michelangelo.</div>
-            </div>
-
-            <div className="flex justify-center mt-10 mb-2">
-              <div className="relative">
-                {/* Speech bubble with caret */}
-                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-white border-2 border-black px-3 py-1 rounded text-xs font-bold whitespace-nowrap mb-2">
-                  Together, we vote red!
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-black"></div>
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 translate-y-[-2px] w-0 h-0 border-l-5 border-r-5 border-t-5 border-transparent border-t-white"></div>
-                </div>
-                <div className="grid grid-cols-5 gap-0 p-1 bg-red-200">
-                  <div className="w-8 h-8 comic-tile comic-red-tile"></div>
-                  <div className="w-8 h-8 comic-tile comic-red-tile"></div>
-                  <div className="w-8 h-8 comic-tile comic-red-tile"></div>
-                  <div className="w-8 h-8 comic-tile comic-blue-tile"></div>
-                  <div className="w-8 h-8 comic-tile comic-blue-tile"></div>
-                </div>
-              </div>
-            </div>
-
-            <div className="text-center text-sm sm:text-base mt-2">A district is a collection of voters.</div>
-          </div>
-        );
+        return <DistrictAnimation />;
 
       case 4:
         return (
