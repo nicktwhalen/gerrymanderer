@@ -29,7 +29,7 @@ export default function Tutorial({ onClose }: TutorialProps) {
       case 1:
         return (
           <div>
-            <h2 className="comic-title text-2xl sm:text-3xl mb-6 text-center">WELCOME TO DEMOCRACY!</h2>
+            <h2 className="comic-title text-xl sm:text-3xl mb-4 sm:mb-6 text-center">WELCOME TO DEMOCRACY!</h2>
 
             {/* Dictionary-style definition */}
             <div className="bg-yellow-50 p-3 mb-4 font-serif text-sm italic shadow-inner" style={{ border: '3px solid #000' }}>
@@ -45,7 +45,7 @@ export default function Tutorial({ onClose }: TutorialProps) {
       case 2:
         return (
           <div>
-            <h2 className="comic-title text-2xl sm:text-3xl mb-6 text-center">MEET THE VOTERS</h2>
+            <h2 className="comic-title text-xl sm:text-3xl mb-4 sm:mb-6 text-center">MEET THE VOTERS</h2>
 
             {/* Dictionary-style definition */}
             <div className="bg-yellow-50 p-3 mb-4 font-serif text-sm italic shadow-inner" style={{ border: '3px solid #000' }}>
@@ -84,7 +84,7 @@ export default function Tutorial({ onClose }: TutorialProps) {
       case 3:
         return (
           <div>
-            <h2 className="comic-title text-2xl sm:text-3xl mb-6 text-center">DISTRICTING MAGIC</h2>
+            <h2 className="comic-title text-xl sm:text-3xl mb-4 sm:mb-6 text-center">DISTRICTING MAGIC</h2>
 
             {/* Dictionary-style definition */}
             <div className="bg-yellow-50 p-3 mb-4 font-serif text-sm italic shadow-inner" style={{ border: '3px solid #000' }}>
@@ -118,20 +118,20 @@ export default function Tutorial({ onClose }: TutorialProps) {
       case 4:
         return (
           <div>
-            <h2 className="comic-title text-2xl sm:text-3xl mb-6 text-center">GERRYMANDERING RULES</h2>
+            <h2 className="comic-title text-lg sm:text-3xl mb-3 sm:mb-6 text-center">GERRYMANDERING RULES</h2>
 
-            <div className="space-y-4 text-sm sm:text-base">
+            <div className="space-y-3 sm:space-y-4 text-sm sm:text-base">
               <div>
-                <div className="font-bold text-lg mb-1">Your Mission</div>
-                <div className="text-sm">You will be given a map of voters and tasked with splitting them up into a specific number of districts of equal size. Click, touch, or drag to select connected squares into a district.</div>
+                <div className="font-bold text-base sm:text-lg mb-1">Your Mission</div>
+                <div className="text-xs sm:text-sm">You will be given a map of voters and tasked with splitting them up into a specific number of districts of equal size. Click, touch, or drag to select connected squares into a district.</div>
               </div>
 
               <div>
-                <div className="font-bold text-lg mb-1">Victory</div>
-                <div className="text-sm">You win by splitting voters into districts such that the minority of voters win a majority of districts.</div>
+                <div className="font-bold text-base sm:text-lg mb-1">Victory</div>
+                <div className="text-xs sm:text-sm">You win by splitting voters into districts such that the minority of voters win a majority of districts.</div>
               </div>
 
-              <div className="text-center font-bold text-lg pt-2">Go forth, Gerrymanderer!</div>
+              <div className="text-center font-bold text-base sm:text-lg pt-1 sm:pt-2">Go forth, Gerrymanderer!</div>
             </div>
           </div>
         );
@@ -143,11 +143,11 @@ export default function Tutorial({ onClose }: TutorialProps) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}>
-      <div className="comic-instructions p-6 max-w-lg w-full relative">
+      <div className="comic-instructions p-4 sm:p-6 max-w-lg w-full relative max-h-[95vh] flex flex-col">
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute w-8 h-8 comic-tile comic-red-tile text-white text-xl font-bold hover:scale-110 transition-all flex items-center justify-center"
+          className="absolute w-8 h-8 comic-tile comic-red-tile text-white text-xl font-bold hover:scale-110 transition-all flex items-center justify-center z-10"
           style={{
             top: '8px',
             right: '8px',
@@ -159,29 +159,33 @@ export default function Tutorial({ onClose }: TutorialProps) {
         </button>
 
         {/* Tutorial content */}
-        <div className="mb-6 h-72 flex flex-col justify-center">{renderStep()}</div>
+        <div className="flex-1 flex flex-col justify-center min-h-0 pr-10 sm:pr-0">
+          <div className="overflow-y-auto">{renderStep()}</div>
+        </div>
 
         {/* Navigation */}
-        <div className="flex items-center justify-between">
-          {/* Back button or spacer */}
-          <div className="flex-1">
-            {currentStep > 1 && (
-              <button onClick={prevStep} className="comic-tile comic-red-tile text-white font-bold px-4 py-2 text-sm hover:scale-105 transition-transform">
-                BACK
+        <div className="flex-shrink-0 mt-4 sm:mt-6">
+          <div className="flex items-center justify-between">
+            {/* Back button or spacer */}
+            <div className="flex-1">
+              {currentStep > 1 && (
+                <button onClick={prevStep} className="comic-tile comic-red-tile text-white font-bold px-3 sm:px-4 py-2 text-xs sm:text-sm hover:scale-105 transition-transform">
+                  BACK
+                </button>
+              )}
+            </div>
+
+            {/* Centered page counter */}
+            <div className="comic-section-title text-xs sm:text-sm px-2">
+              Page {currentStep} of {totalSteps}
+            </div>
+
+            {/* Next button */}
+            <div className="flex-1 flex justify-end">
+              <button onClick={nextStep} className="comic-tile comic-blue-tile text-white font-bold px-3 sm:px-4 py-2 text-xs sm:text-sm hover:scale-105 transition-transform">
+                {currentStep === totalSteps ? 'START!' : 'NEXT'}
               </button>
-            )}
-          </div>
-
-          {/* Centered page counter */}
-          <div className="comic-section-title text-sm">
-            Page {currentStep} of {totalSteps}
-          </div>
-
-          {/* Next button */}
-          <div className="flex-1 flex justify-end">
-            <button onClick={nextStep} className="comic-tile comic-blue-tile text-white font-bold px-4 py-2 text-sm hover:scale-105 transition-transform">
-              {currentStep === totalSteps ? 'START!' : 'NEXT'}
-            </button>
+            </div>
           </div>
         </div>
       </div>
