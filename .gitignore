@@ -1,0 +1,7 @@
+.claude
+CLAUDE.md
+.vscode
+.next
+.swc
+coverage
+node_modules

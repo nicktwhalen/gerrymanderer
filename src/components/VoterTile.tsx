@@ -1,0 +1,68 @@
+'use client';
+
+import { Voter, District, TileState } from '@/types/game';
+
+interface VoterTileProps {
+  voter: Voter;
+  state: TileState;
+  district?: District;
+  onMouseDown?: (e: React.MouseEvent) => void;
+  onMouseEnter?: () => void;
+  onTouchStart?: (e: React.TouchEvent) => void;
+  currentDistrictVoters?: Voter[];
+}
+
+export default function VoterTile({ voter, state, district, onMouseDown, onMouseEnter, onTouchStart }: VoterTileProps) {
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onMouseDown) {
+      onMouseDown(e);
+    }
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (onTouchStart) {
+      onTouchStart(e);
+    }
+  };
+  const getBaseColor = () => {
+    return voter.color === 'red' ? 'comic-red-tile' : 'comic-blue-tile';
+  };
+
+  const getComicStyle = () => {
+    let style = 'comic-tile';
+    switch (state) {
+      case 'selected':
+        style += ' comic-tile-selected';
+        break;
+      case 'completed':
+        style += ' comic-tile-completed';
+        break;
+      case 'available':
+        style += ' comic-tile-available';
+        break;
+    }
+    return style;
+  };
+
+  const getCursor = () => {
+    return state === 'completed' && !district ? 'cursor-not-allowed' : 'cursor-pointer';
+  };
+
+  return (
+    <div
+      className={`
+        w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16
+        ${getBaseColor()} 
+        ${getComicStyle()}
+        ${getCursor()}
+        select-none
+        flex items-center justify-center
+        text-white text-sm sm:text-base lg:text-lg font-black
+      `}
+      onMouseDown={handleMouseDown}
+      onMouseEnter={onMouseEnter}
+      onTouchStart={handleTouchStart}
+    ></div>
+  );
+}
