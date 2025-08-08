@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useReducer, useEffect } from 'react';
+import { useCallback, useReducer, useEffect, useRef } from 'react';
 import { Voter } from '@/types/game';
 import { useGame } from '@/context/GameContext';
 import { useGameLogic } from './useGameLogic';
@@ -101,9 +101,12 @@ const interactionReducer = (state: InteractionState, event: InteractionEvent, ga
 };
 
 export const useInteractionStateMachine = () => {
-  const { setIsDragging, setShowGameResult, gameResult } = useGame();
+  const { setIsDragging, setShowGameResult, gameResult, gameState } = useGame();
   const gameLogic = useGameLogic();
   const { addMultipleVotersToDistrict, addVoterToDistrict } = gameLogic;
+
+  // Track if we're currently in a touch interaction to prevent synthetic mouse events
+  const touchInProgress = useRef(false);
 
   // State machine with game logic injected
   const [state, dispatch] = useReducer((state: InteractionState, event: InteractionEvent) => interactionReducer(state, event, gameLogic), { type: 'idle' } as InteractionState);
@@ -135,34 +138,77 @@ export const useInteractionStateMachine = () => {
   // Check for game completion with fresh gameResult
   useEffect(() => {
     if (gameResult?.isComplete && state.type === 'idle') {
-      console.log('Game completed! Showing result modal:', {
-        gameResult: {
-          isComplete: gameResult.isComplete,
-          playerWon: gameResult.playerWon,
-        },
-      });
       setShowGameResult(true);
     }
   }, [gameResult, state.type, setShowGameResult]);
 
   // Event handlers
   const handleMouseDown = useCallback((voter: Voter, event: React.MouseEvent) => {
+    // Ignore synthetic mouse events from touch
+    if (touchInProgress.current) {
+      return;
+    }
     event.preventDefault();
     dispatch({ type: 'MOUSE_DOWN', voter });
   }, []);
 
   const handleMouseEnter = useCallback((voter: Voter) => {
+    // Ignore synthetic mouse events from touch
+    if (touchInProgress.current) {
+      return;
+    }
     dispatch({ type: 'MOUSE_ENTER', voter });
   }, []);
 
   const handleMouseUp = useCallback(() => {
+    // If this is the end of a touch interaction, process it and clear the flag
+    if (touchInProgress.current) {
+      dispatch({ type: 'MOUSE_UP' });
+      touchInProgress.current = false;
+      return;
+    }
     dispatch({ type: 'MOUSE_UP' });
   }, []);
 
   const handleTouchStart = useCallback((voter: Voter, event: React.TouchEvent) => {
+    touchInProgress.current = true;
     event.preventDefault();
+    event.stopPropagation();
     dispatch({ type: 'MOUSE_DOWN', voter });
+
+    // Safety timeout to clear touch flag in case touchend doesn't fire
+    setTimeout(() => {
+      touchInProgress.current = false;
+    }, 1000);
   }, []);
+
+  const handleTouchMove = useCallback(
+    (event: React.TouchEvent) => {
+      if (!touchInProgress.current) return;
+
+      event.preventDefault();
+      const touch = event.touches[0];
+      if (!touch) return;
+
+      // Find the element under the touch point
+      const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (!elementBelow) return;
+
+      // Look for voter-id data attribute (could be on the tile or its container)
+      const voterContainer = elementBelow.closest('[data-voter-id]');
+      if (!voterContainer) return;
+
+      const voterId = voterContainer.getAttribute('data-voter-id');
+      if (!voterId) return;
+
+      // Find the voter from the game state
+      const voter = gameState.board.flat().find((v) => v.id === voterId);
+      if (voter) {
+        dispatch({ type: 'MOUSE_ENTER', voter });
+      }
+    },
+    [gameState.board],
+  );
 
   // Reset function for emergencies
   const resetInteraction = useCallback(() => {
@@ -190,6 +236,7 @@ export const useInteractionStateMachine = () => {
     handleMouseEnter,
     handleMouseUp,
     handleTouchStart,
+    handleTouchMove,
     resetInteraction,
   };
 };

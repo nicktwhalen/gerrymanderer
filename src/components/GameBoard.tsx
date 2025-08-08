@@ -15,10 +15,10 @@ export default function GameBoard() {
   const { gameState, currentLevel, gameKey, gameResult, hasNextLevel, showGameResult, resetGame, nextLevel } = useGame();
 
   const { getTileState, getDistrictForVoter } = useGameLogic();
-  const { handleMouseDown, handleMouseEnter, handleMouseUp, handleTouchStart, interactionMode, isInPreviewSelection } = useInteractionStateMachine();
+  const { handleMouseDown, handleMouseEnter, handleMouseUp, handleTouchStart, handleTouchMove, interactionMode, isInPreviewSelection } = useInteractionStateMachine();
   const { showTutorial, closeTutorial, openTutorial } = useTutorial();
 
-  // Global mouseup listener for the state machine interaction system
+  // Global mouseup/touchend/touchmove listener for the state machine interaction system
   useEffect(() => {
     const handleGlobalMouseUp = () => {
       if (interactionMode !== 'idle') {
@@ -26,20 +26,36 @@ export default function GameBoard() {
       }
     };
 
-    const handleGlobalTouchEnd = () => {
+    const handleGlobalTouchEnd = (e: TouchEvent) => {
       if (interactionMode !== 'idle') {
+        e.preventDefault();
         handleMouseUp();
       }
     };
 
+    const handleGlobalTouchMove = (e: TouchEvent) => {
+      if (interactionMode !== 'idle') {
+        e.preventDefault();
+        // Create a minimal synthetic event that matches our usage
+        const syntheticEvent = {
+          preventDefault: () => e.preventDefault(),
+          stopPropagation: () => e.stopPropagation(),
+          touches: e.touches,
+        } as unknown as React.TouchEvent;
+        handleTouchMove(syntheticEvent);
+      }
+    };
+
     document.addEventListener('mouseup', handleGlobalMouseUp);
-    document.addEventListener('touchend', handleGlobalTouchEnd);
+    document.addEventListener('touchend', handleGlobalTouchEnd, { passive: false });
+    document.addEventListener('touchmove', handleGlobalTouchMove, { passive: false });
 
     return () => {
       document.removeEventListener('mouseup', handleGlobalMouseUp);
       document.removeEventListener('touchend', handleGlobalTouchEnd);
+      document.removeEventListener('touchmove', handleGlobalTouchMove);
     };
-  }, [interactionMode, handleMouseUp]);
+  }, [interactionMode, handleMouseUp, handleTouchMove]);
 
   return (
     <div className={`${CSS_CLASSES.COMIC.BG} flex flex-col items-center p-2 sm:p-4 min-h-screen`}>
@@ -82,6 +98,7 @@ export default function GameBoard() {
                   onMouseDown={(e) => handleMouseDown(voter, e)}
                   onMouseEnter={() => handleMouseEnter(voter)}
                   onTouchStart={(e) => handleTouchStart(voter, e)}
+                  onTouchMove={handleTouchMove}
                   currentDistrictVoters={gameState.currentDistrict?.voters || []}
                 />
               </div>

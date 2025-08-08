@@ -9,10 +9,11 @@ interface VoterTileProps {
   onMouseDown?: (e: React.MouseEvent) => void;
   onMouseEnter?: () => void;
   onTouchStart?: (e: React.TouchEvent) => void;
+  onTouchMove?: (e: React.TouchEvent) => void;
   currentDistrictVoters?: Voter[];
 }
 
-export default function VoterTile({ voter, state, district, onMouseDown, onMouseEnter, onTouchStart }: VoterTileProps) {
+export default function VoterTile({ voter, state, district, onMouseDown, onMouseEnter, onTouchStart, onTouchMove }: VoterTileProps) {
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     if (onMouseDown) {
@@ -21,8 +22,16 @@ export default function VoterTile({ voter, state, district, onMouseDown, onMouse
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (onTouchStart) {
       onTouchStart(e);
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (onTouchMove) {
+      onTouchMove(e);
     }
   };
   const getBaseColor = () => {
@@ -63,6 +72,7 @@ export default function VoterTile({ voter, state, district, onMouseDown, onMouse
       onMouseDown={handleMouseDown}
       onMouseEnter={onMouseEnter}
       onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
     ></div>
   );
 }

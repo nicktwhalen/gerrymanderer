@@ -272,19 +272,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
   const gameResult = useMemo(() => {
     const result = calculateGameResult(state.gameState, state.currentLevel);
-    console.log('Game result calculated:', {
-      districts: state.gameState.districts.length,
-      requiredDistricts: state.currentLevel.districtCount,
-      result: result
-        ? {
-            isComplete: result.isComplete,
-            playerWon: result.playerWon,
-            blueWins: result.blueWins,
-            redWins: result.redWins,
-          }
-        : null,
-      showGameResult: state.showGameResult,
-    });
     return result;
   }, [state.gameState, state.currentLevel, state.showGameResult]);
 
