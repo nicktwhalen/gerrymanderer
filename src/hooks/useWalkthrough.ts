@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-type WalkthroughStep = 'instructions' | 'step2' | 'step3' | 'step4' | 'completed';
+type WalkthroughStep = 'instructions' | 'step2' | 'step3' | 'step4' | 'step5' | 'completed';
 
 export const useWalkthrough = () => {
   const [showWalkthrough, setShowWalkthrough] = useState(false);

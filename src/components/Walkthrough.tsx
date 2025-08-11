@@ -7,8 +7,8 @@ import { useGame } from '@/context/GameContext';
 interface WalkthroughProps {
   onClose: () => void;
   levelId: number;
-  currentStep: 'instructions' | 'step2' | 'step3' | 'step4' | 'completed';
-  setCurrentStep: (step: 'instructions' | 'step2' | 'step3' | 'step4' | 'completed') => void;
+  currentStep: 'instructions' | 'step2' | 'step3' | 'step4' | 'step5' | 'completed';
+  setCurrentStep: (step: 'instructions' | 'step2' | 'step3' | 'step4' | 'step5' | 'completed') => void;
 }
 
 export default function Walkthrough({ onClose, levelId, currentStep, setCurrentStep }: WalkthroughProps) {
@@ -62,8 +62,33 @@ export default function Walkthrough({ onClose, levelId, currentStep, setCurrentS
       });
 
       if (completedBottomRowDistrict) {
-        // For now, close the walkthrough when step 4 is completed
-        // TODO: Add step 5 when ready
+        setCurrentStep('step5');
+      }
+    }
+
+    // Auto-advance from step5 to step6 when middle row district is completed
+    if (currentStep === 'step5' && gameState.districts.length > 2) {
+      // Check if there's a completed district containing all middle row voters (positions 3, 4, 5)
+      const middleRowPositions = [3, 4, 5];
+
+      const completedMiddleRowDistrict = gameState.districts.find((district) => {
+        if (!district.isComplete) return false;
+
+        // Get positions of all voters in this district
+        const districtPositions = district.voters.map((voter) => {
+          return gameState.board.flat().findIndex((v) => v.id === voter.id);
+        });
+
+        // Check if this district contains exactly the middle row positions
+        const hasAllMiddleRow = middleRowPositions.every((pos) => districtPositions.includes(pos));
+        const hasOnlyMiddleRow = districtPositions.every((pos) => middleRowPositions.includes(pos));
+
+        return hasAllMiddleRow && hasOnlyMiddleRow && districtPositions.length === 3;
+      });
+
+      if (completedMiddleRowDistrict) {
+        // For now, close the walkthrough when step 5 is completed
+        // TODO: Add step 6 when ready
         onClose();
       }
     }
@@ -129,12 +154,14 @@ export default function Walkthrough({ onClose, levelId, currentStep, setCurrentS
       case 'step4':
         return (
           <div className="text-center relative">
-            {/* Down block arrow half on modal, half hanging off */}
-            <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
-              <div className="text-3xl">⬇️</div>
-            </div>
-
             <div className="text-sm mb-3">Now create a second district with a red majority. Remember — voters have to be neighbors (above, below, left, or right) to join the same district.</div>
+          </div>
+        );
+
+      case 'step5':
+        return (
+          <div className="text-center relative">
+            <div className="text-sm mb-3">Awesome! You now have 2 red districts. It's okay if the last district is all blue — the majority will still be red. Create the final district to win the level!</div>
           </div>
         );
 
@@ -154,15 +181,16 @@ export default function Walkthrough({ onClose, levelId, currentStep, setCurrentS
 
       {/* Small modal positioned based on current step */}
       <div
-        className="fixed max-w-sm p-4 z-70 border-4 border-black rounded-lg shadow-lg"
+        className={`fixed p-4 z-70 border-4 border-black rounded-lg shadow-lg ${currentStep === 'step5' ? '' : 'max-w-sm'}`}
         style={{
           background: 'linear-gradient(45deg, #FFD700 25%, #FFCC33 25%, #FFCC33 50%, #FFD700 50%, #FFD700 75%, #FFCC33 75%)',
           backgroundSize: '40px 40px',
           fontFamily: '"Permanent Marker", cursive',
           color: '#000000',
-          top: currentStep === 'step2' ? '130px' : currentStep === 'step3' ? '350px' : currentStep === 'step4' ? '130px' : '180px', // Position based on step
+          top: currentStep === 'step2' ? '130px' : currentStep === 'step3' ? '350px' : currentStep === 'step4' ? '130px' : currentStep === 'step5' ? '130px' : '180px', // Position based on step
           left: '50%',
           transform: 'translateX(-50%)',
+          width: currentStep === 'step5' ? 'calc(24rem + 40px)' : '24rem', // Make step 5 40px wider
         }}
       >
         {renderStep()}
