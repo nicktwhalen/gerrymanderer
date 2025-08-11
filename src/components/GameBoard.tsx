@@ -19,7 +19,21 @@ export default function GameBoard() {
   const { getTileState, getDistrictForVoter } = useGameLogic();
   const { handleMouseDown, handleMouseEnter, handleMouseUp, handleTouchStart, handleTouchMove, interactionMode, isInPreviewSelection } = useInteractionStateMachine();
   const { showTutorial, closeTutorial, openTutorial } = useTutorial();
-  const { showWalkthrough, openWalkthrough, closeWalkthrough } = useWalkthrough();
+  const { showWalkthrough, currentStep, setCurrentStep, openWalkthrough, closeWalkthrough } = useWalkthrough();
+
+  // Helper function to check if interaction is allowed during walkthrough step 2
+  const isInteractionAllowed = (voter: any) => {
+    if (!showWalkthrough || currentStep !== 'step2') {
+      return true; // Allow all interactions when not in step 2
+    }
+
+    // Only allow interaction with top 3 squares (row 0, positions 0, 1, 2)
+    const voterPosition = gameState.board.flat().findIndex((v) => v.id === voter.id);
+    const row = Math.floor(voterPosition / currentLevel.voterGrid[0].length);
+    const col = voterPosition % currentLevel.voterGrid[0].length;
+
+    return row === 0; // Only top row (row 0) is allowed
+  };
 
   // Global mouseup/touchend/touchmove listener for the state machine interaction system
   useEffect(() => {
@@ -64,7 +78,7 @@ export default function GameBoard() {
     <div className={`${CSS_CLASSES.COMIC.BG} flex flex-col items-center p-2 sm:p-4 min-h-screen`}>
       <h1 className={`${CSS_CLASSES.COMIC.TITLE} text-4xl sm:text-5xl lg:text-6xl font-bold mb-2 sm:mb-4 text-center px-2`}>THE GERRYMANDERER</h1>
 
-      <div className={`${CSS_CLASSES.COMIC.INSTRUCTIONS} mb-3 sm:mb-5 p-2 sm:p-2 max-w-xs sm:max-w-md text-center text-xs sm:text-sm mx-2`} style={showWalkthrough ? { position: 'relative', zIndex: 60 } : {}}>
+      <div className={`${CSS_CLASSES.COMIC.INSTRUCTIONS} mb-3 sm:mb-5 p-2 sm:p-2 max-w-xs sm:max-w-md text-center text-xs sm:text-sm mx-2`} style={showWalkthrough && currentStep === 'instructions' ? { position: 'relative', zIndex: 60 } : {}}>
         <strong className="text-sm sm:text-base">Level {currentLevel.id}</strong>
         <br />
         <span>
@@ -85,7 +99,13 @@ export default function GameBoard() {
         </div>
       </div>
 
-      <div key={gameKey} className={`${CSS_CLASSES.COMIC.BOARD} grid gap-0 p-3 sm:p-6 max-w-sm sm:max-w-none`} style={{ gridTemplateColumns: `repeat(${currentLevel.voterGrid[0].length}, minmax(0, 1fr))` }}>
+      <div
+        key={gameKey}
+        className={`${CSS_CLASSES.COMIC.BOARD} grid gap-0 p-3 sm:p-6 max-w-sm sm:max-w-none`}
+        style={{
+          gridTemplateColumns: `repeat(${currentLevel.voterGrid[0].length}, minmax(0, 1fr))`,
+        }}
+      >
         {gameState.board.map((row) =>
           row.map((voter) => {
             const district = getDistrictForVoter(voter.id);
@@ -105,9 +125,9 @@ export default function GameBoard() {
                   voter={voter}
                   state={tileState}
                   district={district}
-                  onMouseDown={(e) => handleMouseDown(voter, e)}
-                  onMouseEnter={() => handleMouseEnter(voter)}
-                  onTouchStart={(e) => handleTouchStart(voter, e)}
+                  onMouseDown={(e) => (isInteractionAllowed(voter) ? handleMouseDown(voter, e) : undefined)}
+                  onMouseEnter={() => (isInteractionAllowed(voter) ? handleMouseEnter(voter) : undefined)}
+                  onTouchStart={(e) => (isInteractionAllowed(voter) ? handleTouchStart(voter, e) : undefined)}
                   onTouchMove={handleTouchMove}
                   currentDistrictVoters={gameState.currentDistrict?.voters || []}
                 />
@@ -134,7 +154,7 @@ export default function GameBoard() {
       )}
 
       {showTutorial && <Tutorial onClose={closeTutorial} />}
-      {showWalkthrough && <Walkthrough onClose={closeWalkthrough} levelId={currentLevel.id} />}
+      {showWalkthrough && <Walkthrough onClose={closeWalkthrough} levelId={currentLevel.id} currentStep={currentStep} setCurrentStep={setCurrentStep} />}
     </div>
   );
 }
