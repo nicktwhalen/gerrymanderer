@@ -21,6 +21,24 @@ export default function GameBoard() {
   const { showTutorial, closeTutorial, openTutorial } = useTutorial();
   const { showWalkthrough, currentStep, setCurrentStep, openWalkthrough, closeWalkthrough } = useWalkthrough();
 
+  // Auto-start walkthrough for level 1 only after tutorial is dismissed and on fresh start
+  useEffect(() => {
+    // Only show walkthrough if:
+    // 1. We're on level 1
+    // 2. No tutorial is showing (tutorial takes precedence)
+    // 3. No game result is showing
+    // 4. Game is in fresh state (no districts created)
+    // 5. Walkthrough isn't already showing
+    // 6. Add a small delay to ensure tutorial logic has run first
+    const timer = setTimeout(() => {
+      if (currentLevel.id === 1 && !showTutorial && !showGameResult && gameState.districts.length === 0 && !showWalkthrough) {
+        openWalkthrough();
+      }
+    }, 200); // Small delay to let tutorial initialize first
+
+    return () => clearTimeout(timer);
+  }, [currentLevel.id, showTutorial, showGameResult, gameState.districts.length, showWalkthrough, openWalkthrough]);
+
   // Helper function to check if interaction is allowed during walkthrough
   const isInteractionAllowed = (voter: any) => {
     if (!showWalkthrough) {
@@ -117,14 +135,6 @@ export default function GameBoard() {
           >
             TUTORIAL
           </button>
-          {currentLevel.id === 1 && (
-            <button
-              onClick={showWalkthrough ? undefined : openWalkthrough}
-              className={`${CSS_CLASSES.COMIC.TILE} comic-green-tile text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform ${showWalkthrough ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              GUIDE
-            </button>
-          )}
           <button
             onClick={showWalkthrough ? undefined : resetGame}
             className={`${CSS_CLASSES.COMIC.TILE} ${CSS_CLASSES.COMIC.RED_TILE} text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform ${showWalkthrough ? 'opacity-50 cursor-not-allowed' : ''}`}

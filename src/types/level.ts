@@ -13,15 +13,26 @@ export const LEVELS: Level[] = [
     id: 1,
     districtCount: 3,
     districtSize: 3,
-    targetColor: 'red',
+    targetColor: 'blue',
     voterGrid: [
-      ['red', 'blue', 'red'],
+      ['blue', 'red', 'blue'],
       ['blue', 'blue', 'blue'],
       ['red', 'blue', 'red'],
     ],
   },
   {
     id: 2,
+    districtCount: 3,
+    districtSize: 5,
+    targetColor: 'blue',
+    voterGrid: [
+      ['blue', 'red', 'red', 'red', 'blue'],
+      ['blue', 'red', 'red', 'red', 'blue'],
+      ['blue', 'red', 'red', 'red', 'blue'],
+    ],
+  },
+  {
+    id: 3,
     districtCount: 5,
     districtSize: 5,
     targetColor: 'blue',
@@ -31,6 +42,19 @@ export const LEVELS: Level[] = [
       ['blue', 'blue', 'blue', 'blue', 'blue'],
       ['red', 'blue', 'blue', 'red', 'red'],
       ['red', 'red', 'red', 'red', 'red'],
+    ],
+  },
+  {
+    id: 4,
+    districtCount: 5,
+    districtSize: 7,
+    targetColor: 'blue',
+    voterGrid: [
+      ['blue', 'red', 'red', 'red', 'red', 'red', 'blue'],
+      ['blue', 'red', 'red', 'red', 'red', 'red', 'red'],
+      ['blue', 'red', 'red', 'red', 'red', 'red', 'red'],
+      ['blue', 'red', 'red', 'red', 'red', 'red', 'red'],
+      ['blue', 'blue', 'blue', 'blue', 'blue', 'blue', 'blue'],
     ],
   },
 ];
