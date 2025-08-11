@@ -21,18 +21,26 @@ export default function GameBoard() {
   const { showTutorial, closeTutorial, openTutorial } = useTutorial();
   const { showWalkthrough, currentStep, setCurrentStep, openWalkthrough, closeWalkthrough } = useWalkthrough();
 
-  // Helper function to check if interaction is allowed during walkthrough step 2
+  // Helper function to check if interaction is allowed during walkthrough
   const isInteractionAllowed = (voter: any) => {
-    if (!showWalkthrough || currentStep !== 'step2') {
-      return true; // Allow all interactions when not in step 2
+    if (!showWalkthrough) {
+      return true; // Allow all interactions when walkthrough is not active
     }
 
-    // Only allow interaction with top 3 squares (row 0, positions 0, 1, 2)
-    const voterPosition = gameState.board.flat().findIndex((v) => v.id === voter.id);
-    const row = Math.floor(voterPosition / currentLevel.voterGrid[0].length);
-    const col = voterPosition % currentLevel.voterGrid[0].length;
+    if (currentStep === 'step2') {
+      // Only allow interaction with top 3 squares (row 0, positions 0, 1, 2)
+      const voterPosition = gameState.board.flat().findIndex((v) => v.id === voter.id);
+      const row = Math.floor(voterPosition / currentLevel.voterGrid[0].length);
+      const col = voterPosition % currentLevel.voterGrid[0].length;
 
-    return row === 0; // Only top row (row 0) is allowed
+      return row === 0; // Only top row (row 0) is allowed
+    }
+
+    if (currentStep === 'step3') {
+      return false; // No interactions allowed in step 3
+    }
+
+    return true; // Allow all interactions for other steps
   };
 
   // Global mouseup/touchend/touchmove listener for the state machine interaction system
@@ -137,7 +145,9 @@ export default function GameBoard() {
         )}
       </div>
 
-      <GameStats gameState={gameState} />
+      <div style={showWalkthrough && currentStep === 'step3' ? { position: 'relative', zIndex: 60 } : {}}>
+        <GameStats gameState={gameState} />
+      </div>
 
       {gameResult && showGameResult && (
         <GameResult
