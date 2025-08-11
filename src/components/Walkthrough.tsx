@@ -220,7 +220,7 @@ export default function Walkthrough({ onClose, levelId, currentStep, setCurrentS
           top: currentStep === 'instructions' ? `${instructionsTop + 90}px` : currentStep === 'step2' || currentStep === 'step4' || currentStep === 'step5' ? `${gameboardTop - 100}px` : currentStep === 'step3' ? `${scoreboardTop - 155}px` : '180px', // Position based on step
           left: '50%',
           transform: 'translateX(-50%)',
-          width: currentStep === 'step5' ? 'calc(24rem + 40px)' : '24rem', // Make step 5 40px wider
+          width: '24rem',
         }}
       >
         {renderStep()}

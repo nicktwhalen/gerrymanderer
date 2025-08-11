@@ -243,12 +243,12 @@ export default function Tutorial({ onClose }: TutorialProps) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }} onClick={handleBackdropClick}>
+    <div className="fixed inset-0 flex justify-center p-4 z-50" style={{ backgroundColor: 'rgba(0, 0, 0, 0.75)', paddingTop: 'max(4rem, 10vh)', paddingBottom: 'max(4rem, 10vh)' }} onClick={handleBackdropClick}>
       <div
         className="comic-instructions w-full max-w-md sm:max-w-lg relative"
         onClick={handleModalClick}
         style={{
-          height: '420px', // Fixed height - no shrinking allowed
+          height: 'min(420px, 80vh)', // Responsive height that adapts to mobile screens
         }}
       >
         {/* Close button */}
