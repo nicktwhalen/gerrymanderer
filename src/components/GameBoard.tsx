@@ -5,11 +5,13 @@ import { useGame } from '@/context/GameContext';
 import { useGameLogic } from '@/hooks/useGameLogic';
 import { useInteractionStateMachine } from '@/hooks/useInteractionStateMachine';
 import { useTutorial } from '@/hooks/useTutorial';
+import { useWalkthrough } from '@/hooks/useWalkthrough';
 import { GAME_CONFIG, CSS_CLASSES } from '@/config/constants';
 import VoterTile from './VoterTile';
 import GameStats from './GameStats';
 import GameResult from './GameResult';
 import Tutorial from './Tutorial';
+import Walkthrough from './Walkthrough';
 
 export default function GameBoard() {
   const { gameState, currentLevel, gameKey, gameResult, hasNextLevel, showGameResult, resetGame, nextLevel } = useGame();
@@ -17,6 +19,65 @@ export default function GameBoard() {
   const { getTileState, getDistrictForVoter } = useGameLogic();
   const { handleMouseDown, handleMouseEnter, handleMouseUp, handleTouchStart, handleTouchMove, interactionMode, isInPreviewSelection } = useInteractionStateMachine();
   const { showTutorial, closeTutorial, openTutorial } = useTutorial();
+  const { showWalkthrough, currentStep, setCurrentStep, openWalkthrough, closeWalkthrough } = useWalkthrough();
+
+  // Auto-start walkthrough for level 1 only after tutorial is dismissed and on fresh start
+  useEffect(() => {
+    // Only show walkthrough if:
+    // 1. We're on level 1
+    // 2. No tutorial is showing (tutorial takes precedence)
+    // 3. No game result is showing
+    // 4. Game is in fresh state (no districts created)
+    // 5. Walkthrough isn't already showing
+    // 6. Add a small delay to ensure tutorial logic has run first
+    const timer = setTimeout(() => {
+      if (currentLevel.id === 1 && !showTutorial && !showGameResult && gameState.districts.length === 0 && !showWalkthrough) {
+        openWalkthrough();
+      }
+    }, 200); // Small delay to let tutorial initialize first
+
+    return () => clearTimeout(timer);
+  }, [currentLevel.id, showTutorial, showGameResult, gameState.districts.length, showWalkthrough, openWalkthrough]);
+
+  // Helper function to check if interaction is allowed during walkthrough
+  const isInteractionAllowed = (voter: any) => {
+    if (!showWalkthrough) {
+      return true; // Allow all interactions when walkthrough is not active
+    }
+
+    if (currentStep === 'step2') {
+      // Only allow interaction with top 3 squares (row 0, positions 0, 1, 2)
+      const voterPosition = gameState.board.flat().findIndex((v) => v.id === voter.id);
+      const row = Math.floor(voterPosition / currentLevel.voterGrid[0].length);
+      const col = voterPosition % currentLevel.voterGrid[0].length;
+
+      return row === 0; // Only top row (row 0) is allowed
+    }
+
+    if (currentStep === 'step3') {
+      return false; // No interactions allowed in step 3
+    }
+
+    if (currentStep === 'step4') {
+      // Only allow interaction with bottom 3 squares (row 2, positions 6, 7, 8)
+      const voterPosition = gameState.board.flat().findIndex((v) => v.id === voter.id);
+      const row = Math.floor(voterPosition / currentLevel.voterGrid[0].length);
+      const col = voterPosition % currentLevel.voterGrid[0].length;
+
+      return row === 2; // Only bottom row (row 2) is allowed
+    }
+
+    if (currentStep === 'step5') {
+      // Only allow interaction with middle 3 squares (row 1, positions 3, 4, 5)
+      const voterPosition = gameState.board.flat().findIndex((v) => v.id === voter.id);
+      const row = Math.floor(voterPosition / currentLevel.voterGrid[0].length);
+      const col = voterPosition % currentLevel.voterGrid[0].length;
+
+      return row === 1; // Only middle row (row 1) is allowed
+    }
+
+    return true; // Allow all interactions for other steps
+  };
 
   // Global mouseup/touchend/touchmove listener for the state machine interaction system
   useEffect(() => {
@@ -61,21 +122,35 @@ export default function GameBoard() {
     <div className={`${CSS_CLASSES.COMIC.BG} flex flex-col items-center p-2 sm:p-4 min-h-screen`}>
       <h1 className={`${CSS_CLASSES.COMIC.TITLE} text-4xl sm:text-5xl lg:text-6xl font-bold mb-2 sm:mb-4 text-center px-2`}>THE GERRYMANDERER</h1>
 
-      <div className={`${CSS_CLASSES.COMIC.INSTRUCTIONS} mb-3 sm:mb-5 p-2 sm:p-2 max-w-xs sm:max-w-md text-center text-xs sm:text-sm mx-2`}>
+      <div className={`${CSS_CLASSES.COMIC.INSTRUCTIONS} mb-3 sm:mb-5 p-2 sm:p-2 max-w-xs sm:max-w-md text-center text-xs sm:text-sm mx-2`} style={showWalkthrough && currentStep === 'instructions' ? { position: 'relative', zIndex: 60 } : {}}>
         <strong className="text-sm sm:text-base">Level {currentLevel.id}</strong>
         <br />
-        Create <u>{currentLevel.districtCount}</u> districts of <u>{currentLevel.districtSize}</u> voters each to make <u>{currentLevel.targetColor}</u> win the majority of districts!
+        <span>
+          Create <u>{currentLevel.districtCount}</u> districts of <u>{currentLevel.districtSize}</u> voters each to make <u>{currentLevel.targetColor}</u> win the majority of districts!
+        </span>
         <div className="flex gap-2 mt-2 justify-between">
-          <button onClick={openTutorial} className={`${CSS_CLASSES.COMIC.TILE} ${CSS_CLASSES.COMIC.BLUE_TILE} text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform`}>
+          <button
+            onClick={showWalkthrough ? undefined : openTutorial}
+            className={`${CSS_CLASSES.COMIC.TILE} ${CSS_CLASSES.COMIC.BLUE_TILE} text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform ${showWalkthrough ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
             TUTORIAL
           </button>
-          <button onClick={resetGame} className={`${CSS_CLASSES.COMIC.TILE} ${CSS_CLASSES.COMIC.RED_TILE} text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform`}>
+          <button
+            onClick={showWalkthrough ? undefined : resetGame}
+            className={`${CSS_CLASSES.COMIC.TILE} ${CSS_CLASSES.COMIC.RED_TILE} text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform ${showWalkthrough ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
             RESET
           </button>
         </div>
       </div>
 
-      <div key={gameKey} className={`${CSS_CLASSES.COMIC.BOARD} grid gap-0 p-3 sm:p-6 max-w-sm sm:max-w-none`} style={{ gridTemplateColumns: `repeat(${currentLevel.voterGrid[0].length}, minmax(0, 1fr))` }}>
+      <div
+        key={gameKey}
+        className={`${CSS_CLASSES.COMIC.BOARD} grid gap-0 p-3 sm:p-6 max-w-sm sm:max-w-none`}
+        style={{
+          gridTemplateColumns: `repeat(${currentLevel.voterGrid[0].length}, minmax(0, 1fr))`,
+        }}
+      >
         {gameState.board.map((row) =>
           row.map((voter) => {
             const district = getDistrictForVoter(voter.id);
@@ -95,9 +170,9 @@ export default function GameBoard() {
                   voter={voter}
                   state={tileState}
                   district={district}
-                  onMouseDown={(e) => handleMouseDown(voter, e)}
-                  onMouseEnter={() => handleMouseEnter(voter)}
-                  onTouchStart={(e) => handleTouchStart(voter, e)}
+                  onMouseDown={(e) => (isInteractionAllowed(voter) ? handleMouseDown(voter, e) : undefined)}
+                  onMouseEnter={() => (isInteractionAllowed(voter) ? handleMouseEnter(voter) : undefined)}
+                  onTouchStart={(e) => (isInteractionAllowed(voter) ? handleTouchStart(voter, e) : undefined)}
                   onTouchMove={handleTouchMove}
                   currentDistrictVoters={gameState.currentDistrict?.voters || []}
                 />
@@ -107,7 +182,9 @@ export default function GameBoard() {
         )}
       </div>
 
-      <GameStats gameState={gameState} />
+      <div style={showWalkthrough && currentStep === 'step3' ? { position: 'relative', zIndex: 60 } : {}}>
+        <GameStats gameState={gameState} />
+      </div>
 
       {gameResult && showGameResult && (
         <GameResult
@@ -124,6 +201,7 @@ export default function GameBoard() {
       )}
 
       {showTutorial && <Tutorial onClose={closeTutorial} />}
+      {showWalkthrough && <Walkthrough onClose={closeWalkthrough} levelId={currentLevel.id} currentStep={currentStep} setCurrentStep={setCurrentStep} />}
     </div>
   );
 }
