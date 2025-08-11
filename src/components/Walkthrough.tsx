@@ -14,6 +14,36 @@ interface WalkthroughProps {
 export default function Walkthrough({ onClose, levelId, currentStep, setCurrentStep }: WalkthroughProps) {
   useModal(true, onClose);
   const { gameState, currentLevel } = useGame();
+  const [gameboardTop, setGameboardTop] = useState<number>(200); // Default fallback
+  const [instructionsTop, setInstructionsTop] = useState<number>(90); // Default fallback
+  const [scoreboardTop, setScoreboardTop] = useState<number>(350); // Default fallback
+
+  // Calculate gameboard, instructions, and scoreboard positions for modal positioning
+  useEffect(() => {
+    const calculatePositions = () => {
+      const gameboardElement = document.querySelector('[data-gameboard]');
+      if (gameboardElement) {
+        const rect = gameboardElement.getBoundingClientRect();
+        setGameboardTop(rect.top + window.scrollY);
+      }
+
+      const instructionsElement = document.querySelector('[data-instructions]');
+      if (instructionsElement) {
+        const rect = instructionsElement.getBoundingClientRect();
+        setInstructionsTop(rect.top + window.scrollY);
+      }
+
+      const scoreboardElement = document.querySelector('[data-scoreboard]');
+      if (scoreboardElement) {
+        const rect = scoreboardElement.getBoundingClientRect();
+        setScoreboardTop(rect.top + window.scrollY);
+      }
+    };
+
+    calculatePositions();
+    window.addEventListener('resize', calculatePositions);
+    return () => window.removeEventListener('resize', calculatePositions);
+  }, [currentStep]);
 
   // Auto-advance from step2 to step3 when top row district is completed
   useEffect(() => {
@@ -187,7 +217,7 @@ export default function Walkthrough({ onClose, levelId, currentStep, setCurrentS
           backgroundSize: '40px 40px',
           fontFamily: '"Permanent Marker", cursive',
           color: '#000000',
-          top: currentStep === 'step2' ? '130px' : currentStep === 'step3' ? '350px' : currentStep === 'step4' ? '130px' : currentStep === 'step5' ? '130px' : '180px', // Position based on step
+          top: currentStep === 'instructions' ? `${instructionsTop + 90}px` : currentStep === 'step2' || currentStep === 'step4' || currentStep === 'step5' ? `${gameboardTop - 100}px` : currentStep === 'step3' ? `${scoreboardTop - 155}px` : '180px', // Position based on step
           left: '50%',
           transform: 'translateX(-50%)',
           width: currentStep === 'step5' ? 'calc(24rem + 40px)' : '24rem', // Make step 5 40px wider

@@ -122,7 +122,11 @@ export default function GameBoard() {
     <div className={`${CSS_CLASSES.COMIC.BG} flex flex-col items-center p-2 sm:p-4 min-h-screen`}>
       <h1 className={`${CSS_CLASSES.COMIC.TITLE} text-4xl sm:text-5xl lg:text-6xl font-bold mb-2 sm:mb-4 text-center px-2`}>THE GERRYMANDERER</h1>
 
-      <div className={`${CSS_CLASSES.COMIC.INSTRUCTIONS} mb-3 sm:mb-5 p-2 sm:p-2 max-w-xs sm:max-w-md text-center text-xs sm:text-sm mx-2`} style={showWalkthrough && currentStep === 'instructions' ? { position: 'relative', zIndex: 60 } : {}}>
+      <div
+        data-instructions
+        className={`${CSS_CLASSES.COMIC.INSTRUCTIONS} mb-3 sm:mb-5 p-2 sm:p-2 max-w-xs sm:max-w-md text-center text-xs sm:text-sm mx-2`}
+        style={showWalkthrough && currentStep === 'instructions' ? { position: 'relative', zIndex: 60 } : {}}
+      >
         <strong className="text-sm sm:text-base">Level {currentLevel.id}</strong>
         <br />
         <span>
@@ -146,6 +150,7 @@ export default function GameBoard() {
 
       <div
         key={gameKey}
+        data-gameboard
         className={`${CSS_CLASSES.COMIC.BOARD} grid gap-0 p-3 sm:p-6 max-w-sm sm:max-w-none`}
         style={{
           gridTemplateColumns: `repeat(${currentLevel.voterGrid[0].length}, minmax(0, 1fr))`,
@@ -182,7 +187,7 @@ export default function GameBoard() {
         )}
       </div>
 
-      <div style={showWalkthrough && currentStep === 'step3' ? { position: 'relative', zIndex: 60 } : {}}>
+      <div data-scoreboard style={showWalkthrough && currentStep === 'step3' ? { position: 'relative', zIndex: 60 } : {}}>
         <GameStats gameState={gameState} />
       </div>
 
