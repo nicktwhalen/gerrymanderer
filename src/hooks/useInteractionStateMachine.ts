@@ -23,9 +23,18 @@ type InteractionState =
 type InteractionEvent = { type: 'MOUSE_DOWN'; voter: Voter } | { type: 'MOUSE_ENTER'; voter: Voter } | { type: 'MOUSE_UP' } | { type: 'APPLY_SELECTION' } | { type: 'RESET' };
 
 // Helper function to check if a voter can be added to current selection
-const isValidForSelection = (voter: Voter, currentSelection: Voter[], gameLogic: ReturnType<typeof useGameLogic>): boolean => {
+const isValidForSelection = (voter: Voter, currentSelection: Voter[], gameLogic: ReturnType<typeof useGameLogic>, maxDistrictSize: number, gameState: any): boolean => {
   // Don't add the same voter twice
   if (currentSelection.some((v) => v.id === voter.id)) {
+    return false;
+  }
+
+  // Calculate total size including existing current district voters
+  const existingDistrictSize = gameState.currentDistrict?.voters.length || 0;
+  const totalSelectionSize = currentSelection.length + existingDistrictSize;
+
+  // Check district size limit - don't exceed the maximum district size
+  if (totalSelectionSize >= maxDistrictSize) {
     return false;
   }
 
@@ -38,7 +47,7 @@ const isValidForSelection = (voter: Voter, currentSelection: Voter[], gameLogic:
 };
 
 // State Machine Reducer
-const interactionReducer = (state: InteractionState, event: InteractionEvent, gameLogic: ReturnType<typeof useGameLogic>): InteractionState => {
+const interactionReducer = (state: InteractionState, event: InteractionEvent, gameLogic: ReturnType<typeof useGameLogic>, maxDistrictSize: number, gameState: any): InteractionState => {
   switch (state.type) {
     case 'idle':
       if (event.type === 'MOUSE_DOWN') {
@@ -54,7 +63,7 @@ const interactionReducer = (state: InteractionState, event: InteractionEvent, ga
     case 'selecting':
       if (event.type === 'MOUSE_ENTER' && event.voter.id !== state.startVoter.id) {
         // Upgrade to drag mode
-        if (isValidForSelection(event.voter, state.currentSelection, gameLogic)) {
+        if (isValidForSelection(event.voter, state.currentSelection, gameLogic, maxDistrictSize, gameState)) {
           return {
             ...state,
             currentSelection: [...state.currentSelection, event.voter],
@@ -67,7 +76,7 @@ const interactionReducer = (state: InteractionState, event: InteractionEvent, ga
 
       if (event.type === 'MOUSE_ENTER' && state.mode === 'drag') {
         // Continue dragging
-        if (isValidForSelection(event.voter, state.currentSelection, gameLogic)) {
+        if (isValidForSelection(event.voter, state.currentSelection, gameLogic, maxDistrictSize, gameState)) {
           return {
             ...state,
             currentSelection: [...state.currentSelection, event.voter],
@@ -101,7 +110,7 @@ const interactionReducer = (state: InteractionState, event: InteractionEvent, ga
 };
 
 export const useInteractionStateMachine = () => {
-  const { setIsDragging, setShowGameResult, gameResult, gameState } = useGame();
+  const { setIsDragging, setShowGameResult, gameResult, gameState, currentLevel } = useGame();
   const gameLogic = useGameLogic();
   const { addMultipleVotersToDistrict, addVoterToDistrict } = gameLogic;
 
@@ -109,8 +118,8 @@ export const useInteractionStateMachine = () => {
   const touchInProgress = useRef(false);
   const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // State machine with game logic injected
-  const [state, dispatch] = useReducer((state: InteractionState, event: InteractionEvent) => interactionReducer(state, event, gameLogic), { type: 'idle' } as InteractionState);
+  // State machine with game logic, district size limit, and game state injected
+  const [state, dispatch] = useReducer((state: InteractionState, event: InteractionEvent) => interactionReducer(state, event, gameLogic, currentLevel.districtSize, gameState), { type: 'idle' } as InteractionState);
 
   // Apply selections when confirmed (not during selecting to avoid double processing)
   useEffect(() => {
