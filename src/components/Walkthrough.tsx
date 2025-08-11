@@ -7,8 +7,8 @@ import { useGame } from '@/context/GameContext';
 interface WalkthroughProps {
   onClose: () => void;
   levelId: number;
-  currentStep: 'instructions' | 'step2' | 'step3' | 'completed';
-  setCurrentStep: (step: 'instructions' | 'step2' | 'step3' | 'completed') => void;
+  currentStep: 'instructions' | 'step2' | 'step3' | 'step4' | 'completed';
+  setCurrentStep: (step: 'instructions' | 'step2' | 'step3' | 'step4' | 'completed') => void;
 }
 
 export default function Walkthrough({ onClose, levelId, currentStep, setCurrentStep }: WalkthroughProps) {
@@ -40,15 +40,42 @@ export default function Walkthrough({ onClose, levelId, currentStep, setCurrentS
         setCurrentStep('step3');
       }
     }
-  }, [currentStep, gameState.districts, gameState.board, setCurrentStep]);
+
+    // Auto-advance from step4 to step5 when bottom row district is completed
+    if (currentStep === 'step4' && gameState.districts.length > 1) {
+      // Check if there's a completed district containing all bottom row voters (positions 6, 7, 8)
+      const bottomRowPositions = [6, 7, 8];
+
+      const completedBottomRowDistrict = gameState.districts.find((district) => {
+        if (!district.isComplete) return false;
+
+        // Get positions of all voters in this district
+        const districtPositions = district.voters.map((voter) => {
+          return gameState.board.flat().findIndex((v) => v.id === voter.id);
+        });
+
+        // Check if this district contains exactly the bottom row positions
+        const hasAllBottomRow = bottomRowPositions.every((pos) => districtPositions.includes(pos));
+        const hasOnlyBottomRow = districtPositions.every((pos) => bottomRowPositions.includes(pos));
+
+        return hasAllBottomRow && hasOnlyBottomRow && districtPositions.length === 3;
+      });
+
+      if (completedBottomRowDistrict) {
+        // For now, close the walkthrough when step 4 is completed
+        // TODO: Add step 5 when ready
+        onClose();
+      }
+    }
+  }, [currentStep, gameState.districts, gameState.board, setCurrentStep, onClose]);
 
   const nextStep = () => {
     if (currentStep === 'instructions') {
       setCurrentStep('step2');
     } else if (currentStep === 'step3') {
-      onClose();
+      setCurrentStep('step4');
     }
-    // step2 transitions automatically when district is completed
+    // step2 and step4 transition automatically when districts are completed
   };
 
   const renderStep = () => {
@@ -99,6 +126,18 @@ export default function Walkthrough({ onClose, levelId, currentStep, setCurrentS
           </div>
         );
 
+      case 'step4':
+        return (
+          <div className="text-center relative">
+            {/* Down block arrow half on modal, half hanging off */}
+            <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
+              <div className="text-3xl">⬇️</div>
+            </div>
+
+            <div className="text-sm mb-3">Now create a second district with a red majority. Remember — voters have to be neighbors (above, below, left, or right) to join the same district.</div>
+          </div>
+        );
+
       default:
         return null;
     }
@@ -121,7 +160,7 @@ export default function Walkthrough({ onClose, levelId, currentStep, setCurrentS
           backgroundSize: '40px 40px',
           fontFamily: '"Permanent Marker", cursive',
           color: '#000000',
-          top: currentStep === 'step2' ? '130px' : currentStep === 'step3' ? '350px' : '180px', // Position based on step
+          top: currentStep === 'step2' ? '130px' : currentStep === 'step3' ? '350px' : currentStep === 'step4' ? '130px' : '180px', // Position based on step
           left: '50%',
           transform: 'translateX(-50%)',
         }}

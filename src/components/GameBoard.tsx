@@ -40,6 +40,15 @@ export default function GameBoard() {
       return false; // No interactions allowed in step 3
     }
 
+    if (currentStep === 'step4') {
+      // Only allow interaction with bottom 3 squares (row 2, positions 6, 7, 8)
+      const voterPosition = gameState.board.flat().findIndex((v) => v.id === voter.id);
+      const row = Math.floor(voterPosition / currentLevel.voterGrid[0].length);
+      const col = voterPosition % currentLevel.voterGrid[0].length;
+
+      return row === 2; // Only bottom row (row 2) is allowed
+    }
+
     return true; // Allow all interactions for other steps
   };
 
@@ -93,15 +102,24 @@ export default function GameBoard() {
           Create <u>{currentLevel.districtCount}</u> districts of <u>{currentLevel.districtSize}</u> voters each to make <u>{currentLevel.targetColor}</u> win the majority of districts!
         </span>
         <div className="flex gap-2 mt-2 justify-between">
-          <button onClick={openTutorial} className={`${CSS_CLASSES.COMIC.TILE} ${CSS_CLASSES.COMIC.BLUE_TILE} text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform`}>
+          <button
+            onClick={showWalkthrough && currentStep === 'instructions' ? undefined : openTutorial}
+            className={`${CSS_CLASSES.COMIC.TILE} ${CSS_CLASSES.COMIC.BLUE_TILE} text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform ${showWalkthrough && currentStep === 'instructions' ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
             TUTORIAL
           </button>
           {currentLevel.id === 1 && (
-            <button onClick={openWalkthrough} className={`${CSS_CLASSES.COMIC.TILE} comic-green-tile text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform`}>
+            <button
+              onClick={showWalkthrough && currentStep === 'instructions' ? undefined : openWalkthrough}
+              className={`${CSS_CLASSES.COMIC.TILE} comic-green-tile text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform ${showWalkthrough && currentStep === 'instructions' ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
               GUIDE
             </button>
           )}
-          <button onClick={resetGame} className={`${CSS_CLASSES.COMIC.TILE} ${CSS_CLASSES.COMIC.RED_TILE} text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform`}>
+          <button
+            onClick={showWalkthrough && currentStep === 'instructions' ? undefined : resetGame}
+            className={`${CSS_CLASSES.COMIC.TILE} ${CSS_CLASSES.COMIC.RED_TILE} text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform ${showWalkthrough && currentStep === 'instructions' ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
             RESET
           </button>
         </div>
