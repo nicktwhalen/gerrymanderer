@@ -251,3 +251,7 @@
 .comic-blue-tile {
   background: linear-gradient(135deg, #0066CC 0%, #0052A3 50%, #003D7A 100%);
 }
+
+.comic-green-tile {
+  background: linear-gradient(135deg, #228B22 0%, #006400 50%, #013220 100%);
+}

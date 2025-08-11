@@ -5,11 +5,13 @@ import { useGame } from '@/context/GameContext';
 import { useGameLogic } from '@/hooks/useGameLogic';
 import { useInteractionStateMachine } from '@/hooks/useInteractionStateMachine';
 import { useTutorial } from '@/hooks/useTutorial';
+import { useWalkthrough } from '@/hooks/useWalkthrough';
 import { GAME_CONFIG, CSS_CLASSES } from '@/config/constants';
 import VoterTile from './VoterTile';
 import GameStats from './GameStats';
 import GameResult from './GameResult';
 import Tutorial from './Tutorial';
+import Walkthrough from './Walkthrough';
 
 export default function GameBoard() {
   const { gameState, currentLevel, gameKey, gameResult, hasNextLevel, showGameResult, resetGame, nextLevel } = useGame();
@@ -17,6 +19,7 @@ export default function GameBoard() {
   const { getTileState, getDistrictForVoter } = useGameLogic();
   const { handleMouseDown, handleMouseEnter, handleMouseUp, handleTouchStart, handleTouchMove, interactionMode, isInPreviewSelection } = useInteractionStateMachine();
   const { showTutorial, closeTutorial, openTutorial } = useTutorial();
+  const { showWalkthrough, openWalkthrough, closeWalkthrough } = useWalkthrough();
 
   // Global mouseup/touchend/touchmove listener for the state machine interaction system
   useEffect(() => {
@@ -61,14 +64,21 @@ export default function GameBoard() {
     <div className={`${CSS_CLASSES.COMIC.BG} flex flex-col items-center p-2 sm:p-4 min-h-screen`}>
       <h1 className={`${CSS_CLASSES.COMIC.TITLE} text-4xl sm:text-5xl lg:text-6xl font-bold mb-2 sm:mb-4 text-center px-2`}>THE GERRYMANDERER</h1>
 
-      <div className={`${CSS_CLASSES.COMIC.INSTRUCTIONS} mb-3 sm:mb-5 p-2 sm:p-2 max-w-xs sm:max-w-md text-center text-xs sm:text-sm mx-2`}>
+      <div className={`${CSS_CLASSES.COMIC.INSTRUCTIONS} mb-3 sm:mb-5 p-2 sm:p-2 max-w-xs sm:max-w-md text-center text-xs sm:text-sm mx-2`} style={showWalkthrough ? { position: 'relative', zIndex: 60 } : {}}>
         <strong className="text-sm sm:text-base">Level {currentLevel.id}</strong>
         <br />
-        Create <u>{currentLevel.districtCount}</u> districts of <u>{currentLevel.districtSize}</u> voters each to make <u>{currentLevel.targetColor}</u> win the majority of districts!
+        <span>
+          Create <u>{currentLevel.districtCount}</u> districts of <u>{currentLevel.districtSize}</u> voters each to make <u>{currentLevel.targetColor}</u> win the majority of districts!
+        </span>
         <div className="flex gap-2 mt-2 justify-between">
           <button onClick={openTutorial} className={`${CSS_CLASSES.COMIC.TILE} ${CSS_CLASSES.COMIC.BLUE_TILE} text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform`}>
             TUTORIAL
           </button>
+          {currentLevel.id === 1 && (
+            <button onClick={openWalkthrough} className={`${CSS_CLASSES.COMIC.TILE} comic-green-tile text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform`}>
+              GUIDE
+            </button>
+          )}
           <button onClick={resetGame} className={`${CSS_CLASSES.COMIC.TILE} ${CSS_CLASSES.COMIC.RED_TILE} text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform`}>
             RESET
           </button>
@@ -124,6 +134,7 @@ export default function GameBoard() {
       )}
 
       {showTutorial && <Tutorial onClose={closeTutorial} />}
+      {showWalkthrough && <Walkthrough onClose={closeWalkthrough} levelId={currentLevel.id} />}
     </div>
   );
 }
