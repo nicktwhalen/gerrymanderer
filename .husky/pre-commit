@@ -1,2 +1,3 @@
 yarn test
+npx tsc --noEmit --project tsconfig.precommit.json
 yarn lint-staged
