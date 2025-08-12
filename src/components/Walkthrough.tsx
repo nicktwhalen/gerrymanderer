@@ -18,6 +18,10 @@ export default function Walkthrough({ onClose, levelId, currentStep, setCurrentS
   const [instructionsTop, setInstructionsTop] = useState<number>(90); // Default fallback
   const [scoreboardTop, setScoreboardTop] = useState<number>(350); // Default fallback
 
+  // Get target color and opposite color for level 1
+  const targetColor = currentLevel.targetColor; // This will be 'blue' for level 1
+  const otherColor = targetColor === 'blue' ? 'red' : 'blue';
+
   // Calculate gameboard, instructions, and scoreboard positions for modal positioning
   useEffect(() => {
     const calculatePositions = () => {
@@ -160,7 +164,7 @@ export default function Walkthrough({ onClose, levelId, currentStep, setCurrentS
               <div className="text-3xl">⬇️</div>
             </div>
 
-            <div className="text-sm mb-3">Select the top three squares (click, tap, or drag) to make a district of three voters with a red majority.</div>
+            <div className="text-sm mb-3">Select the top three squares (click, tap, or drag) to make a district of three voters with a {targetColor} majority.</div>
           </div>
         );
 
@@ -172,7 +176,9 @@ export default function Walkthrough({ onClose, levelId, currentStep, setCurrentS
               <div className="text-3xl">⬇️</div>
             </div>
 
-            <div className="text-sm mb-3">Great job! Since the district you created has more red voters than blue, the entire district will vote red. The scoreboard below now shows that you have 1 red district.</div>
+            <div className="text-sm mb-3">
+              Great job! Since the district you created has more {targetColor} voters than {otherColor}, the entire district will vote {targetColor}. The scoreboard below now shows that you have 1 {targetColor} district.
+            </div>
             <div className="flex justify-center">
               <button onClick={nextStep} className="comic-tile comic-blue-tile text-white font-bold px-4 py-1 text-sm hover:scale-105 transition-transform">
                 NEXT
@@ -184,14 +190,16 @@ export default function Walkthrough({ onClose, levelId, currentStep, setCurrentS
       case 'step4':
         return (
           <div className="text-center relative">
-            <div className="text-sm mb-3">Now create a second district with a red majority. Remember — voters have to be neighbors (above, below, left, or right) to join the same district.</div>
+            <div className="text-sm mb-3">Now create a second district with a {targetColor} majority. Remember — voters have to be neighbors (above, below, left, or right) to join the same district.</div>
           </div>
         );
 
       case 'step5':
         return (
           <div className="text-center relative">
-            <div className="text-sm mb-3">Awesome! You now have 2 red districts. It's okay if the last district is all blue — the majority will still be red. Create the final district to win the level!</div>
+            <div className="text-sm mb-3">
+              Awesome! You now have 2 {targetColor} districts. It's okay if the last district is all {otherColor} — the majority of districts will still be {targetColor}. Create the final district to win!
+            </div>
           </div>
         );
 

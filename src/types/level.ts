@@ -16,8 +16,8 @@ export const LEVELS: Level[] = [
     targetColor: 'blue',
     voterGrid: [
       ['blue', 'red', 'blue'],
-      ['blue', 'blue', 'blue'],
-      ['red', 'blue', 'red'],
+      ['red', 'red', 'red'],
+      ['blue', 'red', 'blue'],
     ],
   },
   {
