@@ -1,6 +1,9 @@
 'use client';
 
 import { useModal } from '@/hooks/useModal';
+import GameStats from './GameStats';
+import { GameState } from '@/types/game';
+import { Level } from '@/types/level';
 
 interface GameResultProps {
   blueWins: number;
@@ -12,51 +15,42 @@ interface GameResultProps {
   redCount: number;
   blueCount: number;
   hasNextLevel: boolean;
+  gameState: GameState;
+  currentLevel: Level;
 }
 
-export default function GameResult({ blueWins, redWins, ties, playerWon, onNewGame, onNextLevel, redCount, blueCount, hasNextLevel }: GameResultProps) {
+export default function GameResult({ blueWins, redWins, ties, playerWon, onNewGame, onNextLevel, redCount, blueCount, hasNextLevel, gameState, currentLevel }: GameResultProps) {
   const { handleBackdropClick, handleModalClick } = useModal(true);
+
+  // Get target color and opposite color for dynamic copy
+  const targetColor = currentLevel.targetColor;
+  const otherColor = targetColor === 'blue' ? 'red' : 'blue';
 
   return (
     <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }} onClick={handleBackdropClick}>
       <div className="comic-instructions p-6 max-w-sm w-full text-center" onClick={handleModalClick}>
-        <h2 className={`comic-title text-3xl sm:text-4xl mb-4 ${playerWon ? 'text-green-600' : 'text-red-600'}`}>{playerWon ? 'VICTORY!' : 'DEFEAT!'}</h2>
+        <h2 className={`comic-title text-3xl sm:text-4xl mb-2 ${playerWon ? 'text-green-600' : 'text-red-600'}`}>{playerWon ? 'VICTORY!' : 'DEFEAT!'}</h2>
 
         <div className="mb-6">
-          {/* Voter and District Stats */}
-          <div className="grid grid-cols-4 gap-3 text-center mb-4">
-            <div className="p-2">
-              <div className="comic-red font-bold">RED</div>
-              <div className="comic-number comic-red">{redCount}</div>
-            </div>
-            <div className="p-2">
-              <div className="comic-blue font-bold">BLUE</div>
-              <div className="comic-number comic-blue">{blueCount}</div>
-            </div>
-            <div className={`p-2 ${redWins > blueWins ? 'comic-tile' : 'border-2 border-transparent'}`}>
-              <div className="comic-red font-bold">RED</div>
-              <div className="comic-number comic-red">{redWins}</div>
-            </div>
-            <div className={`p-2 ${blueWins > redWins ? 'comic-tile' : 'border-2 border-transparent'}`}>
-              <div className="comic-blue font-bold">BLUE</div>
-              <div className="comic-number comic-blue">{blueWins}</div>
-            </div>
-          </div>
-
-          <div className="flex justify-between text-xs font-bold mb-4">
-            <span>VOTERS</span>
-            <span>DISTRICTS</span>
-          </div>
-
-          {ties > 0 && (
-            <div className="text-center mb-2">
-              <span>Tied Districts: </span>
-              <span className="comic-number">{ties}</span>
-            </div>
+          {playerWon ? (
+            <>
+              {/* Victory copy */}
+              <div className="text-lg font-bold">{targetColor} wins a majority of districts..</div>
+              <div className="mb-4 text-sm">..Despite there being more {otherColor} voters.</div>
+            </>
+          ) : (
+            <>
+              {/* Defeat copy */}
+              <div className="text-lg font-bold">Oh no — democracy prevailed!</div>
+              <div className="mb-4 text-sm">{otherColor} has the majority of voters and districts.</div>
+            </>
           )}
+
+          {/* Reuse GameStats component */}
+          <GameStats gameState={gameState} />
         </div>
 
-        <div className="mb-3 text-sm">{playerWon ? 'You win! Take that, democracy!' : 'You lose! Try again.'}</div>
+        <div className="mb-3 text-sm">{playerWon ? 'You win! Take that, democracy!' : `You lose! Draw more ${targetColor} districts next time.`}</div>
 
         <button onClick={playerWon && hasNextLevel ? onNextLevel : onNewGame} className="comic-tile comic-red-tile text-white font-bold px-6 py-3 text-lg hover:scale-105 transition-transform">
           {playerWon ? (hasNextLevel ? 'NEXT LEVEL' : 'PLAY AGAIN') : 'TRY AGAIN'}

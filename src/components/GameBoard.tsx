@@ -202,6 +202,8 @@ export default function GameBoard() {
           redCount={gameState.redCount}
           blueCount={gameState.blueCount}
           hasNextLevel={hasNextLevel}
+          gameState={gameState}
+          currentLevel={currentLevel}
         />
       )}
 
