@@ -44,16 +44,38 @@ class ErrorBoundary extends Component<Props, State> {
       }
 
       return (
-        <div className={`${CSS_CLASSES.COMIC.BG} flex flex-col items-center justify-center min-h-screen p-4`}>
-          <div className={`${CSS_CLASSES.COMIC.INSTRUCTIONS} p-6 text-center max-w-md`}>
-            <h1 className={`${CSS_CLASSES.COMIC.TITLE} text-3xl mb-4 text-red-600`}>OOPS! SOMETHING BROKE!</h1>
+        <div
+        // className={`${CSS_CLASSES.COMIC.BG} flex flex-col items-center justify-center min-h-screen p-4`}
+        >
+          <div
+          // className={`${CSS_CLASSES.COMIC.INSTRUCTIONS} p-6 text-center max-w-md`}
+          >
+            <h1
+            // className={`${CSS_CLASSES.COMIC.TITLE} text-3xl mb-4 text-red-600`}
+            >
+              OOPS! SOMETHING BROKE!
+            </h1>
 
-            <div className="mb-6 text-sm">
-              <p className="mb-4">The gerrymanderer has encountered an unexpected error. Don&apos;t worry - democracy is still intact (probably).</p>
+            <div
+            // className="mb-6 text-sm"
+            >
+              <p
+              // className="mb-4"
+              >
+                The gerrymanderer has encountered an unexpected error. Don&apos;t worry - democracy is still intact (probably).
+              </p>
 
-              <details className="text-xs text-left bg-gray-100 p-2 rounded border">
-                <summary className="cursor-pointer font-bold mb-2">Technical Details</summary>
-                <code className="block whitespace-pre-wrap">
+              <details
+              // className="text-xs text-left bg-gray-100 p-2 rounded border"
+              >
+                <summary
+                // className="cursor-pointer font-bold mb-2"
+                >
+                  Technical Details
+                </summary>
+                <code
+                // className="block whitespace-pre-wrap"
+                >
                   {this.state.error?.message || 'Unknown error'}
                   {this.state.error?.stack && (
                     <>
@@ -72,7 +94,8 @@ class ErrorBoundary extends Component<Props, State> {
                 // Force a page reload as a last resort
                 window.location.reload();
               }}
-              className={`${CSS_CLASSES.COMIC.TILE} ${CSS_CLASSES.COMIC.RED_TILE} text-white font-bold px-6 py-3 hover:scale-105 transition-transform`}
+
+              // className={`${CSS_CLASSES.COMIC.TILE} ${CSS_CLASSES.COMIC.RED_TILE} text-white font-bold px-6 py-3 hover:scale-105 transition-transform`}
             >
               RELOAD GAME
             </button>

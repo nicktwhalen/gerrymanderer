@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { CSSProperties, useEffect } from 'react';
 import { useGame } from '@/context/GameContext';
 import { useGameLogic } from '@/hooks/useGameLogic';
 import { useInteractionStateMachine } from '@/hooks/useInteractionStateMachine';
@@ -119,96 +119,92 @@ export default function GameBoard() {
   }, [interactionMode, handleMouseUp, handleTouchMove]);
 
   return (
-    <div className={`${CSS_CLASSES.COMIC.BG} flex flex-col items-center p-2 sm:p-4 min-h-screen`}>
-      <h1 className={`${CSS_CLASSES.COMIC.TITLE} text-4xl sm:text-5xl lg:text-6xl font-bold mb-2 sm:mb-4 text-center px-2`}>THE GERRYMANDERER</h1>
-
-      <div
-        data-instructions
-        className={`${CSS_CLASSES.COMIC.INSTRUCTIONS} mb-3 sm:mb-5 p-2 sm:p-2 max-w-xs sm:max-w-md text-center text-xs sm:text-sm mx-2`}
-        style={showWalkthrough && currentStep === 'instructions' ? { position: 'relative', zIndex: 60 } : {}}
-      >
-        <strong className="text-sm sm:text-base">Level {currentLevel.id}</strong>
-        <br />
-        <span>
-          Create <u>{currentLevel.districtCount}</u> districts of <u>{currentLevel.districtSize}</u> voters each to make <u>{currentLevel.targetColor}</u> win the majority of districts!
-        </span>
-        <div className="flex gap-2 mt-2 justify-between">
-          <button
-            onClick={showWalkthrough ? undefined : openTutorial}
-            className={`${CSS_CLASSES.COMIC.TILE} ${CSS_CLASSES.COMIC.BLUE_TILE} text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform ${showWalkthrough ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            TUTORIAL
-          </button>
-          <button
-            onClick={showWalkthrough ? undefined : resetGame}
-            className={`${CSS_CLASSES.COMIC.TILE} ${CSS_CLASSES.COMIC.RED_TILE} text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform ${showWalkthrough ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            RESET
-          </button>
+    <>
+      <h1>
+        <small>The</small> <span className="gerrymanderer">Gerrymanderer</span>
+      </h1>
+      <div className="content">
+        <div data-instructions className="tile">
+          <h2>Level {currentLevel.id}</h2>
+          <p>
+            Create <u>{currentLevel.districtCount}</u> districts of <u>{currentLevel.districtSize}</u> voters each to make <u>{currentLevel.targetColor}</u> win the majority of districts!
+          </p>
+          <div className="flex-center">
+            <button className="blue" onClick={showWalkthrough ? undefined : openTutorial}>
+              Tutorial
+            </button>
+            <button className="red" onClick={showWalkthrough ? undefined : resetGame}>
+              Reset
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div
-        key={gameKey}
-        data-gameboard
-        className={`${CSS_CLASSES.COMIC.BOARD} grid gap-0 p-3 sm:p-6 max-w-sm sm:max-w-none`}
-        style={{
-          gridTemplateColumns: `repeat(${currentLevel.voterGrid[0].length}, minmax(0, 1fr))`,
-        }}
-      >
-        {gameState.board.map((row) =>
-          row.map((voter) => {
-            const district = getDistrictForVoter(voter.id);
-            const districtId = district ? parseInt(district.id.split('-')[1]) : -1;
+        <div
+          key={gameKey}
+          data-gameboard
+          className="tile game-board"
+          style={
+            {
+              '--grid-size': currentLevel.voterGrid[0].length,
+            } as CSSProperties
+          }
+        >
+          {gameState.board.map((row) =>
+            row.map((voter) => {
+              const district = getDistrictForVoter(voter.id);
+              const redVotes = district ? district.voters.filter((v) => v.color === 'red').length : 0;
+              const blueVotes = district ? district.voters.filter((v) => v.color === 'blue').length : 0;
+              const winnerColor = redVotes > blueVotes ? 'red' : blueVotes > redVotes ? 'blue' : 'tie';
 
-            const backgroundColor = district && district.isComplete ? GAME_CONFIG.DISTRICT_COLORS[districtId % GAME_CONFIG.DISTRICT_COLORS.length] : 'transparent';
+              // Override tile state if voter is in preview selection
+              let tileState = getTileState(voter);
+              if (isInPreviewSelection(voter.id)) {
+                tileState = 'selected';
+              }
 
-            // Override tile state if voter is in preview selection
-            let tileState = getTileState(voter);
-            if (isInPreviewSelection(voter.id)) {
-              tileState = 'selected';
-            }
+              return (
+                <div key={voter.id} className={`grid-cell winner-${winnerColor}`} data-voter-id={voter.id}>
+                  <VoterTile
+                    voter={voter}
+                    state={tileState}
+                    district={district}
+                    onMouseDown={(e) => (isInteractionAllowed(voter) ? handleMouseDown(voter, e) : undefined)}
+                    onMouseEnter={() => (isInteractionAllowed(voter) ? handleMouseEnter(voter) : undefined)}
+                    onTouchStart={(e) => (isInteractionAllowed(voter) ? handleTouchStart(voter, e) : undefined)}
+                    onTouchMove={handleTouchMove}
+                    currentDistrictVoters={gameState.currentDistrict?.voters || []}
+                  />
+                </div>
+              );
+            }),
+          )}
+        </div>
 
-            return (
-              <div key={voter.id} className="p-1" style={{ backgroundColor }} data-voter-id={voter.id}>
-                <VoterTile
-                  voter={voter}
-                  state={tileState}
-                  district={district}
-                  onMouseDown={(e) => (isInteractionAllowed(voter) ? handleMouseDown(voter, e) : undefined)}
-                  onMouseEnter={() => (isInteractionAllowed(voter) ? handleMouseEnter(voter) : undefined)}
-                  onTouchStart={(e) => (isInteractionAllowed(voter) ? handleTouchStart(voter, e) : undefined)}
-                  onTouchMove={handleTouchMove}
-                  currentDistrictVoters={gameState.currentDistrict?.voters || []}
-                />
-              </div>
-            );
-          }),
+        <div
+          data-scoreboard
+          // style={showWalkthrough && currentStep === 'step3' ? { position: 'relative', zIndex: 60 } : {}}
+        >
+          <GameStats gameState={gameState} />
+        </div>
+
+        {gameResult && showGameResult && (
+          <GameResult
+            blueWins={gameResult.blueWins}
+            redWins={gameResult.redWins}
+            ties={gameResult.ties}
+            playerWon={gameResult.playerWon}
+            onNewGame={resetGame}
+            onNextLevel={nextLevel}
+            redCount={gameState.redCount}
+            blueCount={gameState.blueCount}
+            hasNextLevel={hasNextLevel}
+            gameState={gameState}
+            currentLevel={currentLevel}
+          />
         )}
       </div>
-
-      <div data-scoreboard style={showWalkthrough && currentStep === 'step3' ? { position: 'relative', zIndex: 60 } : {}}>
-        <GameStats gameState={gameState} />
-      </div>
-
-      {gameResult && showGameResult && (
-        <GameResult
-          blueWins={gameResult.blueWins}
-          redWins={gameResult.redWins}
-          ties={gameResult.ties}
-          playerWon={gameResult.playerWon}
-          onNewGame={resetGame}
-          onNextLevel={nextLevel}
-          redCount={gameState.redCount}
-          blueCount={gameState.blueCount}
-          hasNextLevel={hasNextLevel}
-          gameState={gameState}
-          currentLevel={currentLevel}
-        />
-      )}
-
       {showTutorial && <Tutorial onClose={closeTutorial} />}
       {showWalkthrough && <Walkthrough onClose={closeWalkthrough} levelId={currentLevel.id} currentStep={currentStep} setCurrentStep={setCurrentStep} />}
-    </div>
+    </>
   );
 }

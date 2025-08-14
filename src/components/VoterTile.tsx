@@ -34,21 +34,18 @@ export default function VoterTile({ voter, state, district, onMouseDown, onMouse
       onTouchMove(e);
     }
   };
-  const getBaseColor = () => {
-    return voter.color === 'red' ? 'comic-red-tile' : 'comic-blue-tile';
-  };
 
   const getComicStyle = () => {
-    let style = 'comic-tile';
+    let style = '';
     switch (state) {
       case 'selected':
-        style += ' comic-tile-selected';
+        style += ' selected';
         break;
       case 'completed':
-        style += ' comic-tile-completed';
+        style += ' completed';
         break;
       case 'available':
-        style += ' comic-tile-available';
+        style += ' available';
         break;
     }
     return style;
@@ -59,20 +56,25 @@ export default function VoterTile({ voter, state, district, onMouseDown, onMouse
   };
 
   return (
-    <div
+    <button
       className={`
-        w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16
-        ${getBaseColor()} 
+        voter
+        ${voter.color}
         ${getComicStyle()}
-        ${getCursor()}
-        select-none
-        flex items-center justify-center
-        text-white text-sm sm:text-base lg:text-lg font-black
       `}
+      // className={`
+      //   w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16
+      //   ${getBaseColor()}
+      //   ${getComicStyle()}
+      //   ${getCursor()}
+      //   select-none
+      //   flex items-center justify-center
+      //   text-white text-sm sm:text-base lg:text-lg font-black
+      // `}
       onMouseDown={handleMouseDown}
       onMouseEnter={onMouseEnter}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
-    ></div>
+    ></button>
   );
 }
