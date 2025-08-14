@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-// import '../styles/comic.css';
 import { GameProvider } from '@/context/GameContext';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
@@ -16,6 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+      </head>
       <body>
         <ErrorBoundary>
           <GameProvider>{children}</GameProvider>

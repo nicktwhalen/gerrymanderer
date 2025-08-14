@@ -1,0 +1,66 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-size), 3rem);
+  border: 0.5rem solid white;
+  box-shadow:
+    0 0 0 0.25rem black,
+    0.5rem 0.5rem 0 black;
+}
+
+.grid-cell {
+  position: relative;
+}
+
+.grid-cell.completed {
+  pointer-events: none;
+}
+
+.grid-cell::after {
+  content: '';
+  display: block;
+  position: absolute;
+  inset: 0.125rem;
+  pointer-events: none;
+  border-color: white;
+  border-width: 0;
+}
+
+.grid-cell.selected::after {
+  border-style: dashed;
+}
+
+.grid-cell.completed::after {
+  border-style: solid;
+}
+
+.grid-cell.border-top::after {
+  border-top-width: 0.25rem;
+}
+
+.grid-cell.border-right::after {
+  border-right-width: 0.25rem;
+}
+
+.grid-cell.border-bottom::after {
+  border-bottom-width: 0.25rem;
+}
+
+.grid-cell.border-left::after {
+  border-left-width: 0.25rem;
+}
+
+.grid-cell.border-all::after,
+.grid-cell.selected:not([class*='border-'])::after {
+  border-left-width: 0.25rem;
+  border-right-width: 0.25rem;
+  border-top-width: 0.25rem;
+  border-bottom-width: 0.25rem;
+}
+
+.grid-cell.winner-red::after {
+  background-color: rgba(220, 20, 60, 0.5);
+}
+
+.grid-cell.winner-blue::after {
+  background-color: rgba(0, 102, 204, 0.5);
+}

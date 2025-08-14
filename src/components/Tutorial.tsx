@@ -36,12 +36,16 @@ function DistrictAnimation() {
       setPhase(step.phase);
 
       // Update cursor position based on phase
-      if (step.phase === 'cursor-appear' || step.phase === 'cursor-click') {
-        setCursorPosition({ x: '1.75rem', y: '50%' }); // Center of first square
+      if (step.phase === 'initial') {
+        setCursorPosition({ x: '1.75rem', y: '5rem' });
+      } else if (step.phase === 'cursor-appear' || step.phase === 'cursor-click') {
+        setCursorPosition({ x: '1.75rem', y: '2.5rem' }); // Center of first square
       } else if (step.phase === 'drag-to-second') {
-        setCursorPosition({ x: '50%', y: '50%' }); // Center of second square
-      } else if (step.phase === 'drag-to-third' || step.phase === 'final') {
-        setCursorPosition({ x: '10rem', y: '50%' }); // Center of third square
+        setCursorPosition({ x: '50%', y: '2.5rem' }); // Center of second square
+      } else if (step.phase === 'drag-to-third') {
+        setCursorPosition({ x: '9rem', y: '2.5rem' }); // Center of third square
+      } else if (step.phase === 'final') {
+        setCursorPosition({ x: '9rem', y: '5rem' }); // disappear
       }
 
       currentStep++;
@@ -65,9 +69,9 @@ function DistrictAnimation() {
 
       <div className="illustration">
         {/* Cursor */}
-        {['cursor-appear', 'cursor-click', 'drag-to-second', 'drag-to-third', 'final'].includes(phase) && (
+        {['initial', 'cursor-appear', 'cursor-click', 'drag-to-second', 'drag-to-third', 'final'].includes(phase) && (
           <div
-            className="cursor"
+            className={`cursor ${phase}`}
             style={
               {
                 '--x': `${cursorPosition.x}`,
@@ -114,9 +118,38 @@ function DistrictAnimation() {
 
         {/* The three voting squares */}
         <div className="voters">
-          <button className={`voter red ${['cursor-click', 'drag-to-second', 'drag-to-third', 'final'].includes(phase) ? 'selected' : ''}`} />
-          <button className={`voter red ${['drag-to-second', 'drag-to-third', 'final'].includes(phase) ? 'selected' : ''}`} />
-          <button className={`voter blue ${['drag-to-third', 'final'].includes(phase) ? 'selected' : ''}`} />
+          <div
+            className={`
+              grid-cell
+              ${['cursor-click', 'drag-to-second', 'drag-to-third'].includes(phase) ? 'selected' : ''}
+              ${['cursor-click'].includes(phase) ? 'border-all' : ''}
+              ${['drag-to-second', 'drag-to-third', 'final'].includes(phase) ? 'border-top border-left border-bottom' : ''}
+              ${['final'].includes(phase) ? 'completed' : ''}
+            `}
+          >
+            <button className="voter red" />
+          </div>
+          <div
+            className={`
+              grid-cell
+              ${['drag-to-second', 'drag-to-third', 'final'].includes(phase) ? 'selected' : ''}
+              ${['drag-to-second'].includes(phase) ? 'border-top border-bottom border-right' : ''}
+              ${['drag-to-third', 'final'].includes(phase) ? 'border-top border-bottom' : ''}
+              ${['final'].includes(phase) ? 'completed' : ''}
+            `}
+          >
+            <button className="voter red" />
+          </div>
+          <div
+            className={`
+              grid-cell
+              ${['drag-to-third'].includes(phase) ? 'selected' : ''}
+              ${['drag-to-third', 'final'].includes(phase) ? 'border-top border-bottom border-right' : ''}
+              ${['final'].includes(phase) ? 'completed' : ''}
+            `}
+          >
+            <button className="voter blue" />
+          </div>
         </div>
       </div>
 

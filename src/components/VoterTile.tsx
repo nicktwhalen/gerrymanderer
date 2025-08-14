@@ -13,7 +13,7 @@ interface VoterTileProps {
   currentDistrictVoters?: Voter[];
 }
 
-export default function VoterTile({ voter, state, district, onMouseDown, onMouseEnter, onTouchStart, onTouchMove }: VoterTileProps) {
+export default function VoterTile({ voter, district, onMouseDown, onMouseEnter, onTouchStart, onTouchMove }: VoterTileProps) {
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     if (onMouseDown) {
@@ -35,42 +35,12 @@ export default function VoterTile({ voter, state, district, onMouseDown, onMouse
     }
   };
 
-  const getComicStyle = () => {
-    let style = '';
-    switch (state) {
-      case 'selected':
-        style += ' selected';
-        break;
-      case 'completed':
-        style += ' completed';
-        break;
-      case 'available':
-        style += ' available';
-        break;
-    }
-    return style;
-  };
-
-  const getCursor = () => {
-    return state === 'completed' && !district ? 'cursor-not-allowed' : 'cursor-pointer';
-  };
-
   return (
     <button
       className={`
         voter
         ${voter.color}
-        ${getComicStyle()}
       `}
-      // className={`
-      //   w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16
-      //   ${getBaseColor()}
-      //   ${getComicStyle()}
-      //   ${getCursor()}
-      //   select-none
-      //   flex items-center justify-center
-      //   text-white text-sm sm:text-base lg:text-lg font-black
-      // `}
       onMouseDown={handleMouseDown}
       onMouseEnter={onMouseEnter}
       onTouchStart={handleTouchStart}

@@ -1,0 +1,45 @@
+button {
+  font-size: 1rem;
+  font-family: inherit;
+  text-transform: uppercase;
+  color: white;
+  border-radius: 0;
+  border: 0.25rem solid black;
+  outline: none;
+  box-shadow:
+    inset 0.15rem 0.15rem 0 rgba(255, 255, 255, 0.3),
+    inset -0.15rem -0.15rem 0 rgba(0, 0, 0, 0.3),
+    0.15rem 0.15rem 0 black;
+  transition:
+    scale 0.1s ease,
+    rotate 0.1s ease;
+  padding: 0.25rem 0.75rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button.blue {
+  background: linear-gradient(135deg, #0066cc, #0052a3 50%, #003d7a);
+}
+
+button.red {
+  background: linear-gradient(135deg, #dc143c, #b22222 50%, #8b0000);
+}
+
+button[disabled] {
+  pointer-events: none;
+  background: grey;
+  visibility: hidden;
+}
+
+@media (hover: hover) {
+  button:hover {
+    scale: 1.05;
+    rotate: 1deg;
+  }
+}
+
+button:active {
+  scale: 0.95;
+  rotate: -1deg;
+}

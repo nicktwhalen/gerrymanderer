@@ -19,7 +19,7 @@ interface GameResultProps {
   currentLevel: Level;
 }
 
-export default function GameResult({ blueWins, redWins, ties, playerWon, onNewGame, onNextLevel, redCount, blueCount, hasNextLevel, gameState, currentLevel }: GameResultProps) {
+export default function GameResult({ playerWon, onNewGame, onNextLevel, hasNextLevel, gameState, currentLevel }: GameResultProps) {
   const { handleBackdropClick, handleModalClick } = useModal(true);
 
   // Get target color and opposite color for dynamic copy
@@ -27,70 +27,29 @@ export default function GameResult({ blueWins, redWins, ties, playerWon, onNewGa
   const otherColor = targetColor === 'blue' ? 'red' : 'blue';
 
   return (
-    <div
-      // className="fixed inset-0 flex items-center justify-center p-4 z-50"
-      // style={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
-      onClick={handleBackdropClick}
-    >
-      <div
-        // className="comic-instructions p-6 max-w-sm w-full text-center"
-        onClick={handleModalClick}
-      >
-        <h2
-        // className={`comic-title text-3xl sm:text-4xl mb-2 ${playerWon ? 'text-green-600' : 'text-red-600'}`}
-        >
-          {playerWon ? 'VICTORY!' : 'DEFEAT!'}
-        </h2>
+    <div className="modal" onClick={handleBackdropClick}>
+      <div className="tile" onClick={handleModalClick}>
+        <h2>{playerWon ? 'Victory!' : 'Defeat!'}</h2>
 
-        <div
-        // className="mb-6"
-        >
-          {playerWon ? (
-            <>
-              {/* Victory copy */}
-              <div
-              // className="text-lg font-bold"
-              >
-                {targetColor} wins a majority of districts..
-              </div>
+        {playerWon ? (
+          <>
+            {/* Victory copy */}
+            <p>{targetColor} wins a majority of districts..</p>
+            <p>..Despite there being more {otherColor} voters.</p>
+          </>
+        ) : (
+          <>
+            {/* Defeat copy */} <p>Oh no — democracy prevailed!</p>
+            <p>{otherColor} has the majority of voters and districts.</p>
+          </>
+        )}
 
-              <div
-              // className="mb-4 text-sm"
-              >
-                ..Despite there being more {otherColor} voters.
-              </div>
-            </>
-          ) : (
-            <>
-              {/* Defeat copy */}
-              <div
-              // className="text-lg font-bold"
-              >
-                Oh no — democracy prevailed!
-              </div>
+        {/* Reuse GameStats component */}
+        {/* <GameStats gameState={gameState} /> */}
 
-              <div
-              // className="mb-4 text-sm"
-              >
-                {otherColor} has the majority of voters and districts.
-              </div>
-            </>
-          )}
+        <p>{playerWon ? 'You win! Take that, democracy!' : `You lose! Draw more ${targetColor} districts next time.`}</p>
 
-          {/* Reuse GameStats component */}
-          <GameStats gameState={gameState} />
-        </div>
-
-        <div
-        // className="mb-3 text-sm"
-        >
-          {playerWon ? 'You win! Take that, democracy!' : `You lose! Draw more ${targetColor} districts next time.`}
-        </div>
-
-        <button
-          onClick={playerWon && hasNextLevel ? onNextLevel : onNewGame}
-          // className="comic-tile comic-red-tile text-white font-bold px-6 py-3 text-lg hover:scale-105 transition-transform"
-        >
+        <button className={`${playerWon ? 'blue' : 'red'}`} onClick={playerWon && hasNextLevel ? onNextLevel : onNewGame}>
           {playerWon ? (hasNextLevel ? 'NEXT LEVEL' : 'PLAY AGAIN') : 'TRY AGAIN'}
         </button>
       </div>

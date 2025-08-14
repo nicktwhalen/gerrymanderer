@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { Voter, District, Position, TileState } from '@/types/game';
+import { Voter, District, Position, TileState, TileBorders } from '@/types/game';
 import { useGame } from '@/context/GameContext';
 
 export const useGameLogic = () => {
@@ -81,6 +81,37 @@ export const useGameLogic = () => {
       return 'default';
     },
     [isVoterInCurrentDistrict, isVoterInAnyDistrict, gameState.currentDistrict, canAddVoterToCurrentDistrict],
+  );
+
+  const getTileBorders = useCallback(
+    (voter: Voter, district: District | undefined): TileBorders => {
+      const borders: TileBorders = {
+        top: true,
+        right: true,
+        bottom: true,
+        left: true,
+      };
+      const { row, col } = voter;
+
+      // loop through the district voters to find adjacent tiles
+      if (district) {
+        for (const v of district.voters) {
+          if (v.row === row && v.col === col) continue; // Skip self
+
+          if (v.row === row - 1 && v.col === col) {
+            borders.top = false;
+          } else if (v.row === row + 1 && v.col === col) {
+            borders.bottom = false;
+          } else if (v.row === row && v.col === col - 1) {
+            borders.left = false;
+          } else if (v.row === row && v.col === col + 1) {
+            borders.right = false;
+          }
+        }
+      }
+      return borders;
+    },
+    [gameState.board],
   );
 
   const getDistrictForVoter = useCallback(
@@ -268,10 +299,11 @@ export const useGameLogic = () => {
       isVoterInAnyDistrict,
       canAddVoterToCurrentDistrict,
       getTileState,
+      getTileBorders,
       getDistrictForVoter,
       addVoterToDistrict,
       addMultipleVotersToDistrict,
     }),
-    [isAdjacent, isContiguous, isVoterInCurrentDistrict, isVoterInAnyDistrict, canAddVoterToCurrentDistrict, getTileState, getDistrictForVoter, addVoterToDistrict, addMultipleVotersToDistrict],
+    [isAdjacent, isContiguous, isVoterInCurrentDistrict, isVoterInAnyDistrict, canAddVoterToCurrentDistrict, getTileState, getTileBorders, getDistrictForVoter, addVoterToDistrict, addMultipleVotersToDistrict],
   );
 };

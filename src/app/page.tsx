@@ -1,9 +1,5 @@
 import GameBoard from '@/components/GameBoard';
 
 export default function Home() {
-  return (
-    <main>
-      <GameBoard />
-    </main>
-  );
+  return <GameBoard />;
 }

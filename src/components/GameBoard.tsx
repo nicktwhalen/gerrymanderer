@@ -6,17 +6,17 @@ import { useGameLogic } from '@/hooks/useGameLogic';
 import { useInteractionStateMachine } from '@/hooks/useInteractionStateMachine';
 import { useTutorial } from '@/hooks/useTutorial';
 import { useWalkthrough } from '@/hooks/useWalkthrough';
-import { GAME_CONFIG, CSS_CLASSES } from '@/config/constants';
 import VoterTile from './VoterTile';
 import GameStats from './GameStats';
 import GameResult from './GameResult';
 import Tutorial from './Tutorial';
 import Walkthrough from './Walkthrough';
+import { District, Voter } from '@/types/game';
 
 export default function GameBoard() {
   const { gameState, currentLevel, gameKey, gameResult, hasNextLevel, showGameResult, resetGame, nextLevel } = useGame();
 
-  const { getTileState, getDistrictForVoter } = useGameLogic();
+  const { getTileState, getDistrictForVoter, getTileBorders } = useGameLogic();
   const { handleMouseDown, handleMouseEnter, handleMouseUp, handleTouchStart, handleTouchMove, interactionMode, isInPreviewSelection } = useInteractionStateMachine();
   const { showTutorial, closeTutorial, openTutorial } = useTutorial();
   const { showWalkthrough, currentStep, setCurrentStep, openWalkthrough, closeWalkthrough } = useWalkthrough();
@@ -49,8 +49,6 @@ export default function GameBoard() {
       // Only allow interaction with top 3 squares (row 0, positions 0, 1, 2)
       const voterPosition = gameState.board.flat().findIndex((v) => v.id === voter.id);
       const row = Math.floor(voterPosition / currentLevel.voterGrid[0].length);
-      const col = voterPosition % currentLevel.voterGrid[0].length;
-
       return row === 0; // Only top row (row 0) is allowed
     }
 
@@ -62,8 +60,6 @@ export default function GameBoard() {
       // Only allow interaction with bottom 3 squares (row 2, positions 6, 7, 8)
       const voterPosition = gameState.board.flat().findIndex((v) => v.id === voter.id);
       const row = Math.floor(voterPosition / currentLevel.voterGrid[0].length);
-      const col = voterPosition % currentLevel.voterGrid[0].length;
-
       return row === 2; // Only bottom row (row 2) is allowed
     }
 
@@ -71,8 +67,6 @@ export default function GameBoard() {
       // Only allow interaction with middle 3 squares (row 1, positions 3, 4, 5)
       const voterPosition = gameState.board.flat().findIndex((v) => v.id === voter.id);
       const row = Math.floor(voterPosition / currentLevel.voterGrid[0].length);
-      const col = voterPosition % currentLevel.voterGrid[0].length;
-
       return row === 1; // Only middle row (row 1) is allowed
     }
 
@@ -118,13 +112,27 @@ export default function GameBoard() {
     };
   }, [interactionMode, handleMouseUp, handleTouchMove]);
 
+  const getDistrictBorders = (voter: Voter, district?: District | null) => {
+    if (!district) return '';
+    const borders = getTileBorders(voter, district);
+    if (!borders) return '';
+    return Object.entries(borders)
+      .map(([side, hasBorder]) => (hasBorder ? `border-${side}` : ''))
+      .filter(Boolean)
+      .join(' ');
+  };
+
   return (
     <>
-      <h1>
-        <small>The</small> <span className="gerrymanderer">Gerrymanderer</span>
-      </h1>
-      <div className="content">
-        <div data-instructions className="tile">
+      <header>
+        <h1>
+          <span className="the">The</span>
+          <span className="gerrymanderer">Gerrymanderer</span>
+        </h1>
+      </header>
+
+      <main>
+        <div data-instructions className="tile tile-instructions">
           <h2>Level {currentLevel.id}</h2>
           <p>
             Create <u>{currentLevel.districtCount}</u> districts of <u>{currentLevel.districtSize}</u> voters each to make <u>{currentLevel.targetColor}</u> win the majority of districts!
@@ -142,7 +150,7 @@ export default function GameBoard() {
         <div
           key={gameKey}
           data-gameboard
-          className="tile game-board"
+          className="grid"
           style={
             {
               '--grid-size': currentLevel.voterGrid[0].length,
@@ -154,7 +162,7 @@ export default function GameBoard() {
               const district = getDistrictForVoter(voter.id);
               const redVotes = district ? district.voters.filter((v) => v.color === 'red').length : 0;
               const blueVotes = district ? district.voters.filter((v) => v.color === 'blue').length : 0;
-              const winnerColor = redVotes > blueVotes ? 'red' : blueVotes > redVotes ? 'blue' : 'tie';
+              const winnerColor = redVotes > blueVotes ? 'red' : blueVotes > redVotes ? 'blue' : undefined;
 
               // Override tile state if voter is in preview selection
               let tileState = getTileState(voter);
@@ -163,7 +171,14 @@ export default function GameBoard() {
               }
 
               return (
-                <div key={voter.id} className={`grid-cell winner-${winnerColor}`} data-voter-id={voter.id}>
+                <div
+                  key={voter.id}
+                  data-voter-id={voter.id}
+                  className={`grid-cell 
+                  ${tileState}
+                  ${winnerColor ? `winner-${winnerColor}` : ''}
+                  ${getDistrictBorders(voter, district || gameState.currentDistrict)}`}
+                >
                   <VoterTile
                     voter={voter}
                     state={tileState}
@@ -180,10 +195,7 @@ export default function GameBoard() {
           )}
         </div>
 
-        <div
-          data-scoreboard
-          // style={showWalkthrough && currentStep === 'step3' ? { position: 'relative', zIndex: 60 } : {}}
-        >
+        <div data-scoreboard>
           <GameStats gameState={gameState} />
         </div>
 
@@ -202,7 +214,7 @@ export default function GameBoard() {
             currentLevel={currentLevel}
           />
         )}
-      </div>
+      </main>
       {showTutorial && <Tutorial onClose={closeTutorial} />}
       {showWalkthrough && <Walkthrough onClose={closeWalkthrough} levelId={currentLevel.id} currentStep={currentStep} setCurrentStep={setCurrentStep} />}
     </>

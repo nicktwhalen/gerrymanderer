@@ -22,14 +22,14 @@ export default function GameStats({ gameState }: GameStatsProps) {
 
   return (
     <div className="flex-center">
-      <div className="tile flex-center">
+      <div className="tile tile-scoreboard flex-center">
         <h2>Voters:</h2>
         <h3 className="visually-hidden">Blue</h3>
         <p className="text-number text-blue">{gameState.blueCount}</p>
         <h3 className="visually-hidden">Red</h3>
         <p className="text-number text-red">{gameState.redCount}</p>
       </div>
-      <div className="tile flex-center">
+      <div className="tile tile-scoreboard flex-center">
         <h2>Districts:</h2>
         <h3 className="visually-hidden">Blue</h3>
         <p className="text-number text-blue">{blueDistricts}</p>

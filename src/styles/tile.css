@@ -1,0 +1,17 @@
+.tile {
+  background: #ffe4b5;
+  border: 0.2rem solid black;
+  padding: 0.5rem;
+  box-shadow: 0.3rem 0.3rem 0 black;
+  transform: rotate(-0.5deg);
+  text-align: center;
+  max-width: 22rem;
+}
+
+.tile-instructions {
+  padding-bottom: 1rem;
+}
+
+.tile-scoreboard {
+  padding: 0.5rem 1rem;
+}
