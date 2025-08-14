@@ -46,6 +46,13 @@
   bottom: -1.5rem;
 }
 
+.walkthrough.step4 {
+  place-items: start;
+}
+.walkthrough.step4 .tile {
+  margin-top: 9rem;
+}
+
 .walkthrough.step5 {
   place-items: start;
 }
