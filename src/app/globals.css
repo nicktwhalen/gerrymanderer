@@ -7,6 +7,7 @@
 @import '../styles/modal.css';
 @import '../styles/illustration.css';
 @import '../styles/tile.css';
+@import '../styles/walkthrough.css';
 
 * {
   select: none;

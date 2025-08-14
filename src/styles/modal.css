@@ -12,6 +12,16 @@ body:has(.modal) {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
+.modal.no-overlay {
+  pointer-events: none;
+  background-color: transparent;
+}
+
+.modal.no-overlay .tile {
+  pointer-events: auto;
+  background-color: transparent;
+}
+
 .modal .tile {
   padding: 1rem;
 }

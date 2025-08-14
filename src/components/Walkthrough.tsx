@@ -141,120 +141,49 @@ export default function Walkthrough({ onClose, levelId, currentStep, setCurrentS
     switch (currentStep) {
       case 'instructions':
         return (
-          <div
-          // className="text-center relative"
-          >
+          <>
+            <p>The instructions at the top tell you how many districts to draw, the size of each one, and which color needs to win the majority.</p>
+            <button className="blue" onClick={nextStep}>
+              Next
+            </button>
             {/* Comic book style arrow pointing up to instructions */}
-            <div
-            // className="absolute -top-8 left-1/2 transform -translate-x-1/2"
-            >
-              <div
-              // className="text-3xl"
-              >
-                ⬆️
-              </div>
-            </div>
-
-            <div
-            // className="text-sm mb-3"
-            >
-              The instructions at the top tell you how many districts to draw, the size of each one, and which color needs to win the majority.
-            </div>
-            <div
-            // className="flex justify-center"
-            >
-              <button
-                onClick={nextStep}
-                // className="comic-tile comic-blue-tile text-white font-bold px-4 py-1 text-sm hover:scale-105 transition-transform"
-              >
-                NEXT
-              </button>
-            </div>
-          </div>
+            <div className="arrow">⬆️</div>
+          </>
         );
 
       case 'step2':
         return (
-          <div
-          // className="text-center relative"
-          >
-            {/* Down block arrow half on modal, half hanging off */}
-            <div
-            // className="absolute -bottom-12 left-1/2 transform -translate-x-1/2"
-            >
-              <div
-              // className="text-3xl"
-              >
-                ⬇️
-              </div>
-            </div>
-
-            <div
-            // className="text-sm mb-3"
-            >
-              Select the top three squares (click, tap, or drag) to make a district of three voters with a {targetColor} majority.
-            </div>
-          </div>
+          <>
+            <p>Select the top three squares (click, tap, or drag) to make a district of three voters with a {targetColor} majority.</p>
+            {/* Comic book style arrow pointing down to squares */}
+            <div className="arrow">⬇️</div>
+          </>
         );
 
       case 'step3':
         return (
-          <div
-          // className="text-center relative"
-          >
-            {/* Down block arrow pointing to scoreboard */}
-            <div
-            // className="absolute left-1/2 transform -translate-x-1/2" style={{ bottom: '-39px' }}
-            >
-              <div
-              // className="text-3xl"
-              >
-                ⬇️
-              </div>
-            </div>
-
-            <div
-            // className="text-sm mb-3"
-            >
+          <>
+            <p>
               Great job! Since the district you created has more {targetColor} voters than {otherColor}, the entire district will vote {targetColor}. The scoreboard below now shows that you have 1 {targetColor} district.
-            </div>
-            <div
-            // className="flex justify-center"
-            >
-              <button
-                onClick={nextStep}
-                // className="comic-tile comic-blue-tile text-white font-bold px-4 py-1 text-sm hover:scale-105 transition-transform"
-              >
-                NEXT
-              </button>
-            </div>
-          </div>
+            </p>
+
+            <button className="red" onClick={nextStep}>
+              Next
+            </button>
+
+            {/* Down block arrow pointing to scoreboard */}
+            <div className="arrow">⬇️</div>
+          </>
         );
 
       case 'step4':
-        return (
-          <div
-          // className="text-center relative"
-          >
-            <div
-            // className="text-sm mb-3"
-            >
-              Now create a second district with a {targetColor} majority. Remember — voters have to be neighbors (above, below, left, or right) to join the same district.
-            </div>
-          </div>
-        );
+        return <p>Now create a second district with a {targetColor} majority. Remember — voters have to be neighbors (above, below, left, or right) to join the same district.</p>;
 
       case 'step5':
         return (
-          <div
-          // className="text-center relative"
-          >
-            <div
-            // className="text-sm mb-3"
-            >
-              Awesome! You now have 2 {targetColor} districts. It's okay if the last district is all {otherColor} — the majority of districts will still be {targetColor}. Create the final district to win!
-            </div>
-          </div>
+          <p>
+            Awesome! You now have 2 {targetColor} districts. It's okay if the last district is all {otherColor} — the majority of districts will still be {targetColor}. Create the final district to win!
+          </p>
         );
 
       default:
@@ -263,35 +192,16 @@ export default function Walkthrough({ onClose, levelId, currentStep, setCurrentS
   };
 
   return (
-    <>
+    <div
+      className={`
+        modal
+        walkthrough 
+        ${currentStep}
+        ${!['instructions', 'step3'].includes(currentStep) ? 'no-overlay' : ''}`}
+    >
       {/* Dark overlay - show for step 1 and step 3 */}
-      {(currentStep === 'instructions' || currentStep === 'step3') && (
-        <div
-        // className="fixed inset-0 z-50"
-        >
-          <div
-          // className="absolute inset-0" style={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
-          ></div>
-        </div>
-      )}
-
       {/* Small modal positioned based on current step */}
-      <div
-
-      // className={`fixed p-4 z-70 border-4 border-black rounded-lg shadow-lg ${currentStep === 'step5' ? '' : 'max-w-sm'}`}
-      // style={{
-      //   background: 'linear-gradient(45deg, #FFD700 25%, #FFCC33 25%, #FFCC33 50%, #FFD700 50%, #FFD700 75%, #FFCC33 75%)',
-      //   backgroundSize: '40px 40px',
-      //   fontFamily: '"Permanent Marker", cursive',
-      //   color: '#000000',
-      //   top: currentStep === 'instructions' ? `${instructionsTop + 90}px` : currentStep === 'step2' || currentStep === 'step4' || currentStep === 'step5' ? `${gameboardTop - 100}px` : currentStep === 'step3' ? `${scoreboardTop - 155}px` : '180px', // Position based on step
-      //   left: '50%',
-      //   transform: 'translateX(-50%)',
-      //   width: '24rem',
-      // }}
-      >
-        {renderStep()}
-      </div>
-    </>
+      <div className="tile">{renderStep()}</div>
+    </div>
   );
 }

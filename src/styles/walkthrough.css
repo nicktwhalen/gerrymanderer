@@ -1,0 +1,54 @@
+.walkthrough .tile {
+  background: linear-gradient(45deg, rgb(255, 215, 0) 25%, rgb(255, 204, 51) 25%, rgb(255, 204, 51) 50%, rgb(255, 215, 0) 50%, rgb(255, 215, 0) 75%, rgb(255, 204, 51) 75%) 0% 0% / 40px 40px;
+  max-width: 18rem;
+  padding: 1rem;
+}
+
+.walkthrough .arrow {
+  position: absolute;
+  font-size: 3rem;
+  line-height: 1;
+  left: 50%;
+  transform: translateX(-50%);
+  text-shadow: 0.1rem 0.1rem 0.75rem rgba(0, 0, 0, 1);
+}
+
+.walkthrough.instructions {
+  place-items: start;
+}
+.walkthrough.instructions .tile {
+  margin-top: 12rem;
+  padding-top: 3rem;
+}
+.walkthrough.instructions .arrow {
+  top: -1.5rem;
+}
+
+.walkthrough.step2 {
+  place-items: start;
+}
+.walkthrough.step2 .tile {
+  margin-top: 8.5rem;
+  padding-bottom: 2rem;
+}
+.walkthrough.step2 .arrow {
+  bottom: -1.5rem;
+}
+
+.walkthrough.step3 {
+  place-items: start;
+}
+.walkthrough.step3 .tile {
+  margin-top: 15rem;
+  padding-bottom: 2rem;
+}
+.walkthrough.step3 .arrow {
+  bottom: -1.5rem;
+}
+
+.walkthrough.step5 {
+  place-items: start;
+}
+.walkthrough.step5 .tile {
+  margin-top: 8rem;
+}
