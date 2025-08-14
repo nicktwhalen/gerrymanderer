@@ -86,29 +86,40 @@ export const useGameLogic = () => {
   const getTileBorders = useCallback(
     (voter: Voter, district: District | undefined): TileBorders => {
       const borders: TileBorders = {
-        top: true,
-        right: true,
-        bottom: true,
-        left: true,
+        top: false,
+        right: false,
+        bottom: false,
+        left: false,
       };
-      const { row, col } = voter;
 
-      // loop through the district voters to find adjacent tiles
-      if (district) {
-        for (const v of district.voters) {
-          if (v.row === row && v.col === col) continue; // Skip self
-
-          if (v.row === row - 1 && v.col === col) {
-            borders.top = false;
-          } else if (v.row === row + 1 && v.col === col) {
-            borders.bottom = false;
-          } else if (v.row === row && v.col === col - 1) {
-            borders.left = false;
-          } else if (v.row === row && v.col === col + 1) {
-            borders.right = false;
-          }
-        }
+      // No district, no borders
+      if (!district) {
+        return borders;
       }
+
+      // get adjacent voters
+      const voterAbove = gameState.board[voter.row - 1]?.[voter.col];
+      const voterBelow = gameState.board[voter.row + 1]?.[voter.col];
+      const voterLeft = gameState.board[voter.row]?.[voter.col - 1];
+      const voterRight = gameState.board[voter.row]?.[voter.col + 1];
+
+      // if voter above is NOT in the same district
+      if (!voterAbove || !district.voters.includes(voterAbove)) {
+        borders.top = true;
+      }
+      // if voter below is NOT in the same district
+      if (!voterBelow || !district.voters.includes(voterBelow)) {
+        borders.bottom = true;
+      }
+      // if voter left is NOT in the same district
+      if (!voterLeft || !district.voters.includes(voterLeft)) {
+        borders.left = true;
+      }
+      // if voter right is NOT in the same district
+      if (!voterRight || !district.voters.includes(voterRight)) {
+        borders.right = true;
+      }
+
       return borders;
     },
     [gameState.board],

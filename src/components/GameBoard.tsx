@@ -150,7 +150,7 @@ export default function GameBoard() {
         <div
           key={gameKey}
           data-gameboard
-          className="grid"
+          className="grid tile"
           style={
             {
               '--grid-size': currentLevel.voterGrid[0].length,
@@ -189,6 +189,10 @@ export default function GameBoard() {
                     onTouchMove={handleTouchMove}
                     currentDistrictVoters={gameState.currentDistrict?.voters || []}
                   />
+                  <div className="div-border-top" />
+                  <div className="div-border-right" />
+                  <div className="div-border-bottom" />
+                  <div className="div-border-left" />
                 </div>
               );
             }),

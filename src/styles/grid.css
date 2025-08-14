@@ -1,7 +1,46 @@
+:root {
+  --grid-cell-border-color: black;
+  --grid-cell-border-image-slice: 8;
+  --grid-cell-border-image-size: 8px;
+  --grid-cell-border-image-top:
+    linear-gradient(
+      to bottom,
+      var(--grid-cell-border-color) 0,
+      var(--grid-cell-border-color) var(--grid-cell-border-image-size),
+      transparent var(--grid-cell-border-image-size)
+    );
+
+  --grid-cell-border-image-right:
+    linear-gradient(
+      to left,
+      var(--grid-cell-border-color) 0,
+      var(--grid-cell-border-color) var(--grid-cell-border-image-size),
+      transparent var(--grid-cell-border-image-size)
+    );
+
+  --grid-cell-border-image-bottom:
+    linear-gradient(
+      to top,
+      var(--grid-cell-border-color) 0,
+      var(--grid-cell-border-color) var(--grid-cell-border-image-size),
+      transparent var(--grid-cell-border-image-size)
+    );
+
+  --grid-cell-border-image-left:
+    linear-gradient(
+      to right,
+      var(--grid-cell-border-color) 0,
+      var(--grid-cell-border-color) var(--grid-cell-border-image-size),
+      transparent var(--grid-cell-border-image-size)
+    );
+}
+
 .grid {
+  position: relative;
+  z-index: 0;
   display: grid;
-  grid-template-columns: repeat(var(--grid-size), 3rem);
-  border: 0.5rem solid white;
+  grid-template-columns: repeat(var(--grid-size), 2.5rem);
+  border: 1rem solid white;
   box-shadow:
     0 0 0 0.25rem black,
     0.5rem 0.5rem 0 black;
@@ -9,58 +48,81 @@
 
 .grid-cell {
   position: relative;
+  padding: calc(var(--grid-cell-border-image-size) / 2);
 }
 
 .grid-cell.completed {
   pointer-events: none;
+  padding: 0;
 }
 
 .grid-cell::after {
   content: '';
-  display: block;
   position: absolute;
-  inset: 0.125rem;
+  inset: 0;
+  z-index: 5;
   pointer-events: none;
-  border-color: white;
-  border-width: 0;
 }
-
-.grid-cell.selected::after {
-  border-style: dashed;
-}
-
-.grid-cell.completed::after {
-  border-style: solid;
-}
-
-.grid-cell.border-top::after {
-  border-top-width: 0.25rem;
-}
-
-.grid-cell.border-right::after {
-  border-right-width: 0.25rem;
-}
-
-.grid-cell.border-bottom::after {
-  border-bottom-width: 0.25rem;
-}
-
-.grid-cell.border-left::after {
-  border-left-width: 0.25rem;
-}
-
-.grid-cell.border-all::after,
-.grid-cell.selected:not([class*='border-'])::after {
-  border-left-width: 0.25rem;
-  border-right-width: 0.25rem;
-  border-top-width: 0.25rem;
-  border-bottom-width: 0.25rem;
-}
-
 .grid-cell.winner-red::after {
-  background-color: rgba(220, 20, 60, 0.5);
+  background-color: rgba(220, 20, 60, 0.6);
+}
+.grid-cell.winner-blue::after {
+  background-color: rgba(0, 102, 204, 0.6);
 }
 
-.grid-cell.winner-blue::after {
-  background-color: rgba(0, 102, 204, 0.5);
+[class*="div-border-"] {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  display: none;
+  border-style: solid;
+  border-image-repeat: repeat;
+  border-image-width: var(--grid-cell-border-image-size);
+  border-image-slice: var(--grid-cell-border-image-slice);
+  border-image-outset: calc(var(--grid-cell-border-image-size) / 2);
+}
+
+.completed [class*="div-border-"] {
+  z-index: 1;
+}
+.selected [class*="div-border-"] {
+  z-index: 2;
+}
+.available .voter {
+  z-index: 0;
+  outline: 3px dashed white;
+  outline-offset: -5px;
+}
+.div-border-top {
+  border-image-source: var(--grid-cell-border-image-top);
+}
+.div-border-right {
+  border-image-source: var(--grid-cell-border-image-right);
+}
+.div-border-bottom {
+  border-image-source: var(--grid-cell-border-image-bottom);
+}
+.div-border-left {
+  border-image-source: var(--grid-cell-border-image-left);
+}
+
+.grid-cell.selected .div-border-top,
+.grid-cell.completed.border-top .div-border-top {
+  display: block;
+}
+
+.grid-cell.selected .div-border-right,
+.grid-cell.completed.border-right .div-border-right {
+  display: block;
+}
+
+.grid-cell.selected .div-border-bottom,
+.grid-cell.completed.border-bottom .div-border-bottom {
+  display: block;
+}
+
+.grid-cell.selected .div-border-left,
+.grid-cell.completed.border-left .div-border-left {
+  display: block;
 }
