@@ -13,7 +13,7 @@ interface VoterTileProps {
   currentDistrictVoters?: Voter[];
 }
 
-export default function VoterTile({ voter, state, district, onMouseDown, onMouseEnter, onTouchStart, onTouchMove }: VoterTileProps) {
+export default function VoterTile({ voter, district, onMouseDown, onMouseEnter, onTouchStart, onTouchMove }: VoterTileProps) {
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     if (onMouseDown) {
@@ -34,45 +34,17 @@ export default function VoterTile({ voter, state, district, onMouseDown, onMouse
       onTouchMove(e);
     }
   };
-  const getBaseColor = () => {
-    return voter.color === 'red' ? 'comic-red-tile' : 'comic-blue-tile';
-  };
-
-  const getComicStyle = () => {
-    let style = 'comic-tile';
-    switch (state) {
-      case 'selected':
-        style += ' comic-tile-selected';
-        break;
-      case 'completed':
-        style += ' comic-tile-completed';
-        break;
-      case 'available':
-        style += ' comic-tile-available';
-        break;
-    }
-    return style;
-  };
-
-  const getCursor = () => {
-    return state === 'completed' && !district ? 'cursor-not-allowed' : 'cursor-pointer';
-  };
 
   return (
-    <div
+    <button
       className={`
-        w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16
-        ${getBaseColor()} 
-        ${getComicStyle()}
-        ${getCursor()}
-        select-none
-        flex items-center justify-center
-        text-white text-sm sm:text-base lg:text-lg font-black
+        voter
+        ${voter.color}
       `}
       onMouseDown={handleMouseDown}
       onMouseEnter={onMouseEnter}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
-    ></div>
+    ></button>
   );
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { Voter, District, Position, TileState } from '@/types/game';
+import { Voter, District, Position, TileState, TileBorders } from '@/types/game';
 import { useGame } from '@/context/GameContext';
 
 export const useGameLogic = () => {
@@ -81,6 +81,48 @@ export const useGameLogic = () => {
       return 'default';
     },
     [isVoterInCurrentDistrict, isVoterInAnyDistrict, gameState.currentDistrict, canAddVoterToCurrentDistrict],
+  );
+
+  const getTileBorders = useCallback(
+    (voter: Voter, district: District | undefined): TileBorders => {
+      const borders: TileBorders = {
+        top: false,
+        right: false,
+        bottom: false,
+        left: false,
+      };
+
+      // No district, no borders
+      if (!district) {
+        return borders;
+      }
+
+      // get adjacent voters
+      const voterAbove = gameState.board[voter.row - 1]?.[voter.col];
+      const voterBelow = gameState.board[voter.row + 1]?.[voter.col];
+      const voterLeft = gameState.board[voter.row]?.[voter.col - 1];
+      const voterRight = gameState.board[voter.row]?.[voter.col + 1];
+
+      // if voter above is NOT in the same district
+      if (!voterAbove || !district.voters.includes(voterAbove)) {
+        borders.top = true;
+      }
+      // if voter below is NOT in the same district
+      if (!voterBelow || !district.voters.includes(voterBelow)) {
+        borders.bottom = true;
+      }
+      // if voter left is NOT in the same district
+      if (!voterLeft || !district.voters.includes(voterLeft)) {
+        borders.left = true;
+      }
+      // if voter right is NOT in the same district
+      if (!voterRight || !district.voters.includes(voterRight)) {
+        borders.right = true;
+      }
+
+      return borders;
+    },
+    [gameState.board],
   );
 
   const getDistrictForVoter = useCallback(
@@ -268,10 +310,11 @@ export const useGameLogic = () => {
       isVoterInAnyDistrict,
       canAddVoterToCurrentDistrict,
       getTileState,
+      getTileBorders,
       getDistrictForVoter,
       addVoterToDistrict,
       addMultipleVotersToDistrict,
     }),
-    [isAdjacent, isContiguous, isVoterInCurrentDistrict, isVoterInAnyDistrict, canAddVoterToCurrentDistrict, getTileState, getDistrictForVoter, addVoterToDistrict, addMultipleVotersToDistrict],
+    [isAdjacent, isContiguous, isVoterInCurrentDistrict, isVoterInAnyDistrict, canAddVoterToCurrentDistrict, getTileState, getTileBorders, getDistrictForVoter, addVoterToDistrict, addMultipleVotersToDistrict],
   );
 };

@@ -39,3 +39,7 @@ export interface GameResult {
 export type TileState = 'default' | 'available' | 'selected' | 'completed';
 
 export type DistrictWinner = 'red' | 'blue' | 'tie';
+
+export type TileSide = 'top' | 'right' | 'bottom' | 'left';
+
+export type TileBorders = Record<TileSide, boolean>;

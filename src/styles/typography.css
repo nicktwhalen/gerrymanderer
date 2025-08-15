@@ -1,0 +1,70 @@
+html {
+  font-size: clamp(16px, 2.5dvw, 24px);
+}
+
+body {
+  font-family: 'Permanent Marker', sans-serif;
+  line-height: 1.5;
+  color: black;
+}
+
+h1 {
+  font-family: 'Bangers', sans-serif;
+  font-size: 3.25rem;
+  font-weight: bold;
+  color: #ffffff;
+  transform: rotate(-2deg);
+  letter-spacing: 0.1rem;
+  text-align: center;
+  line-height: 2rem;
+  margin: 1rem 0 2rem;
+}
+
+h1 .the {
+  position: relative;
+  display: block;
+  vertical-align: middle;
+  font-size: 1.5rem;
+  text-shadow:
+    0 0.2rem 0 black,
+    0 -0.2rem 0 black,
+    0.2rem 0.2rem 0 black,
+    0.2rem 0 0 black,
+    0.2rem -0.2rem 0 black,
+    -0.2rem 0.2rem 0 black,
+    -0.2rem 0 0 black,
+    -0.2rem -0.2rem 0 black;
+}
+
+h1 .gerrymanderer {
+  text-shadow:
+    0.5rem 0 black,
+    -0.25rem 0 black,
+    0 0.5rem black,
+    0 -0.25rem black;
+}
+
+h2 {
+  font-size: 1.25rem;
+  line-height: 1.2;
+  text-wrap: balance;
+  margin: 0.5rem auto;
+}
+
+p {
+  text-wrap: balance;
+  line-height: 1.25;
+  margin-bottom: 0.75rem;
+}
+
+.text-blue {
+  color: #0066cc;
+}
+
+.text-red {
+  color: #dc143c;
+}
+
+.text-number {
+  font-size: 1.5rem;
+}

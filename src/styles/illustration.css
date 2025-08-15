@@ -1,0 +1,77 @@
+.illustration {
+  pointer-events: none;
+  position: relative;
+  margin: 3rem auto 0.5rem;
+  width: max-content;
+}
+
+.illustration .voters {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.illustration .voter {
+  width: 3.5rem;
+}
+
+.cursor {
+  transform-origin: left top;
+  position: absolute;
+  transition: all 250ms ease;
+  transform: translate(-50%, -50%);
+  left: var(--x, 0);
+  top: var(--y, 0);
+  font-size: 3rem;
+  text-shadow: 0.1rem 0.1rem 0.75rem rgba(0, 0, 0, 1);
+  z-index: 10;
+}
+
+.cursor.initial,
+.cursor.final {
+  opacity: 0;
+  scale: 1.5;
+}
+
+.bubbles {
+  position: absolute;
+  top: -2.5rem;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+
+.bubble {
+  position: relative;
+  background: white;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  line-height: 1;
+  border-radius: 0.5rem;
+  border: 0.2rem solid black;
+  text-transform: uppercase;
+}
+
+.bubble .arrow {
+  position: absolute;
+  width: 0.75rem;
+  height: 0.75rem;
+  left: 50%;
+  top: calc(100% - 0.25rem);
+  transform: translateX(-50%) rotate(-45deg);
+  border-left: 0.2rem solid black;
+  border-bottom: 0.2rem solid black;
+  background: white;
+}
+
+.bubble .arrow.left {
+  left: calc(100% - 1rem);
+}
+
+.bubble .arrow.right {
+  left: 1rem;
+}

@@ -1,26 +1,52 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Permanent+Marker&family=Bangers&display=swap');
+@import '../styles/reset.css';
+@import '../styles/typography.css';
+@import '../styles/button.css';
+@import '../styles/voter.css';
+@import '../styles/grid.css';
+@import '../styles/modal.css';
+@import '../styles/illustration.css';
+@import '../styles/tile.css';
+@import '../styles/walkthrough.css';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+* {
+  select: none;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html, body {
+  min-height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  padding: 1rem 1rem 2rem;
+  background-color: #f0f8ff;
+  background: linear-gradient(45deg, #e6e6fa 25%, #f0f8ff 0, #f0f8ff 50%, #e6e6fa 0, #e6e6fa 75%, #f0f8ff 0) 0% 0% / 3rem 3rem;
+}
+
+main {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.flex-center {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-center > * {
+  margin: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
