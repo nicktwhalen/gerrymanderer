@@ -22,7 +22,7 @@ export default function GameStats({ gameState, version = '1.0' }: GameStatsProps
   const blueDistricts = completedDistricts.filter((d) => getDistrictMajority(d) === 'blue').length;
 
   return version === '1.0' ? (
-    <div className="flex-center">
+    <>
       <div className="tile tile-scoreboard flex-center">
         <h2>Voters:</h2>
         <h3 className="visually-hidden">Blue</h3>
@@ -37,7 +37,7 @@ export default function GameStats({ gameState, version = '1.0' }: GameStatsProps
         <h3 className="visually-hidden">Red</h3>
         <p className="text-number text-red">{redDistricts}</p>
       </div>
-    </div>
+    </>
   ) : (
     <div className="tile tile-scoreboard-v2 flex-center">
       <h2>Districts:</h2>

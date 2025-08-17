@@ -209,7 +209,14 @@ export default function GameBoard({ version = '1.0' }) {
         </div>
 
         <div data-scoreboard>
-          <GameStats gameState={gameState} version={version} />
+          <div className="flex-center">
+            <GameStats gameState={gameState} version={version} />
+            {version === '2.0' && (
+              <button aria-label="How to play" onClick={openTutorial}>
+                ?
+              </button>
+            )}
+          </div>
         </div>
 
         {gameResult && showGameResult && (
@@ -230,7 +237,7 @@ export default function GameBoard({ version = '1.0' }) {
         )}
       </main>
 
-      {showTutorial && version === '1.0' && <Tutorial onClose={closeTutorial} />}
+      {showTutorial && <Tutorial onClose={closeTutorial} />}
       {showWalkthrough && version === '1.0' && <Walkthrough onClose={closeWalkthrough} levelId={currentLevel.id} currentStep={currentStep} setCurrentStep={setCurrentStep} />}
     </div>
   );
