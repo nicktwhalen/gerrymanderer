@@ -14,40 +14,40 @@ interface WalkthroughProps {
 export default function Walkthrough({ onClose, levelId, currentStep, setCurrentStep }: WalkthroughProps) {
   useModal(true, onClose);
   const { gameState, currentLevel } = useGame();
-  const [gameboardTop, setGameboardTop] = useState<number>(200); // Default fallback
-  const [instructionsTop, setInstructionsTop] = useState<number>(90); // Default fallback
-  const [scoreboardTop, setScoreboardTop] = useState<number>(350); // Default fallback
+  // const [gameboardTop, setGameboardTop] = useState<number>(200); // Default fallback
+  // const [instructionsTop, setInstructionsTop] = useState<number>(90); // Default fallback
+  // const [scoreboardTop, setScoreboardTop] = useState<number>(350); // Default fallback
 
   // Get target color and opposite color for level 1
   const targetColor = currentLevel.targetColor; // This will be 'blue' for level 1
   const otherColor = targetColor === 'blue' ? 'red' : 'blue';
 
-  // Calculate gameboard, instructions, and scoreboard positions for modal positioning
-  useEffect(() => {
-    const calculatePositions = () => {
-      const gameboardElement = document.querySelector('[data-gameboard]');
-      if (gameboardElement) {
-        const rect = gameboardElement.getBoundingClientRect();
-        setGameboardTop(rect.top + window.scrollY);
-      }
+  // // Calculate gameboard, instructions, and scoreboard positions for modal positioning
+  // useEffect(() => {
+  //   const calculatePositions = () => {
+  //     const gameboardElement = document.querySelector('[data-gameboard]');
+  //     if (gameboardElement) {
+  //       const rect = gameboardElement.getBoundingClientRect();
+  //       setGameboardTop(rect.top + window.scrollY);
+  //     }
 
-      const instructionsElement = document.querySelector('[data-instructions]');
-      if (instructionsElement) {
-        const rect = instructionsElement.getBoundingClientRect();
-        setInstructionsTop(rect.top + window.scrollY);
-      }
+  //     const instructionsElement = document.querySelector('[data-instructions]');
+  //     if (instructionsElement) {
+  //       const rect = instructionsElement.getBoundingClientRect();
+  //       setInstructionsTop(rect.top + window.scrollY);
+  //     }
 
-      const scoreboardElement = document.querySelector('[data-scoreboard]');
-      if (scoreboardElement) {
-        const rect = scoreboardElement.getBoundingClientRect();
-        setScoreboardTop(rect.top + window.scrollY);
-      }
-    };
+  //     const scoreboardElement = document.querySelector('[data-scoreboard]');
+  //     if (scoreboardElement) {
+  //       const rect = scoreboardElement.getBoundingClientRect();
+  //       setScoreboardTop(rect.top + window.scrollY);
+  //     }
+  //   };
 
-    calculatePositions();
-    window.addEventListener('resize', calculatePositions);
-    return () => window.removeEventListener('resize', calculatePositions);
-  }, [currentStep]);
+  //   calculatePositions();
+  //   window.addEventListener('resize', calculatePositions);
+  //   return () => window.removeEventListener('resize', calculatePositions);
+  // }, [currentStep]);
 
   // Auto-advance from step2 to step3 when top row district is completed
   useEffect(() => {
@@ -143,9 +143,7 @@ export default function Walkthrough({ onClose, levelId, currentStep, setCurrentS
         return (
           <>
             <p>The instructions at the top tell you how many districts to draw, the size of each one, and which color needs to win the majority.</p>
-            <button className="blue" onClick={nextStep}>
-              Next
-            </button>
+            <button onClick={nextStep}>Next</button>
             {/* Comic book style arrow pointing up to instructions */}
             <div className="arrow">⬆️</div>
           </>
@@ -167,9 +165,7 @@ export default function Walkthrough({ onClose, levelId, currentStep, setCurrentS
               Great job! Since the district you created has more {targetColor} voters than {otherColor}, the entire district will vote {targetColor}. The scoreboard below now shows that you have 1 {targetColor} district.
             </p>
 
-            <button className="red" onClick={nextStep}>
-              Next
-            </button>
+            <button onClick={nextStep}>Next</button>
 
             {/* Down block arrow pointing to scoreboard */}
             <div className="arrow">⬇️</div>
@@ -195,9 +191,10 @@ export default function Walkthrough({ onClose, levelId, currentStep, setCurrentS
     <div
       className={`
         modal
+        no-overlay
         walkthrough 
         ${currentStep}
-        ${!['instructions', 'step3'].includes(currentStep) ? 'no-overlay' : ''}`}
+      `}
     >
       {/* Dark overlay - show for step 1 and step 3 */}
       {/* Small modal positioned based on current step */}

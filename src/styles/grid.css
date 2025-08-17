@@ -1,5 +1,5 @@
 :root {
-  --grid-cell-border-color: black;
+  --grid-cell-border-color: white;
   --grid-cell-border-image-slice: 8;
   --grid-cell-border-image-size: 8px;
   --grid-cell-border-image-top:
@@ -40,6 +40,7 @@
   z-index: 0;
   display: grid;
   grid-template-columns: repeat(var(--grid-size), minmax(2.5rem, 5rem));
+  padding: 0;
   box-shadow:
     0 0 0 0.25rem black,
     0.5rem 0.5rem 0 black;
@@ -59,14 +60,14 @@
   content: '';
   position: absolute;
   inset: 0;
-  z-index: 5;
+  z-index: 1;
   pointer-events: none;
 }
 .grid-cell.winner-red::after {
-  background-color: rgba(220, 20, 60, 0.6);
+  background: linear-gradient(45deg, rgba(0,0,0,0.05) 25%, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 50%, rgba(0,0,0,0.05) 0, rgba(0,0,0,0.05) 75%, rgba(255,255,255,0.05) 0) 0% 0% / 1rem 1rem rgba(220, 20, 60, 0.6);
 }
 .grid-cell.winner-blue::after {
-  background-color: rgba(0, 102, 204, 0.6);
+  background: linear-gradient(45deg, rgba(0,0,0,0.05) 25%, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 50%, rgba(0,0,0,0.05) 0, rgba(0,0,0,0.05) 75%, rgba(255,255,255,0.05) 0) 0% 0% / 1rem 1rem #0066cc80;
 }
 
 [class*="div-border-"] {
@@ -83,10 +84,10 @@
 }
 
 .completed [class*="div-border-"] {
-  z-index: 1;
+  z-index: 2;
 }
 .selected [class*="div-border-"] {
-  z-index: 2;
+  z-index: 3;
 }
 .available .voter {
   z-index: 0;

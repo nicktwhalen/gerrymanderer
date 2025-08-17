@@ -138,12 +138,8 @@ export default function GameBoard() {
             Create <u>{currentLevel.districtCount}</u> districts of <u>{currentLevel.districtSize}</u> voters each to make <u>{currentLevel.targetColor}</u> win the majority of districts!
           </p>
           <div className="flex-center">
-            <button className="blue" onClick={showWalkthrough ? undefined : openTutorial}>
-              Tutorial
-            </button>
-            <button className="red" onClick={showWalkthrough ? undefined : resetGame}>
-              Reset
-            </button>
+            <button onClick={showWalkthrough ? undefined : openTutorial}>Tutorial</button>
+            <button onClick={showWalkthrough ? undefined : resetGame}>Reset</button>
           </div>
         </div>
 

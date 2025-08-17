@@ -247,7 +247,7 @@ export default function Tutorial({ onClose }: TutorialProps) {
     <div className="modal" onClick={handleBackdropClick}>
       <div className="tile" onClick={handleModalClick}>
         {/* Close button */}
-        <button className="close-button red" onClick={onClose} aria-label="Close tutorial">
+        <button className="close-button" onClick={onClose} aria-label="Close tutorial">
           ✕
         </button>
 
@@ -257,7 +257,7 @@ export default function Tutorial({ onClose }: TutorialProps) {
         {/* Navigation */}
         <div className="tutorial-nav">
           {/* Back button or spacer */}
-          <button disabled={currentStep <= 1} className={'back-button red'} onClick={prevStep}>
+          <button disabled={currentStep <= 1} className="back-button" onClick={prevStep}>
             Back
           </button>
           {/* Centered page counter */}
@@ -265,7 +265,7 @@ export default function Tutorial({ onClose }: TutorialProps) {
             Page {currentStep} of {totalSteps}
           </div>
           {/* Next button */}
-          <button className="blue next-button" onClick={nextStep}>
+          <button className="next-button" onClick={nextStep}>
             {currentStep === totalSteps ? 'Start!' : 'Next'}
           </button>
         </div>

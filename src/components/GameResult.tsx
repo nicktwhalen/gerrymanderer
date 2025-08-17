@@ -49,9 +49,7 @@ export default function GameResult({ playerWon, onNewGame, onNextLevel, hasNextL
 
         <p>{playerWon ? 'You win! Take that, democracy!' : `You lose! Draw more ${targetColor} districts next time.`}</p>
 
-        <button className={`${playerWon ? 'blue' : 'red'}`} onClick={playerWon && hasNextLevel ? onNextLevel : onNewGame}>
-          {playerWon ? (hasNextLevel ? 'NEXT LEVEL' : 'PLAY AGAIN') : 'TRY AGAIN'}
-        </button>
+        <button onClick={playerWon && hasNextLevel ? onNextLevel : onNewGame}>{playerWon ? (hasNextLevel ? 'NEXT LEVEL' : 'PLAY AGAIN') : 'TRY AGAIN'}</button>
       </div>
     </div>
   );

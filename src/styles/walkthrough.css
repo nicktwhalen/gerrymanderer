@@ -17,7 +17,7 @@
   place-items: start;
 }
 .walkthrough.instructions .tile {
-  margin-top: 12rem;
+  margin-top: 16rem;
   padding-top: 3rem;
 }
 .walkthrough.instructions .arrow {
@@ -39,7 +39,7 @@
   place-items: start;
 }
 .walkthrough.step3 .tile {
-  margin-top: 15rem;
+  margin-top: 21rem;
   padding-bottom: 2rem;
 }
 .walkthrough.step3 .arrow {
