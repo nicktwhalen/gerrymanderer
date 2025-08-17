@@ -64,3 +64,11 @@
   background: #0066cc;
   height: 100%;
 }
+
+.modal .tile-grid-mini {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+}

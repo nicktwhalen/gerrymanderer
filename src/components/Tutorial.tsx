@@ -248,7 +248,7 @@ export default function Tutorial({ onClose }: TutorialProps) {
       <div className="tile" onClick={handleModalClick}>
         {/* Close button */}
         <button className="close-button" onClick={onClose} aria-label="Close tutorial">
-          ✕
+          X
         </button>
 
         {/* Tutorial content - uses available space between header and navigation */}

@@ -1,9 +1,9 @@
 'use client';
 
 import { useModal } from '@/hooks/useModal';
-import GameStats from './GameStats';
 import { GameState } from '@/types/game';
 import { Level } from '@/types/level';
+import GameBoardMini from './GameBoardMini';
 
 interface GameResultProps {
   blueWins: number;
@@ -29,8 +29,10 @@ export default function GameResult({ playerWon, onNewGame, onNextLevel, hasNextL
 
   return (
     <div className="modal" onClick={handleBackdropClick}>
-      <div className="tile" onClick={handleModalClick}>
+      <div className="tile tile-grid-mini" onClick={handleModalClick}>
         <h2>{playerWon ? 'Victory!' : 'Defeat!'}</h2>
+
+        <GameBoardMini />
 
         {playerWon ? (
           <>
@@ -44,9 +46,6 @@ export default function GameResult({ playerWon, onNewGame, onNextLevel, hasNextL
             <p>{otherColor} has the majority of voters and districts.</p>
           </>
         )}
-
-        {/* Reuse GameStats component */}
-        {/* <GameStats gameState={gameState} /> */}
 
         <p>{playerWon ? 'You win! Take that, democracy!' : `You lose! Draw more ${targetColor} districts next time.`}</p>
 

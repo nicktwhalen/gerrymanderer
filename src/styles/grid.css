@@ -126,3 +126,19 @@
 .grid-cell.completed.border-left .div-border-left {
   display: block;
 }
+
+.grid-mini {
+  box-shadow: none;
+  max-width: 50%;
+  margin: 0 auto 1rem;
+  justify-content: center;
+  grid-template-columns: repeat(var(--grid-size), 1.5rem);
+}
+
+.grid-mini .grid-cell.winner-red::after {
+  background: #dc143c;
+}
+.grid-mini .grid-cell.winner-blue::after {
+  background: #0066cc;
+}
+
