@@ -37,19 +37,28 @@ export default function GameResult({ playerWon, onNewGame, onNextLevel, hasNextL
         {playerWon ? (
           <>
             {/* Victory copy */}
-            <p>{targetColor} wins a majority of districts..</p>
-            <p>..Despite there being more {otherColor} voters.</p>
+            <p>
+              <span className={`text-${targetColor}`}>{targetColor}</span> wins a majority of districts..
+            </p>
+            <p>
+              ..Despite there being more <span className={`text-${otherColor}`}>{otherColor}</span> voters.
+            </p>
+            <p>You win! Take that, democracy!</p>
           </>
         ) : (
           <>
-            {/* Defeat copy */} <p>Oh no — democracy prevailed!</p>
-            <p>{otherColor} has the majority of voters and districts.</p>
+            {/* Defeat copy */}
+            <p>Oh no — democracy prevailed!</p>
+            <p>
+              <span className={`text-${otherColor}`}>{otherColor}</span> has the majority of voters and districts.
+            </p>
+            <p>
+              You lose! Draw more <span className={`text-${targetColor}`}>{targetColor}</span> districts next time.
+            </p>
           </>
         )}
 
-        <p>{playerWon ? 'You win! Take that, democracy!' : `You lose! Draw more ${targetColor} districts next time.`}</p>
-
-        <button onClick={playerWon && hasNextLevel ? onNextLevel : onNewGame}>{playerWon ? (hasNextLevel ? 'NEXT LEVEL' : 'PLAY AGAIN') : 'TRY AGAIN'}</button>
+        <button onClick={playerWon && hasNextLevel ? onNextLevel : onNewGame}>{playerWon ? (hasNextLevel ? 'Next level' : 'Play again') : 'Try again'}</button>
       </div>
     </div>
   );
