@@ -4,7 +4,7 @@ import { GameProvider } from '@/context/GameContext';
 export default function Home() {
   return (
     <GameProvider>
-      <GameBoard />
+      <GameBoard version="2.0" />
     </GameProvider>
   );
 }

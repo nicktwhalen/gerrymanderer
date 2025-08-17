@@ -13,7 +13,7 @@ import Tutorial from './Tutorial';
 import Walkthrough from './Walkthrough';
 import { District, Voter } from '@/types/game';
 
-export default function GameBoard() {
+export default function GameBoard({ version = '1.0' }) {
   const { gameState, currentLevel, gameKey, gameResult, hasNextLevel, showGameResult, resetGame, nextLevel } = useGame();
 
   const { getTileState, getDistrictForVoter, getTileBorders } = useGameLogic();
@@ -23,6 +23,8 @@ export default function GameBoard() {
 
   // Auto-start walkthrough for level 1 only after tutorial is dismissed and on fresh start
   useEffect(() => {
+    if (version === '2.0') return; // Only run this logic for version 2.0
+
     // Only show walkthrough if:
     // 1. We're on level 1
     // 2. No tutorial is showing (tutorial takes precedence)
@@ -41,6 +43,8 @@ export default function GameBoard() {
 
   // Helper function to check if interaction is allowed during walkthrough
   const isInteractionAllowed = (voter: any) => {
+    if (version === '2.0') return true; // Allow all interactions in version 2.0
+
     if (!showWalkthrough) {
       return true; // Allow all interactions when walkthrough is not active
     }
@@ -123,7 +127,7 @@ export default function GameBoard() {
   };
 
   return (
-    <>
+    <div className={`version-${version}`}>
       <header>
         <h1>
           <span className="the">The</span>
@@ -132,16 +136,25 @@ export default function GameBoard() {
       </header>
 
       <main>
-        <div data-instructions className="tile tile-instructions">
-          <h2>Level {currentLevel.id}</h2>
-          <p>
-            Create <u>{currentLevel.districtCount}</u> districts of <u>{currentLevel.districtSize}</u> voters each to make <u>{currentLevel.targetColor}</u> win the majority of districts!
-          </p>
-          <div className="flex-center">
-            <button onClick={showWalkthrough ? undefined : openTutorial}>Tutorial</button>
-            <button onClick={showWalkthrough ? undefined : resetGame}>Reset</button>
+        {version === '1.0' ? (
+          <div data-instructions className="tile tile-instructions">
+            <h2>Level {currentLevel.id}</h2>
+            <p>
+              Create <u>{currentLevel.districtCount}</u> districts of <u>{currentLevel.districtSize}</u> voters each to make <u>{currentLevel.targetColor}</u> win the majority of districts!
+            </p>
+            <div className="flex-center">
+              <button onClick={showWalkthrough ? undefined : openTutorial}>Tutorial</button>
+              <button onClick={showWalkthrough ? undefined : resetGame}>Reset</button>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div data-instructions className="tile tile-instructions-v2">
+            <h2>Level {currentLevel.id}:</h2>
+            <p>
+              Make <span className={`team text-${currentLevel.targetColor}`}>{currentLevel.targetColor}</span> win!
+            </p>
+          </div>
+        )}
 
         <div
           key={gameKey}
@@ -196,11 +209,12 @@ export default function GameBoard() {
         </div>
 
         <div data-scoreboard>
-          <GameStats gameState={gameState} />
+          <GameStats gameState={gameState} version={version} />
         </div>
 
         {gameResult && showGameResult && (
           <GameResult
+            version={version}
             blueWins={gameResult.blueWins}
             redWins={gameResult.redWins}
             ties={gameResult.ties}
@@ -215,8 +229,9 @@ export default function GameBoard() {
           />
         )}
       </main>
-      {showTutorial && <Tutorial onClose={closeTutorial} />}
-      {showWalkthrough && <Walkthrough onClose={closeWalkthrough} levelId={currentLevel.id} currentStep={currentStep} setCurrentStep={setCurrentStep} />}
-    </>
+
+      {showTutorial && version === '1.0' && <Tutorial onClose={closeTutorial} />}
+      {showWalkthrough && version === '1.0' && <Walkthrough onClose={closeWalkthrough} levelId={currentLevel.id} currentStep={currentStep} setCurrentStep={setCurrentStep} />}
+    </div>
   );
 }

@@ -17,9 +17,10 @@ interface GameResultProps {
   hasNextLevel: boolean;
   gameState: GameState;
   currentLevel: Level;
+  version?: string; // Optional version prop for conditional rendering
 }
 
-export default function GameResult({ playerWon, onNewGame, onNextLevel, hasNextLevel, gameState, currentLevel }: GameResultProps) {
+export default function GameResult({ playerWon, onNewGame, onNextLevel, hasNextLevel, gameState, currentLevel, version = '1.0' }: GameResultProps) {
   const { handleBackdropClick, handleModalClick } = useModal(true);
 
   // Get target color and opposite color for dynamic copy
