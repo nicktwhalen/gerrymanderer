@@ -3,6 +3,7 @@ button {
   font-size: 1rem;
   font-family: inherit;
   text-transform: uppercase;
+  text-align: center;
   color: white;
   border-radius: 0;
   border: 0.25rem solid black;
@@ -45,9 +46,14 @@ button:active {
   rotate: -1deg;
 }
 
+button.tutorialButton {
+  padding: .5rem 1rem;
+}
+
 button:has(.resetIcon) {
   padding: 0.25rem;
 }
+
 
 .resetIcon {
   display: block;

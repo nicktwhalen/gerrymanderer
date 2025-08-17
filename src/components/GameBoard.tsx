@@ -155,7 +155,7 @@ export default function GameBoard({ version = '1.0' }) {
                 Make <span className={`team text-${currentLevel.targetColor}`}>{currentLevel.targetColor}</span> win!
               </p>
             </div>
-            <button aria-label="How to play" onClick={openTutorial}>
+            <button className="tutorialButton" aria-label="How to play" onClick={openTutorial}>
               ?
             </button>
           </div>
