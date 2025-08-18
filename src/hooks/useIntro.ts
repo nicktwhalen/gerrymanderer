@@ -10,8 +10,8 @@ export const useIntro = () => {
   // Check if user has seen tutorial on component mount
   useEffect(() => {
     try {
-      const introIntro = localStorage.getItem(GAME_CONFIG.STORAGE_KEYS.INTRO_SEEN);
-      if (!introIntro) {
+      const seenIntro = localStorage.getItem(GAME_CONFIG.STORAGE_KEYS.INTRO_SEEN);
+      if (!seenIntro) {
         setShowIntro(true);
       }
     } catch (error) {

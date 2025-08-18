@@ -6,10 +6,15 @@ import GameBoard from './GameBoard';
 import GameStats from './GameStats';
 import GameResult from './GameResult';
 import ResetIcon from './ResetIcon';
+import Intro from '../components/Intro';
 
 export default function Game() {
   const { gameState, currentLevel, gameResult, hasNextLevel, showGameResult, resetGame, nextLevel } = useGame();
-  const { openIntro } = useIntro();
+  const { showIntro, openIntro, closeIntro } = useIntro();
+
+  if (showIntro) {
+    return <Intro onClose={closeIntro} />;
+  }
 
   return (
     <>
