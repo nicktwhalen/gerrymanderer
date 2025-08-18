@@ -189,7 +189,7 @@ export default function Tutorial({ onClose }: TutorialProps) {
               <div className="pronunciation">/ˈjerēˌmandəriNG/ (noun)</div>
               <div className="definition">The fine art of drawing voting districts so creatively that politicians get to choose their voters — rather than the other way around.</div>
             </div>
-            <p>You are the world&apos;s best gerrymanderer. It is your job to draw districts so that the voting minority wins a majority of districts.</p>
+            <p>You are the world’s best gerrymanderer. It is your job to draw districts so that the voting minority wins a majority of districts.</p>
           </>
         );
 
@@ -245,30 +245,29 @@ export default function Tutorial({ onClose }: TutorialProps) {
 
   return (
     <div className="modal" onClick={handleBackdropClick}>
-      <div className="tile" onClick={handleModalClick}>
+      <div className="tile tile-tutorial" onClick={handleModalClick}>
         {/* Close button */}
         <button className="close-button" onClick={onClose} aria-label="Close tutorial">
-          X
+          x
         </button>
 
         {/* Tutorial content - uses available space between header and navigation */}
         {renderStep()}
+      </div>
 
-        {/* Navigation */}
-        <div className="tutorial-nav">
-          {/* Back button or spacer */}
-          <button disabled={currentStep <= 1} className="back-button" onClick={prevStep}>
-            Back
-          </button>
-          {/* Centered page counter */}
+      {/* Navigation */}
+      <div className="tutorial-nav">
+        <button disabled={currentStep <= 1} className="back-button" onClick={prevStep}>
+          Back
+        </button>
+        <div className="tile tile-page">
           <div className="current">
             Page {currentStep} of {totalSteps}
           </div>
-          {/* Next button */}
-          <button className="next-button" onClick={nextStep}>
-            {currentStep === totalSteps ? 'Start!' : 'Next'}
-          </button>
         </div>
+        <button className="next-button" onClick={nextStep}>
+          {currentStep === totalSteps ? 'Start!' : 'Next'}
+        </button>
       </div>
     </div>
   );

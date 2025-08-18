@@ -11,6 +11,7 @@ interface GameContextType {
   isDragging: boolean;
   showGameResult: boolean;
   showTutorial: boolean;
+  showIntro: boolean;
   gameKey: number;
 
   // Actions
@@ -19,6 +20,7 @@ interface GameContextType {
   setIsDragging: (dragging: boolean) => void;
   setShowGameResult: (show: boolean) => void;
   setShowTutorial: (show: boolean) => void;
+  setShowIntro: (show: boolean) => void;
   resetGame: () => void;
   nextLevel: () => void;
 
@@ -33,6 +35,7 @@ type GameAction =
   | { type: 'SET_IS_DRAGGING'; payload: boolean }
   | { type: 'SET_SHOW_GAME_RESULT'; payload: boolean }
   | { type: 'SET_SHOW_TUTORIAL'; payload: boolean }
+  | { type: 'SET_SHOW_INTRO'; payload: boolean }
   | { type: 'RESET_GAME' }
   | { type: 'NEXT_LEVEL' }
   | { type: 'FORCE_RERENDER' };
@@ -43,6 +46,7 @@ interface GameContextState {
   isDragging: boolean;
   showGameResult: boolean;
   showTutorial: boolean;
+  showIntro: boolean;
   gameKey: number;
 }
 
@@ -124,6 +128,9 @@ const gameReducer = (state: GameContextState, action: GameAction): GameContextSt
     case 'SET_SHOW_TUTORIAL':
       return { ...state, showTutorial: action.payload };
 
+    case 'SET_SHOW_INTRO':
+      return { ...state, showIntro: action.payload };
+
     case 'RESET_GAME':
       const resetBoard = createBoardFromLevel(state.currentLevel);
       const resetRedCount = resetBoard.flat().filter((v) => v.color === 'red').length;
@@ -203,6 +210,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     isDragging: false,
     showGameResult: false,
     showTutorial: false,
+    showIntro: false,
     gameKey: 0,
   };
 
@@ -251,6 +259,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: 'SET_SHOW_TUTORIAL', payload: show });
   }, []);
 
+  const setShowIntro = useCallback((show: boolean) => {
+    dispatch({ type: 'SET_SHOW_INTRO', payload: show });
+  }, []);
+
   const resetGame = useCallback(() => {
     dispatch({ type: 'RESET_GAME' });
   }, []);
@@ -285,6 +297,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       setIsDragging,
       setShowGameResult,
       setShowTutorial,
+      setShowIntro,
       resetGame,
       nextLevel,
       gameResult,

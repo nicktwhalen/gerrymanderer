@@ -43,3 +43,5 @@ export type DistrictWinner = 'red' | 'blue' | 'tie';
 export type TileSide = 'top' | 'right' | 'bottom' | 'left';
 
 export type TileBorders = Record<TileSide, boolean>;
+
+export type Face = 'elated' | 'happy' | 'sad' | 'neutral' | 'worried' | 'thinking';
