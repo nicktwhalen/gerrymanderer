@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, CSSProperties } from 'react';
-import VoterTile from '../VoterTile';
+import VoterTile from './VoterTile';
 import { Face } from '@/types/game';
 
 interface IntroProps {

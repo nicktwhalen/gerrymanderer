@@ -1,10 +1,11 @@
-import GameBoard from '@/components/GameBoard';
+'use client';
+
 import { GameProvider } from '@/context/GameContext';
+import { useIntro } from '@/hooks/useIntro';
+import Game from '@/components/Game';
+import Intro from '../components/Intro';
 
 export default function Home() {
-  return (
-    <GameProvider>
-      <GameBoard />
-    </GameProvider>
-  );
+  const { showIntro, closeIntro } = useIntro();
+  return <GameProvider>{showIntro ? <Intro onClose={closeIntro} /> : <Game />}</GameProvider>;
 }
