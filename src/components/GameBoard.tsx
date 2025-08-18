@@ -10,6 +10,7 @@ import VoterTile from './VoterTile';
 import GameStats from './GameStats';
 import GameResult from './GameResult';
 import Tutorial from './Tutorial';
+import Intro from './2.0/Intro';
 import Walkthrough from './Walkthrough';
 import { District, Voter } from '@/types/game';
 
@@ -128,13 +129,6 @@ export default function GameBoard({ version = '1.0' }) {
 
   return (
     <div className={`version-${version}`}>
-      <header>
-        <h1>
-          <span className="the">The</span>
-          <span className="gerrymanderer">Gerrymanderer</span>
-        </h1>
-      </header>
-
       <main>
         {version === '1.0' ? (
           <div data-instructions className="tile tile-instructions">

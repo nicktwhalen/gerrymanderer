@@ -1,76 +1,14 @@
 .tile {
   background: #ffe4b5;
   border: 0.2rem solid black;
-  padding: 1rem;
+  padding: 0.75rem 1rem;
   box-shadow: 0.3rem 0.3rem 0 black;
   transform: rotate(-0.5deg);
   text-align: center;
   max-width: 22rem;
-}
-
-.tile-instructions {
-  padding-bottom: 1rem;
-}
-
-.tile-instructions-v2 {
-  padding: 1rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.tile-instructions-v2 > * {
   margin: 0;
 }
 
-.tile-instructions-v2 .team {
-  font-size: 1.25rem;
-}
-
-.tile-scoreboard {
-  padding: 0.5rem 1rem;
-}
-
-.tile-scoreboard-v2 {
-  padding: 1rem;
-}
-
-
-.district-meter {
-  display: block;
-  width: 8rem;
-  height: 2rem;
-  flex-grow: 1;
-  background: black;
-  display: flex;
-  border: 0.25rem solid white;
-}
-
-.district-meter-label-open {
-  background: #black;
-  height: 100%;
-  flex-grow: 1;
-  flex-shrink: 1;
-  width: 100%;
-}
-
-.district-meter-label-red {
-  background: #dc143c;
-  height: 100%;
-}
-
-.district-meter-label-blue {
-  background: #0066cc;
-  height: 100%;
-}
-
-.modal .tile-grid-mini {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 1.5rem;
-  max-width: 100%;
+.tile.white {
+  background: white;
 }

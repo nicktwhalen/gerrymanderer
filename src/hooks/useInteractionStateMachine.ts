@@ -20,7 +20,7 @@ type InteractionState =
       mode: 'click' | 'drag';
     };
 
-type InteractionEvent = { type: 'MOUSE_DOWN'; voter: Voter } | { type: 'MOUSE_ENTER'; voter: Voter } | { type: 'MOUSE_UP' } | { type: 'APPLY_SELECTION' } | { type: 'RESET' };
+type InteractionEvent = { type: 'CLICK'; voter: Voter } | { type: 'MOUSE_DOWN'; voter: Voter } | { type: 'MOUSE_ENTER'; voter: Voter } | { type: 'MOUSE_UP' } | { type: 'APPLY_SELECTION' } | { type: 'RESET' };
 
 // Helper function to check if a voter can be added to current selection
 const isValidForSelection = (voter: Voter, currentSelection: Voter[], gameLogic: ReturnType<typeof useGameLogic>, maxDistrictSize: number, gameState: any): boolean => {
@@ -162,6 +162,10 @@ export const useInteractionStateMachine = () => {
   }, []);
 
   // Event handlers
+  const handleClick = useCallback((voter: Voter, event: React.MouseEvent) => {
+    dispatch({ type: 'CLICK', voter });
+  }, []);
+
   const handleMouseDown = useCallback((voter: Voter, event: React.MouseEvent) => {
     // Ignore synthetic mouse events from touch
     if (touchInProgress.current) {
@@ -263,6 +267,7 @@ export const useInteractionStateMachine = () => {
     isInPreviewSelection,
 
     // Event handlers
+    handleClick,
     handleMouseDown,
     handleMouseEnter,
     handleMouseUp,

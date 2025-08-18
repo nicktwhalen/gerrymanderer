@@ -6,9 +6,11 @@ body:has(.modal) {
   position: fixed;
   inset: 0;
   display: flex;
+  flex-direction: column;
   place-items: center;
   place-content: center;
-  padding: 1rem;
+  padding: 0.5rem;
+  /* gap: .25rem; */
   background-color: rgba(0, 0, 0, 0.8);
 }
 
@@ -23,7 +25,8 @@ body:has(.modal) {
 }
 
 .modal .tile {
-  padding: 1rem;
+  padding: 2rem 1rem;
+  width: auto;
 }
 
 .modal h2 {
@@ -39,29 +42,15 @@ body:has(.modal) {
   right: 1rem;
 }
 
-.dictionary {
-  font-family: 'Times New Roman', Georgia, serif;
-  text-align: left;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border: 0.1rem solid black;
-  background-color: oklch(98.7% 0.026 102.212);
-}
-
-.definition {
-  font-style: italic;
-}
-
-.pronunciation {
-  margin-bottom: 1rem;
-}
-
 .tutorial-nav {
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 0.1rem solid black;
-  justify-content: space-between;
+  z-index: 1;
+  margin-top: -1rem;
+  align-items: start;
   display: flex;
-  gap: 0.5rem;
-  align-items: center;
+  /* gap: 0.5rem; */
+  justify-content: center;
+}
+
+.tutorial-nav .tile {
+  padding: 0.5rem 1rem;
 }

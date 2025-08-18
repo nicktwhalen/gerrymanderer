@@ -47,11 +47,12 @@ export default function GameBoardMini() {
                   ${winnerColor ? `winner-${winnerColor}` : ''}
                   ${getDistrictBorders(voter, district || gameState.currentDistrict)}`}
             >
-              <VoterTile voter={voter} state={tileState} district={district} currentDistrictVoters={gameState.currentDistrict?.voters || []} />
+              {/* <VoterTile voter={voter} state={tileState} district={district} currentDistrictVoters={gameState.currentDistrict?.voters || []} /> */}
               <div className="div-border-top" />
               <div className="div-border-right" />
               <div className="div-border-bottom" />
               <div className="div-border-left" />
+              <div className="div-border-dashed" />
             </div>
           );
         }),

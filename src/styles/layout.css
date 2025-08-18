@@ -1,0 +1,48 @@
+* {
+  box-sizing: border-box;
+  user-select: none;
+}
+
+::-moz-selection {
+  color: inherit;
+  background-color: inherit;
+}
+
+::selection {
+  color: inherit;
+  background-color: inherit;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  padding: 0.5rem 0 1rem;
+  background: linear-gradient(45deg, #e6e6fa 25%, #f0f8ff 0, #f0f8ff 50%, #e6e6fa 0, #e6e6fa 75%, #f0f8ff 0) 0% 0% / 3rem 3rem;
+}
+
+main {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.flex-center {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

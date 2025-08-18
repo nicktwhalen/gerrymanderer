@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import './globals.css';
 import { GameProvider } from '@/context/GameContext';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'The Gerrymanderer',
@@ -20,9 +20,19 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
       </head>
       <body>
-        <ErrorBoundary>
-          <GameProvider>{children}</GameProvider>
-        </ErrorBoundary>
+        <header>
+          <h1>
+            <a href="/">
+              <span className="the">The</span>
+              <span className="gerrymanderer">Gerrymanderer</span>
+            </a>
+          </h1>
+        </header>
+        <main>
+          <ErrorBoundary>
+            <GameProvider>{children}</GameProvider>
+          </ErrorBoundary>
+        </main>
       </body>
     </html>
   );

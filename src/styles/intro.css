@@ -1,18 +1,54 @@
+.dictionary {
+  font-family: Georgia, serif;
+  text-align: left;
+  padding: 1rem 1.5rem;
+  line-height: 1.5;
+  max-width: 22rem;
+  margin: 0.5rem 0;
+  background-color: white;
+}
+
+.term {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 1.5rem;
+  letter-spacing: -0.025em;
+  font-weight: bold;
+}
+
+.pronunciation {
+  margin-bottom: 1rem;
+}
+
+.definition {
+  font-style: italic;
+}
+
+.intro-navigation {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .illustration {
   pointer-events: none;
   position: relative;
-  margin: 3rem auto 0.5rem;
+  margin: 1rem auto -1rem;
   width: max-content;
+  padding: 1rem;
+  background: #bd9cceff;
 }
 
 .illustration .voters {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0rem;
 }
 
-.illustration .voter {
-  width: 3.5rem;
+.illustration .grid-cell {
+  width: 4rem;
+  font-size: 2rem;
 }
 
 .cursor {
@@ -22,7 +58,7 @@
   transform: translate(-50%, -50%);
   left: var(--x, 0);
   top: var(--y, 0);
-  font-size: 3rem;
+  font-size: 4rem;
   text-shadow: 0.1rem 0.1rem 0.75rem rgba(0, 0, 0, 1);
   z-index: 10;
 }
@@ -34,11 +70,11 @@
 }
 
 .bubbles {
+  display: flex;
   position: absolute;
-  top: -2.5rem;
+  top: -1.5rem;
   left: 0;
   width: 100%;
-  display: flex;
   flex-direction: row;
   justify-content: center;
   gap: 0.25rem;
@@ -68,10 +104,10 @@
   background: white;
 }
 
-.bubble .arrow.left {
+.bubble .arrow.right {
   left: calc(100% - 1rem);
 }
 
-.bubble .arrow.right {
+.bubble .arrow.left {
   left: 1rem;
 }
