@@ -1,4 +1,4 @@
-button {
+.button {
   flex-shrink: 0;
   font-size: 1rem;
   line-height: 1;
@@ -20,38 +20,34 @@ button {
   padding: 0.5rem 0.75rem;
   cursor: pointer;
   z-index: 1;
+  text-decoration: none;
 }
 
-button[disabled] {
+.button.disabled {
   pointer-events: none;
   background: grey;
   visibility: hidden;
 }
 
 @media (hover: hover) {
-  button:hover {
+  .button:hover {
     scale: 1.05;
     rotate: 1deg;
   }
 }
 
-button:active {
+.button:active {
   scale: 0.95;
   rotate: -1deg;
 }
 
-button.tutorialButton {
-  font-size: 1.25rem;
+.button:has(svg) {
+  padding: 0.125rem 0.125rem;
 }
 
-button:has(.resetIcon) {
-  padding: 0.25rem;
-}
-
-.resetIcon {
+.button svg {
   display: block;
   width: 2rem;
   height: 2rem;
   fill: white;
-  transition: transform 0.2s ease;
 }

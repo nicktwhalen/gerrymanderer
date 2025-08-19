@@ -7,34 +7,16 @@
   height: 100%;
 }
 
+h2 span.gerrymanderer {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 1.75rem;
+}
+
 .hero {
   position: relative;
   font-size: 16rem;
   line-height: 1;
-}
-
-.dictionary {
-  font-family: Georgia, serif;
-  text-align: left;
-  padding: 1rem 1.5rem;
-  line-height: 1.5;
-  background-color: white;
-}
-
-.term {
-  font-family: 'Times New Roman', Georgia, serif;
-  font-size: 1.5rem;
-  letter-spacing: -0.025em;
-  font-weight: bold;
-}
-
-.pronunciation {
-  margin-bottom: 1rem;
-}
-
-.definition {
-  font-style: italic;
-  text-wrap: pretty;
 }
 
 .intro-navigation {

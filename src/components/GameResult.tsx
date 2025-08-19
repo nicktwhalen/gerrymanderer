@@ -3,6 +3,7 @@
 import { GameState } from '@/types/game';
 import { Level } from '@/types/level';
 import GameBoard from './GameBoard';
+import Button from '@/components/Button/Button';
 
 interface GameResultProps {
   blueWins: number;
@@ -62,7 +63,7 @@ export default function GameResult({ playerWon, onNewGame, onNextLevel, hasNextL
         </>
       )}
 
-      <button onClick={playerWon && hasNextLevel ? onNextLevel : onNewGame}>{playerWon ? (hasNextLevel ? 'Next level' : 'Play again') : 'Try again'}</button>
+      <Button onClick={playerWon && hasNextLevel ? onNextLevel : onNewGame}>{playerWon ? (hasNextLevel ? 'Next level' : 'Play again') : 'Try again'}</Button>
     </>
   );
 }

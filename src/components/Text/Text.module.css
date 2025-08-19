@@ -1,0 +1,13 @@
+.text {
+  background: #ffe4b5;
+  border: 0.2rem solid black;
+  padding: 0.75rem 1rem;
+  box-shadow: 0.3rem 0.3rem 0 black;
+  transform: rotate(-0.5deg);
+  text-align: center;
+  margin: 0;
+}
+
+.white {
+  background: white;
+}

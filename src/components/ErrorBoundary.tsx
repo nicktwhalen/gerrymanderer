@@ -1,6 +1,7 @@
 'use client';
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+import Button from './Button/Button';
 
 interface Props {
   children: ReactNode;
@@ -46,7 +47,7 @@ class ErrorBoundary extends Component<Props, State> {
         <>
           <h2 className="tile">Oops! Something broke!</h2>
           <p className="tile">The gerrymanderer has encountered an unexpected error. Don’t worry - democracy is still intact (probably).</p>
-          <button
+          <Button
             onClick={() => {
               // Reset the error boundary
               this.setState({ hasError: false, error: undefined });
@@ -55,7 +56,7 @@ class ErrorBoundary extends Component<Props, State> {
             }}
           >
             Reload game
-          </button>
+          </Button>
         </>
       );
     }

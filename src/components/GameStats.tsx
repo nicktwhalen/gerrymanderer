@@ -1,7 +1,7 @@
 'use client';
 
 import { GameState, District, DistrictWinner } from '@/types/game';
-import ResetIcon from './ResetIcon';
+import Button from '@/components/Button/Button';
 
 interface GameStatsProps {
   gameState: GameState;
@@ -35,9 +35,11 @@ export default function GameStats({ gameState, resetGame }: GameStatsProps) {
             <div className="district-meter-label district-meter-label-red" style={{ width: `${(redDistricts / totalDistricts) * 100}%` }}></div>
           </div>
         </div>
-        <button aria-label="Reset board" onClick={resetGame}>
-          <ResetIcon />
-        </button>
+        <Button ariaLabel="Reset board" onClick={resetGame}>
+          <svg className="resetIcon" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 100 100">
+            <path d="M79,43.7L66.7,59.9L50.5,47.6c-2.2-1.7-2.6-4.8-1-7c1.7-2.2,4.8-2.6,7-1l1.1,0.9c-0.8-1.1-1.8-2-2.9-2.9  c-3.3-2.5-7.4-3.6-11.5-3c-4.1,0.6-7.7,2.7-10.2,6c-2.5,3.3-3.6,7.4-3,11.5s2.7,7.7,6,10.2C41,66,47.6,66.5,53,63.5  c2.4-1.3,5.5-0.5,6.8,2c1.3,2.4,0.5,5.5-2,6.8c-3.8,2.1-8.1,3.2-12.3,3.2c-5.4,0-10.9-1.7-15.4-5.2c-5.4-4.1-8.9-10.1-9.9-16.8  c-0.9-6.7,0.8-13.4,4.9-18.9c8.5-11.2,24.5-13.4,35.7-5c3.7,2.8,6.5,6.5,8.2,10.6l2-2.6c1.7-2.2,4.8-2.6,7-1  C80.2,38.3,80.7,41.5,79,43.7z" />
+          </svg>
+        </Button>
       </div>
       <p className="tile">
         Draw {totalDistricts} districts of {requiredDistrictSize} voters each!

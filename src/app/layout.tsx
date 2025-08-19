@@ -1,12 +1,6 @@
-import type { Metadata } from 'next';
 import { GameProvider } from '@/context/GameContext';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import './globals.css';
-
-export const metadata: Metadata = {
-  title: 'The Gerrymanderer',
-  description: 'A game that teaches and plays with the concept of gerrymandering.',
-};
 
 export default function RootLayout({
   children,

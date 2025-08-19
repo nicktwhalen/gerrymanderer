@@ -1,19 +1,13 @@
 'use client';
 
 import { useGame } from '@/context/GameContext';
-import { useIntro } from '@/hooks/useIntro';
 import GameBoard from './GameBoard';
 import GameStats from './GameStats';
 import GameResult from './GameResult';
-import Intro from '../components/Intro';
+import Button from '@/components/Button/Button';
 
 export default function Game() {
   const { gameState, currentLevel, gameResult, hasNextLevel, showGameResult, resetGame, nextLevel } = useGame();
-  const { showIntro, openIntro, closeIntro } = useIntro();
-
-  if (showIntro) {
-    return <Intro onClose={closeIntro} />;
-  }
 
   return (
     <>
@@ -39,9 +33,9 @@ export default function Game() {
                 Level {currentLevel.id}: Help <span className={`team text-${currentLevel.targetColor}`}>{currentLevel.targetColor}</span> win!
               </h2>
             </div>
-            <button className="tutorialButton" aria-label="How to play" onClick={openIntro}>
+            <Button ariaLabel="How to play" href="/voters/">
               ?
-            </button>
+            </Button>
           </div>
           <GameBoard />
           <GameStats gameState={gameState} resetGame={resetGame} />
