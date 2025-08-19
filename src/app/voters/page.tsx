@@ -3,6 +3,8 @@ import Button from '@/components/Button/Button';
 import Text from '@/components/Text/Text';
 import Definition from '@/components/Definition/Definition';
 import VoterTile from '@/components/VoterTile';
+import ArrowLeftIcon from '@/icons/ArrowLeftIcon';
+import ArrowRightIcon from '@/icons/ArrowRightIcon';
 
 export const metadata: Metadata = {
   title: 'The Gerrymanderer: Meet the voters',
@@ -50,11 +52,17 @@ export default function Voters() {
           </div>
         </div>
       </div>
-      <Text>Each square is a voter.</Text>
+      <Text>
+        <p>Each square is a voter.</p>
+      </Text>
       <div className="flex-center" style={{ marginTop: 'auto' }}>
-        <Button disabled>Back</Button>
+        <Button disabled>
+          <ArrowLeftIcon />
+        </Button>
         <Text color="white">Page 1 of 3</Text>
-        <Button href="/districts/">Next</Button>
+        <Button href="/districts/" ariaLabel="Next: Districts">
+          <ArrowRightIcon />
+        </Button>
       </div>
     </>
   );

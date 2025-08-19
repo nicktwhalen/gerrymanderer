@@ -6,8 +6,22 @@
   transform: rotate(-0.5deg);
   text-align: center;
   margin: 0;
+  animation: text-in 0.1s ease forwards;
 }
 
 .white {
   background: white;
+}
+
+@keyframes text-in {
+  0% {
+    opacity: 0;
+    scale: 0.9;
+    rotate: 0deg;
+  }
+  100% {
+    opacity: 1;
+    scale: 1;
+    rotate: var(--rotate);
+  }
 }
