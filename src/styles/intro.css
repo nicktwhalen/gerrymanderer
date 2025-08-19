@@ -1,10 +1,18 @@
+.intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+}
+
 .dictionary {
   font-family: Georgia, serif;
   text-align: left;
   padding: 1rem 1.5rem;
   line-height: 1.5;
   max-width: 22rem;
-  margin: 0.5rem 0;
   background-color: white;
 }
 
@@ -33,7 +41,7 @@
 .illustration {
   pointer-events: none;
   position: relative;
-  margin: 1rem auto -1rem;
+  margin: 1.5rem auto 0;
   width: max-content;
   padding: 1rem;
   background: #bd9cceff;
@@ -72,8 +80,9 @@
 .bubbles {
   display: flex;
   position: absolute;
-  top: -1.5rem;
+  top: -1.25rem;
   left: 0;
+  z-index: 2;
   width: 100%;
   flex-direction: row;
   justify-content: center;

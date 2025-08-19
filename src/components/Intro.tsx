@@ -337,7 +337,7 @@ export default function Intro({ onClose }: IntroProps) {
   }
 
   return (
-    <>
+    <div className="intro">
       {renderStep()}
       <div className="intro-navigation">
         <button disabled={currentStep <= 1} className="back-button" onClick={prevStep}>
@@ -350,6 +350,6 @@ export default function Intro({ onClose }: IntroProps) {
           {currentStep === totalSteps ? 'Start!' : 'Next'}
         </button>
       </div>
-    </>
+    </div>
   );
 }
