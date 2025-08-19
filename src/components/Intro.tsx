@@ -13,7 +13,7 @@ type AnimationPhase = 'initial' | 'cursor-appear' | 'cursor-click' | 'drag-to-se
 
 export default function Intro({ onClose }: IntroProps) {
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 4;
+  const totalSteps = 5;
 
   const nextStep = () => {
     if (currentStep < totalSteps) {
@@ -34,17 +34,32 @@ export default function Intro({ onClose }: IntroProps) {
       case 1:
         return (
           <>
+            <div className="hero">🦸🏻‍♀️</div>
+
+            <h2 className="tile">The world’s best gerrymanderer</h2>
+            <p className="tile">
+              It’s your job to draw districts
+              <br />
+              so that the voting minority wins
+              <br />
+              the majority of districts.
+            </p>
+          </>
+        );
+
+      case 2:
+        return (
+          <>
             <h2 className="tile">Welcome to democracy!</h2>
             <dl className="tile dictionary rotate-left">
               <dt className="term">Gerrymandering</dt>
               <dt className="pronunciation">/ˈjerēˌmandəriNG/ (noun)</dt>
               <div className="definition">The fine art of drawing voting districts so creatively that politicians get to choose their voters — rather than the other way around.</div>
             </dl>
-            <p className="tile">You are the world’s best gerrymanderer. It is your job to draw districts so that the voting minority wins a majority of districts.</p>
           </>
         );
 
-      case 2:
+      case 3:
         return (
           <>
             <h2 className="tile">Meet the voters</h2>
@@ -91,7 +106,7 @@ export default function Intro({ onClose }: IntroProps) {
           </>
         );
 
-      case 3:
+      case 4:
         return (
           <>
             <h2 className="tile">Districting magic</h2>
@@ -105,7 +120,7 @@ export default function Intro({ onClose }: IntroProps) {
           </>
         );
 
-      case 4:
+      case 5:
         return (
           <>
             <h2 className="tile">The rules</h2>

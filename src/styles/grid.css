@@ -3,10 +3,8 @@
   place-items: center;
   place-content: center;
   background: #bd9cceff;
-  width: 100%;
+  min-height: 20rem;
   aspect-ratio: 1;
-  max-width: 24rem;
-  margin: -1.25rem auto;
 }
 
 .grid {
@@ -53,11 +51,9 @@
 .grid-cell .div-foreground {
   display: none;
   position: absolute;
-  /* inset: 0.35em; */
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  /* border-radius: 100%; */
 }
 .grid-cell.red .div-foreground {
   background: var(--red);
@@ -68,7 +64,7 @@
 .grid-cell.completed .div-foreground {
   display: block;
   border-radius: 100%;
-  inset: 0.4em;
+  inset: 0.25em;
 }
 .grid-cell.selected .div-foreground,
 .grid-cell.completed .div-foreground {
@@ -106,9 +102,10 @@
   border-image-source: var(--grid-cell-border-image-left);
 }
 .div-border-dashed {
-  inset: 0.4em;
-  border: 2px dashed white;
+  inset: 0.25em;
+  border: 0.125rem dashed white;
   border-radius: 100%;
+  animation: available 10s linear infinite;
 }
 
 .grid-cell.selected.border-top .div-border-top,
@@ -129,4 +126,13 @@
 }
 .grid-cell.available .div-border-dashed {
   display: block;
+}
+
+@keyframes available {
+  0% {
+    rotate: 0;
+  }
+  100% {
+    rotate: 360deg;
+  }
 }

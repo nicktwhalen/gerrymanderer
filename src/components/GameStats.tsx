@@ -24,8 +24,6 @@ export default function GameStats({ gameState, resetGame }: GameStatsProps) {
   const redDistricts = completedDistricts.filter((d) => getDistrictMajority(d) === 'red').length;
   const blueDistricts = completedDistricts.filter((d) => getDistrictMajority(d) === 'blue').length;
 
-  const districtToWin = requiredDistrictSize - Math.max(redDistricts, blueDistricts);
-
   return (
     <>
       <div className="flex-center">

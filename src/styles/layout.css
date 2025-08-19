@@ -15,12 +15,18 @@
 
 html,
 body {
-  min-height: 100%;
+  padding: 0;
+  margin: 0;
+  height: 100dvh;
 }
 
 body {
-  padding: 0.5rem 0 1rem;
   background: linear-gradient(45deg, #e6e6fa 25%, #f0f8ff 0, #f0f8ff 50%, #e6e6fa 0, #e6e6fa 75%, #f0f8ff 0) 0% 0% / 3rem 3rem;
+  padding: 1rem 0.5rem;
+}
+
+header {
+  height: 6rem;
 }
 
 main {
@@ -28,7 +34,7 @@ main {
   align-items: center;
   justify-content: start;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
   height: 32rem;
 }
 

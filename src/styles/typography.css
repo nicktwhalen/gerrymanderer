@@ -1,7 +1,8 @@
 html {
-  font-size: 16px;
+  font-size: clamp(16px, 2.5dvh, 24px);
 }
 
+/* calc(100dvh - 4rem - 2rem) */
 body {
   font-family: 'Permanent Marker', sans-serif;
   line-height: 1.25;
@@ -20,7 +21,7 @@ h1 {
   letter-spacing: 0.1rem;
   text-align: center;
   line-height: 2rem;
-  margin: 0.5rem 0 2.0rem;
+  /* margin: 0.5rem 0 2.0rem; */
 }
 
 h1 a {
@@ -64,6 +65,7 @@ h2 {
   padding: 0;
   margin: 0;
   vertical-align: middle;
+  white-space: nowrap;
 }
 
 p {

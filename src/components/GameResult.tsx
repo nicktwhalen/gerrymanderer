@@ -39,7 +39,7 @@ export default function GameResult({ playerWon, onNewGame, onNextLevel, hasNextL
               <span className={`text-${targetColor}`}>{targetColor}</span> wins a majority of districts...
             </p>
             <p>
-              Despite there being more <span className={`text-${otherColor}`}>{otherColor}</span> voters!
+              Even though <span className={`text-${otherColor}`}>{otherColor}</span> has more voters!
             </p>
           </div>
         </>
