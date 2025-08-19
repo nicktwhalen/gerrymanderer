@@ -6,7 +6,7 @@
   width: 100%;
   aspect-ratio: 1;
   max-width: 24rem;
-  margin: -1rem auto -1.25rem;
+  margin: -1.25rem auto;
 }
 
 .grid {
@@ -130,20 +130,3 @@
 .grid-cell.available .div-border-dashed {
   display: block;
 }
-
-/* 
-.grid-mini {
-  margin: 0 auto 1rem;
-  justify-content: center;
-}
-.grid-mini button.voter .face,
-.grid-mini button.voter::before {
-  display: none;
-}
-
-.grid-mini .grid-cell.winner-red::after {
-  background: #dc143c;
-}
-.grid-mini .grid-cell.winner-blue::after {
-  background: #0066cc;
-} */

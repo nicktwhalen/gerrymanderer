@@ -5,7 +5,6 @@ import { useIntro } from '@/hooks/useIntro';
 import GameBoard from './GameBoard';
 import GameStats from './GameStats';
 import GameResult from './GameResult';
-import ResetIcon from './ResetIcon';
 import Intro from '../components/Intro';
 
 export default function Game() {
@@ -45,14 +44,7 @@ export default function Game() {
             </button>
           </div>
           <GameBoard />
-          <div className="flex-center">
-            <GameStats gameState={gameState} />
-            {true && (
-              <button aria-label="Reset board" onClick={resetGame}>
-                <ResetIcon />
-              </button>
-            )}
-          </div>
+          <GameStats gameState={gameState} resetGame={resetGame} />
         </>
       )}
     </>
