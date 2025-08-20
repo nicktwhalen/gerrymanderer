@@ -1,11 +1,17 @@
 'use client';
 
 import { useState, useEffect, CSSProperties } from 'react';
-import VoterTile from './VoterTile';
-import { Face } from '@/types/game';
+import Voter, { VoterProps } from '@/components/Voter/Voter';
+import { VoterMood } from '@/types/game';
 
 // Animation phases for the district demonstration
-type AnimationPhase = 'initial' | 'cursor-appear' | 'cursor-click' | 'drag-to-second' | 'drag-to-third' | 'final';
+type AnimationPhase =
+  | 'initial'
+  | 'cursor-appear'
+  | 'cursor-click'
+  | 'drag-to-second'
+  | 'drag-to-third'
+  | 'final';
 
 export default function DistrictAnimation() {
   const [phase, setPhase] = useState<AnimationPhase>('initial');
@@ -35,7 +41,10 @@ export default function DistrictAnimation() {
       // Update cursor position based on phase
       if (step.phase === 'initial') {
         setCursorPosition({ x: '3.5rem', y: '7rem' });
-      } else if (step.phase === 'cursor-appear' || step.phase === 'cursor-click') {
+      } else if (
+        step.phase === 'cursor-appear' ||
+        step.phase === 'cursor-click'
+      ) {
         setCursorPosition({ x: '3.5rem', y: '6rem' }); // Center of first square
       } else if (step.phase === 'drag-to-second') {
         setCursorPosition({ x: '7.5rem', y: '6rem' }); // Center of second square
@@ -54,77 +63,87 @@ export default function DistrictAnimation() {
     return () => clearTimeout(timer);
   }, []);
 
-  const getFirstFace = (phase: AnimationPhase): Face => {
+  const getFirstVoterProps = (phase: AnimationPhase): VoterProps => {
+    const color = 'red';
     switch (phase) {
       case 'cursor-click':
+        return {
+          color,
+          mood: 'thinking',
+          state: 'selected',
+          borders: { top: true, right: true, bottom: true, left: true },
+        };
       case 'drag-to-second':
       case 'drag-to-third':
-        return 'thinking';
+        return {
+          color,
+          mood: 'thinking',
+          state: 'selected',
+          borders: { top: true, right: false, bottom: true, left: true },
+        };
       case 'final':
-        return 'elated';
+        return {
+          color,
+          mood: 'elated',
+          state: 'completed',
+          districtColor: 'red',
+          borders: { top: true, right: false, bottom: true, left: true },
+        };
       default:
-        return 'neutral';
+        return { color, mood: 'neutral' };
     }
   };
 
-  const getSecondFace = (phase: AnimationPhase): Face => {
+  const getSecondVoterProps = (phase: AnimationPhase): VoterProps => {
+    const color = 'red';
     switch (phase) {
       case 'drag-to-second':
+        return {
+          color,
+          mood: 'thinking',
+          state: 'selected',
+          borders: { top: true, right: true, bottom: true, left: false },
+        };
       case 'drag-to-third':
-        return 'thinking';
+        return {
+          color,
+          mood: 'thinking',
+          state: 'selected',
+          borders: { top: true, right: false, bottom: true, left: false },
+        };
       case 'final':
-        return 'elated';
+        return {
+          color,
+          mood: 'elated',
+          state: 'completed',
+          districtColor: 'red',
+          borders: { top: true, right: false, bottom: true, left: false },
+        };
       default:
-        return 'neutral';
+        return { color, mood: 'neutral' };
     }
   };
 
-  const getThirdFace = (phase: AnimationPhase): Face => {
+  const getThirdVoterProps = (phase: AnimationPhase): VoterProps => {
+    const color = 'blue';
     switch (phase) {
       case 'drag-to-third':
-        return 'thinking';
+        return {
+          color,
+          mood: 'thinking',
+          state: 'selected',
+          borders: { top: true, right: true, bottom: true, left: false },
+        };
       case 'final':
-        return 'sad';
+        return {
+          color,
+          mood: 'sad',
+          state: 'completed',
+          districtColor: 'red',
+          borders: { top: true, right: true, bottom: true, left: false },
+        };
       default:
-        return 'neutral';
-    }
-  };
-
-  const getFirstClass = (phase: AnimationPhase): string => {
-    switch (phase) {
-      case 'cursor-click':
-        return 'grid-cell red selected border-top border-bottom border-right border-left';
-      case 'drag-to-second':
-      case 'drag-to-third':
-        return 'grid-cell red selected border-top border-bottom border-left';
-      case 'final':
-        return 'grid-cell red completed winner-red border-top border-bottom border-left';
-      default:
-        return 'grid-cell red';
-    }
-  };
-
-  const getSecondClass = (phase: AnimationPhase): string => {
-    switch (phase) {
-      case 'drag-to-second':
-        return 'grid-cell red selected border-top border-bottom border-right';
-      case 'drag-to-third':
-        return 'grid-cell red selected border-top border-bottom';
-      case 'final':
-        return 'grid-cell red completed winner-red border-top border-bottom';
-      default:
-        return 'grid-cell red';
-    }
-  };
-
-  const getThirdClass = (phase: AnimationPhase): string => {
-    switch (phase) {
-      case 'drag-to-third':
-        return 'grid-cell blue selected border-top border-bottom border-right';
-      case 'final':
-        return 'grid-cell blue completed winner-red border-top border-bottom border-right';
-      default:
-        return 'grid-cell blue';
+        return { color, mood: 'neutral' };
     }
   };
 
@@ -132,7 +151,14 @@ export default function DistrictAnimation() {
     <>
       <div className="illustration" role="presentation">
         {/* Cursor */}
-        {['initial', 'cursor-appear', 'cursor-click', 'drag-to-second', 'drag-to-third', 'final'].includes(phase) && (
+        {[
+          'initial',
+          'cursor-appear',
+          'cursor-click',
+          'drag-to-second',
+          'drag-to-third',
+          'final',
+        ].includes(phase) && (
           <div
             className={`cursor ${phase}`}
             style={
@@ -147,12 +173,18 @@ export default function DistrictAnimation() {
         )}
 
         {/* Individual speech bubbles for initial state */}
-        {['initial', 'cursor-appear', 'cursor-click', 'drag-to-second', 'drag-to-third'].includes(phase) && (
+        {[
+          'initial',
+          'cursor-appear',
+          'cursor-click',
+          'drag-to-second',
+          'drag-to-third',
+        ].includes(phase) && (
           <div className="bubbles">
             {/* Red square 1 bubble */}
             <div className="bubble">
               I vote red!
-              <span className="arrow right"></span>
+              <span className="arrow" style={{ left: '5rem' }}></span>
             </div>
             {/* Red square 2 bubble */}
             <div className="bubble">
@@ -162,7 +194,7 @@ export default function DistrictAnimation() {
             {/* Blue square bubble */}
             <div className="bubble">
               I vote blue!
-              <span className="arrow left"></span>
+              <span className="arrow" style={{ left: '1rem' }}></span>
             </div>
           </div>
         )}
@@ -172,45 +204,17 @@ export default function DistrictAnimation() {
           <div className="bubbles">
             <div className="bubble">
               Together, we vote red!
-              <span className="arrow right"></span>
+              <span className="arrow" style={{ left: '1.5rem' }}></span>
               <span className="arrow"></span>
-              <span className="arrow left"></span>
+              <span className="arrow" style={{ left: '9.5rem' }}></span>
             </div>
           </div>
         )}
 
-        {/* The three voting squares */}
-        <div className="voters">
-          <div className={getFirstClass(phase)}>
-            <div className="div-background" />
-            <div className="div-foreground" />
-            <VoterTile face={getFirstFace(phase)} />
-            <div className="div-border-top" />
-            <div className="div-border-right" />
-            <div className="div-border-bottom" />
-            <div className="div-border-left" />
-            <div className="div-border-dashed" />
-          </div>
-          <div className={getSecondClass(phase)}>
-            <div className="div-background" />
-            <div className="div-foreground" />
-            <VoterTile face={getSecondFace(phase)} />
-            <div className="div-border-top" />
-            <div className="div-border-right" />
-            <div className="div-border-bottom" />
-            <div className="div-border-left" />
-            <div className="div-border-dashed" />
-          </div>
-          <div className={getThirdClass(phase)}>
-            <div className="div-background" />
-            <div className="div-foreground" />
-            <VoterTile face={getThirdFace(phase)} />
-            <div className="div-border-top" />
-            <div className="div-border-right" />
-            <div className="div-border-bottom" />
-            <div className="div-border-left" />
-            <div className="div-border-dashed" />
-          </div>
+        <div className="voters" style={{ '--count': 3 } as CSSProperties}>
+          <Voter {...getFirstVoterProps(phase)} />
+          <Voter {...getSecondVoterProps(phase)} />
+          <Voter {...getThirdVoterProps(phase)} />
         </div>
       </div>
     </>

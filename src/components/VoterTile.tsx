@@ -1,12 +1,12 @@
 'use client';
 
-import { Voter, District, TileState, Face } from '@/types/game';
+import { Voter, District, TileState, VoterMood } from '@/types/game';
 
 interface VoterTileProps {
   voter?: Voter;
   state?: TileState;
   district?: District;
-  face?: Face;
+  face?: VoterMood;
   onClick?: () => void;
   onMouseDown?: (e: React.MouseEvent) => void;
   onMouseEnter?: () => void;
@@ -15,7 +15,15 @@ interface VoterTileProps {
   currentDistrictVoters?: Voter[];
 }
 
-export default function VoterTile({ voter, face = 'neutral', onClick, onMouseDown, onMouseEnter, onTouchStart, onTouchMove }: VoterTileProps) {
+export default function VoterTile({
+  voter,
+  face = 'neutral',
+  onClick,
+  onMouseDown,
+  onMouseEnter,
+  onTouchStart,
+  onTouchMove,
+}: VoterTileProps) {
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     if (onMouseDown) {
@@ -37,7 +45,7 @@ export default function VoterTile({ voter, face = 'neutral', onClick, onMouseDow
     }
   };
 
-  const getFace = (face: Face) => {
+  const getFace = (face: VoterMood) => {
     switch (face) {
       case 'elated':
         return '😁';

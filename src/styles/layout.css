@@ -40,6 +40,27 @@ main {
   height: 32rem;
 }
 
+.board {
+  display: flex;
+  place-items: center;
+  place-content: center;
+  background: #bd9cceff;
+  min-height: 20rem;
+  aspect-ratio: 1;
+}
+
+.grid {
+  position: relative;
+  z-index: 0;
+  width: 100%; 
+  padding: 1rem;
+  display: grid;
+  margin: auto;
+  place-items: center;
+  grid-template-columns: repeat(var(--grid-size-x), 1fr);
+  grid-template-rows: repeat(var(--grid-size-y), 1fr);
+}
+
 .flex-center {
   display: flex;
   gap: 0.5rem;

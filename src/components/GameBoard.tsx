@@ -4,14 +4,22 @@ import { CSSProperties, useEffect } from 'react';
 import { useGame } from '@/context/GameContext';
 import { useGameLogic } from '@/hooks/useGameLogic';
 import { useInteractionStateMachine } from '@/hooks/useInteractionStateMachine';
-import VoterTile from './VoterTile';
-import { District, Voter, Face } from '@/types/game';
+import VoterButton from '@/components/Voter/Voter';
+import type { District, Voter, VoterMood } from '@/types/game';
 
 export default function GameBoard() {
   const { gameState, currentLevel, gameKey, gameResult } = useGame();
 
   const { getTileState, getDistrictForVoter, getTileBorders } = useGameLogic();
-  const { handleMouseDown, handleMouseEnter, handleMouseUp, handleTouchStart, handleTouchMove, interactionMode, isInPreviewSelection } = useInteractionStateMachine();
+  const {
+    handleMouseDown,
+    handleMouseEnter,
+    handleMouseUp,
+    handleTouchStart,
+    handleTouchMove,
+    interactionMode,
+    isInPreviewSelection,
+  } = useInteractionStateMachine();
 
   // Global mouseup/touchend/touchmove listener for the state machine interaction system
   useEffect(() => {
@@ -42,8 +50,12 @@ export default function GameBoard() {
     };
 
     document.addEventListener('mouseup', handleGlobalMouseUp);
-    document.addEventListener('touchend', handleGlobalTouchEnd, { passive: false });
-    document.addEventListener('touchmove', handleGlobalTouchMove, { passive: false });
+    document.addEventListener('touchend', handleGlobalTouchEnd, {
+      passive: false,
+    });
+    document.addEventListener('touchmove', handleGlobalTouchMove, {
+      passive: false,
+    });
 
     return () => {
       document.removeEventListener('mouseup', handleGlobalMouseUp);
@@ -52,20 +64,9 @@ export default function GameBoard() {
     };
   }, [interactionMode, handleMouseUp, handleTouchMove]);
 
-  const getDistrictBorders = (voter: Voter, district?: District | null) => {
-    if (!district) return '';
-    const borders = getTileBorders(voter, district);
-    if (!borders) return '';
-    return Object.entries(borders)
-      .map(([side, hasBorder]) => (hasBorder ? `border-${side}` : ''))
-      .filter(Boolean)
-      .join(' ');
-  };
-
-  const getFace = (voter: Voter, district?: District | null): Face => {
+  const getMood = (voter: Voter, district?: District | null): VoterMood => {
     if (!district) return 'neutral';
     const voterColor = voter.color;
-    const tileState = getTileState(voter);
 
     // If the game is complete, determine the face based on the game result
     if (gameResult) {
@@ -82,13 +83,12 @@ export default function GameBoard() {
     // If the voter is not in a district, return neutral
     if (!district.voters.includes(voter)) return 'neutral';
 
-    const redVotes = district.voters.filter((v) => v.color === 'red').length;
-    const blueVotes = district.voters.filter((v) => v.color === 'blue').length;
-
     // If the district is not complete, return thinking
     if (!district.isComplete) return 'thinking';
 
     // If the district is complete, determine the face based on the majority color
+    const redVotes = district.voters.filter((v) => v.color === 'red').length;
+    const blueVotes = district.voters.filter((v) => v.color === 'blue').length;
     if (redVotes > blueVotes) {
       return voterColor === 'red' ? 'happy' : 'worried';
     } else if (blueVotes > redVotes) {
@@ -99,58 +99,69 @@ export default function GameBoard() {
   };
 
   return (
-    <div className="board">
-      <div
-        key={gameKey}
-        className="grid"
-        style={
-          {
-            '--grid-size-x': currentLevel.voterGrid[0].length,
-            '--grid-size-y': currentLevel.voterGrid.length,
-          } as CSSProperties
-        }
-      >
-        {gameState.board.map((row) =>
-          row.map((voter) => {
-            const district = getDistrictForVoter(voter.id);
-            const redVotes = district ? district.voters.filter((v) => v.color === 'red').length : 0;
-            const blueVotes = district ? district.voters.filter((v) => v.color === 'blue').length : 0;
-            const winnerColor = redVotes > blueVotes ? 'red' : blueVotes > redVotes ? 'blue' : undefined;
-            const face = getFace(voter, district || gameState.currentDistrict);
+    <>
+      <div className="board">
+        <div
+          key={gameKey}
+          className="grid"
+          style={
+            {
+              '--grid-size-x': currentLevel.voterGrid[0].length,
+              '--grid-size-y': currentLevel.voterGrid.length,
+            } as CSSProperties
+          }
+        >
+          {gameState.board.map((row) =>
+            row.map((voter) => {
+              const { currentDistrict } = gameState;
+              const voterDistrict = getDistrictForVoter(voter.id);
 
-            // Override tile state if voter is in preview selection
-            let tileState = getTileState(voter);
-            if (isInPreviewSelection(voter.id)) {
-              tileState = 'selected';
-            }
+              // check if voter is in preview selection
+              const selected = isInPreviewSelection(voter.id);
+              const state = selected ? 'selected' : getTileState(voter);
 
-            return (
-              <div
-                key={voter.id}
-                data-voter-id={voter.id}
-                onMouseDown={(e) => handleMouseDown(voter, e)}
-                onMouseEnter={() => handleMouseEnter(voter)}
-                onTouchStart={(e) => handleTouchStart(voter, e)}
-                onTouchMove={handleTouchMove}
-                className={`grid-cell 
-                  ${tileState}
-                  ${voter.color}
-                  ${winnerColor ? `winner-${winnerColor}` : ''}
-                  ${getDistrictBorders(voter, district || gameState.currentDistrict)}`}
-              >
-                <div className="div-background" />
-                <div className="div-foreground" />
-                <VoterTile voter={voter} face={face} state={tileState} district={district} currentDistrictVoters={gameState.currentDistrict?.voters || []} />
-                <div className="div-border-top" />
-                <div className="div-border-right" />
-                <div className="div-border-bottom" />
-                <div className="div-border-left" />
-                <div className="div-border-dashed" />
-              </div>
-            );
-          }),
-        )}
+              // calculate the district winner color
+              const district = selected ? currentDistrict : voterDistrict;
+              const redVotes = district
+                ? district.voters.filter((v) => v.color === 'red').length
+                : 0;
+              const blueVotes = district
+                ? district.voters.filter((v) => v.color === 'blue').length
+                : 0;
+              const winnerColor =
+                redVotes > blueVotes
+                  ? 'red'
+                  : blueVotes > redVotes
+                    ? 'blue'
+                    : undefined;
+
+              // get the mood of the voter
+              const mood = getMood(voter, district || currentDistrict);
+
+              // get the district borders of the voter
+              const borders = getTileBorders(
+                voter,
+                district || gameState.currentDistrict || undefined,
+              );
+
+              return (
+                <VoterButton
+                  key={voter.id}
+                  borders={borders}
+                  color={voter.color}
+                  districtColor={winnerColor}
+                  mood={mood}
+                  state={state}
+                  onMouseDown={(e) => handleMouseDown(voter, e)}
+                  onMouseEnter={() => handleMouseEnter(voter)}
+                  onTouchStart={(e) => handleTouchStart(voter, e)}
+                  onTouchMove={handleTouchMove}
+                />
+              );
+            }),
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

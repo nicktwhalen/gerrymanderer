@@ -1,0 +1,171 @@
+.voter {
+  width: 100%;
+  aspect-ratio: 1;
+  position: relative;
+  display: flex;
+  place-items: center;
+  place-content: center;
+  cursor: pointer;
+  border: none;
+  /* padding: calc(var(--grid-cell-border-image-size) / 2); */
+  /* padding: 0.5rem; */
+  font-size: calc(10rem / var(--grid-size-x));
+}
+.red {
+  background: linear-gradient(135deg, #dc143c, #b22222 50%, #8b0000);
+}
+.blue {
+  background: linear-gradient(135deg, #0066cc, #0052a3 50%, #003d7a);
+}
+
+/* when a nearby voter is selected */
+.selectable {
+  position: absolute;
+  pointer-events: none;
+  inset: 0.35em;
+  border: 0.075em dashed rgba(255, 255, 255, 0.5);
+  border-radius: 100%;
+  animation: rotate 10s linear infinite;
+}
+
+/* selected state = staged for selection */
+.red.selected {
+  background: var(--red);
+}
+.blue.selected {
+  background: var(--blue);
+}
+
+/* completed state = no longer in game play */
+.completed {
+  pointer-events: none;
+}
+.district-red {
+  background: var(--red);
+}
+.district-blue {
+  background: var(--blue);
+}
+
+/* completed with district mismatch */
+.districtColor {
+  position: absolute;
+  pointer-events: none;
+  inset: 0.35em;
+  border-radius: 100%;
+}
+.red .districtColor {
+  background: var(--red);
+}
+.blue .districtColor {
+  background: var(--blue);
+}
+
+/* face emoji */
+.face {
+  select: none;
+  line-height: 1;
+  pointer-events: none;
+  position: relative;
+  filter: drop-shadow(0 0.1em 0.1em rgba(0, 0, 0, 0.5));
+}
+.elated .face {
+  animation: elated 1s infinite;
+}
+.sad .face {
+  animation: sad 0.5s linear infinite;
+}
+
+/* district borders made up of 4 layered gradients */
+.districtBorders {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.districtBorders .top,
+.districtBorders .right,
+.districtBorders .bottom,
+.districtBorders .left {
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-style: solid;
+  border-image-repeat: repeat;
+  border-image-width: var(--grid-cell-border-image-size);
+  border-image-slice: var(--grid-cell-border-image-slice);
+  border-image-outset: calc(var(--grid-cell-border-image-size) / 2);
+}
+.districtBorders .top {
+  border-image-source: var(--grid-cell-border-image-top);
+}
+.districtBorders .right {
+  border-image-source: var(--grid-cell-border-image-right);
+}
+.districtBorders .bottom {
+  border-image-source: var(--grid-cell-border-image-bottom);
+}
+.districtBorders .left {
+  border-image-source: var(--grid-cell-border-image-left);
+}
+
+/* animations */
+
+@media (hover: hover) {
+  .face {
+    transition: scale 0.1s ease-in;
+  }
+  .voter:hover .face {
+    transition: scale 0.1s ease-out;
+    scale: 1.2;
+  }
+  .voter:active .face {
+    transition: scale 0.1s ease-out;
+    scale: 1;
+  }
+}
+
+@media (hover: none) {
+  .face {
+    transition: scale 0.05s ease-in;
+  }
+  .voter:active .face {
+    transition: scale 0.15s ease-out;
+    scale: 0.9;
+  }
+}
+
+@keyframes elated {
+  0% {
+    rotate: -15deg;
+  }
+  50% {
+    rotate: 15deg;
+  }
+  100% {
+    rotate: -15deg;
+  }
+}
+
+@keyframes sad {
+  0% {
+    translate: 0 -0.1rem;
+  }
+  50% {
+    translate: 0;
+  }
+  100% {
+    translate: 0 -0.1rem;
+  }
+}
+
+@keyframes rotate {
+  0% {
+    rotate: 0;
+  }
+  100% {
+    rotate: 360deg;
+  }
+}

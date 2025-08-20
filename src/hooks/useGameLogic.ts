@@ -1,7 +1,13 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { Voter, District, Position, TileState, TileBorders } from '@/types/game';
+import {
+  Voter,
+  District,
+  Position,
+  TileState,
+  TileBorders,
+} from '@/types/game';
 import { useGame } from '@/context/GameContext';
 
 export const useGameLogic = () => {
@@ -40,14 +46,18 @@ export const useGameLogic = () => {
 
   const isVoterInCurrentDistrict = useCallback(
     (voterId: string): boolean => {
-      return gameState.currentDistrict?.voters.some((v) => v.id === voterId) ?? false;
+      return (
+        gameState.currentDistrict?.voters.some((v) => v.id === voterId) ?? false
+      );
     },
     [gameState.currentDistrict],
   );
 
   const isVoterInAnyDistrict = useCallback(
     (voterId: string): boolean => {
-      return gameState.districts.some((district) => district.voters.some((v) => v.id === voterId));
+      return gameState.districts.some((district) =>
+        district.voters.some((v) => v.id === voterId),
+      );
     },
     [gameState.districts],
   );
@@ -56,7 +66,10 @@ export const useGameLogic = () => {
     (voter: Voter): boolean => {
       if (!gameState.currentDistrict) return true;
 
-      if (gameState.currentDistrict.voters.length >= gameState.requiredDistrictSize) {
+      if (
+        gameState.currentDistrict.voters.length >=
+        gameState.requiredDistrictSize
+      ) {
         return false;
       }
 
@@ -80,11 +93,16 @@ export const useGameLogic = () => {
       }
       return 'default';
     },
-    [isVoterInCurrentDistrict, isVoterInAnyDistrict, gameState.currentDistrict, canAddVoterToCurrentDistrict],
+    [
+      isVoterInCurrentDistrict,
+      isVoterInAnyDistrict,
+      gameState.currentDistrict,
+      canAddVoterToCurrentDistrict,
+    ],
   );
 
   const getTileBorders = useCallback(
-    (voter: Voter, district: District | undefined): TileBorders => {
+    (voter: Voter, district?: District | null): TileBorders => {
       const borders: TileBorders = {
         top: false,
         right: false,
@@ -95,6 +113,16 @@ export const useGameLogic = () => {
       // No district, no borders
       if (!district) {
         return borders;
+      }
+
+      // If the voter is not in the district, no borders
+      if (!district.voters.includes(voter)) return borders;
+
+      if (voter.id === '1-1') {
+        console.log('');
+        console.log('--');
+        console.log({ voter });
+        console.log({ district });
       }
 
       // get adjacent voters
@@ -127,14 +155,19 @@ export const useGameLogic = () => {
 
   const getDistrictForVoter = useCallback(
     (voterId: string): District | undefined => {
-      return gameState.districts.find((district) => district.voters.some((v) => v.id === voterId));
+      return gameState.districts.find((district) =>
+        district.voters.some((v) => v.id === voterId),
+      );
     },
     [gameState.districts],
   );
 
   const addVoterToDistrict = useCallback(
     (voter: Voter, isDragAction: boolean = false) => {
-      if (isVoterInAnyDistrict(voter.id) && !isVoterInCurrentDistrict(voter.id)) {
+      if (
+        isVoterInAnyDistrict(voter.id) &&
+        !isVoterInCurrentDistrict(voter.id)
+      ) {
         return false; // Can't modify other districts
       }
 
@@ -156,7 +189,9 @@ export const useGameLogic = () => {
 
       // For click actions, allow removal
       if (!isDragAction && isVoterInCurrentDistrict(voter.id)) {
-        const updatedVoters = gameState.currentDistrict.voters.filter((v) => v.id !== voter.id);
+        const updatedVoters = gameState.currentDistrict.voters.filter(
+          (v) => v.id !== voter.id,
+        );
 
         if (!isContiguous(updatedVoters)) {
           return false;
@@ -205,7 +240,14 @@ export const useGameLogic = () => {
 
       return true;
     },
-    [gameState, updateGameState, isVoterInAnyDistrict, isVoterInCurrentDistrict, canAddVoterToCurrentDistrict, isContiguous],
+    [
+      gameState,
+      updateGameState,
+      isVoterInAnyDistrict,
+      isVoterInCurrentDistrict,
+      canAddVoterToCurrentDistrict,
+      isContiguous,
+    ],
   );
 
   const addMultipleVotersToDistrict = useCallback(
@@ -240,14 +282,20 @@ export const useGameLogic = () => {
       const remainingVoters = [...voters];
 
       while (remainingVoters.length > 0) {
-        const currentDistrictVoters = [...gameState.currentDistrict.voters, ...validVoters];
+        const currentDistrictVoters = [
+          ...gameState.currentDistrict.voters,
+          ...validVoters,
+        ];
         let foundAdjacent = false;
 
         for (let i = 0; i < remainingVoters.length; i++) {
           const voter = remainingVoters[i];
 
           // Skip if voter is in another district
-          if (isVoterInAnyDistrict(voter.id) && !isVoterInCurrentDistrict(voter.id)) {
+          if (
+            isVoterInAnyDistrict(voter.id) &&
+            !isVoterInCurrentDistrict(voter.id)
+          ) {
             remainingVoters.splice(i, 1);
             i--;
             continue;
@@ -261,7 +309,9 @@ export const useGameLogic = () => {
           }
 
           // Check if voter is adjacent to any voter in current district (including previously added ones)
-          const voterIsAdjacent = currentDistrictVoters.some((existingVoter) => isAdjacent(existingVoter, voter));
+          const voterIsAdjacent = currentDistrictVoters.some((existingVoter) =>
+            isAdjacent(existingVoter, voter),
+          );
 
           if (voterIsAdjacent) {
             validVoters.push(voter);
@@ -299,7 +349,13 @@ export const useGameLogic = () => {
 
       return true;
     },
-    [gameState, updateGameState, isVoterInAnyDistrict, isVoterInCurrentDistrict, canAddVoterToCurrentDistrict],
+    [
+      gameState,
+      updateGameState,
+      isVoterInAnyDistrict,
+      isVoterInCurrentDistrict,
+      canAddVoterToCurrentDistrict,
+    ],
   );
 
   return useMemo(
@@ -315,6 +371,17 @@ export const useGameLogic = () => {
       addVoterToDistrict,
       addMultipleVotersToDistrict,
     }),
-    [isAdjacent, isContiguous, isVoterInCurrentDistrict, isVoterInAnyDistrict, canAddVoterToCurrentDistrict, getTileState, getTileBorders, getDistrictForVoter, addVoterToDistrict, addMultipleVotersToDistrict],
+    [
+      isAdjacent,
+      isContiguous,
+      isVoterInCurrentDistrict,
+      isVoterInAnyDistrict,
+      canAddVoterToCurrentDistrict,
+      getTileState,
+      getTileBorders,
+      getDistrictForVoter,
+      addVoterToDistrict,
+      addMultipleVotersToDistrict,
+    ],
   );
 };
