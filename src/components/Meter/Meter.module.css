@@ -1,14 +1,25 @@
-.district-meter {
-  display: block;
+.meter {
+  display: flex;
   width: 8rem;
   height: 1.5rem;
   flex-grow: 1;
   background: black;
-  display: flex;
   border: 0.25rem solid black;
+  padding: 0;
+  margin: 0;
 }
 
-.district-meter-label-open {
+.open,
+.red,
+.blue {
+  display: block;
+  color: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+.open {
+  order: 2;
   background: black;
   height: 100%;
   flex-grow: 1;
@@ -16,12 +27,14 @@
   width: 100%;
 }
 
-.district-meter-label-red {
+.red {
   background: var(--red);
   height: 100%;
+  order: 3;
 }
 
-.district-meter-label-blue {
+.blue {
   background: var(--blue);
   height: 100%;
+  order: 1;
 }

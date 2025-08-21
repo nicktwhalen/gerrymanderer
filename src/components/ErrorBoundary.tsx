@@ -2,6 +2,7 @@
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import Button from './Button/Button';
+import Text from './Text/Text';
 
 interface Props {
   children: ReactNode;
@@ -45,8 +46,15 @@ class ErrorBoundary extends Component<Props, State> {
 
       return (
         <>
-          <h2 className="tile">Oops! Something broke!</h2>
-          <p className="tile">The gerrymanderer has encountered an unexpected error. Don’t worry - democracy is still intact (probably).</p>
+          <Text>
+            <h2>Oops! Something broke!</h2>
+          </Text>
+          <Text>
+            <p>
+              The gerrymanderer has encountered an unexpected error. Don’t worry
+              - democracy is still intact (probably).
+            </p>
+          </Text>
           <Button
             onClick={() => {
               // Reset the error boundary

@@ -68,6 +68,12 @@ h2 {
   white-space: nowrap;
 }
 
+h2 .gerrymanderer {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 1.75rem;
+}
+
 p {
   text-wrap: balance;
 }
@@ -79,4 +85,9 @@ p {
 .text-red {
   text-transform: uppercase;
   color: var(--red);
+}
+
+.hero {
+  font-size: 16rem;
+  line-height: 1;
 }

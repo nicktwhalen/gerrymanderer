@@ -2,10 +2,6 @@
 @import '../styles/reset.css';
 @import '../styles/layout.css';
 @import '../styles/typography.css';
-@import '../styles/tile.css';
-@import '../styles/modal.css';
-@import '../styles/intro.css';
-@import '../styles/stats.css';
 
 :root {
   --red: #dc143c;

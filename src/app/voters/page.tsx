@@ -3,7 +3,7 @@ import Text from '@/components/Text/Text';
 import Definition from '@/components/Definition/Definition';
 import Button from '@/components/Button/Button';
 import Voter from '@/components/Voter/Voter';
-import VoterTile from '@/components/VoterTile';
+import Bubble from '@/components/Bubble/Bubble';
 import ArrowLeftIcon from '@/icons/ArrowLeftIcon';
 import ArrowRightIcon from '@/icons/ArrowRightIcon';
 
@@ -26,14 +26,8 @@ export default function Voters() {
       />
       <div className="illustration" role="presentation">
         <div className="bubbles">
-          <div className="bubble">
-            I vote red!
-            <span className="arrow" style={{ left: '4.5rem' }}></span>
-          </div>
-          <div className="bubble">
-            I vote blue!
-            <span className="arrow" style={{ left: '2rem' }}></span>
-          </div>
+          <Bubble arrow="right">I vote red!</Bubble>
+          <Bubble arrow="left">I vote blue!</Bubble>
         </div>
         <div className="voters" style={{ '--count': 2 } as React.CSSProperties}>
           <Voter color="red" />

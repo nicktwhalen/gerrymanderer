@@ -2,7 +2,8 @@
 
 import { useState, useEffect, CSSProperties } from 'react';
 import Voter, { VoterProps } from '@/components/Voter/Voter';
-import { VoterMood } from '@/types/game';
+import Cursor from '@/components/Cursor/Cursor';
+import Bubble from '@/components/Bubble/Bubble';
 
 // Animation phases for the district demonstration
 type AnimationPhase =
@@ -19,12 +20,12 @@ export default function DistrictAnimation() {
 
   useEffect(() => {
     const sequence = [
-      { phase: 'initial', duration: 1500 },
-      { phase: 'cursor-appear', duration: 800 },
-      { phase: 'cursor-click', duration: 600 },
-      { phase: 'drag-to-second', duration: 800 },
-      { phase: 'drag-to-third', duration: 800 },
-      { phase: 'final', duration: 2000 },
+      { phase: 'initial', duration: 500 },
+      { phase: 'cursor-appear', duration: 500 },
+      { phase: 'cursor-click', duration: 500 },
+      { phase: 'drag-to-second', duration: 500 },
+      { phase: 'drag-to-third', duration: 500 },
+      { phase: 'final', duration: 2500 },
     ] as const;
 
     let currentStep = 0;
@@ -58,7 +59,7 @@ export default function DistrictAnimation() {
       setTimeout(runAnimation, step.duration);
     };
 
-    const timer = setTimeout(runAnimation, 500); // Initial delay
+    const timer = setTimeout(runAnimation, 1000); // Initial delay
 
     return () => clearTimeout(timer);
   }, []);
@@ -95,7 +96,7 @@ export default function DistrictAnimation() {
   };
 
   const getSecondVoterProps = (phase: AnimationPhase): VoterProps => {
-    const color = 'red';
+    const color = 'blue';
     switch (phase) {
       case 'drag-to-second':
         return {
@@ -114,7 +115,7 @@ export default function DistrictAnimation() {
       case 'final':
         return {
           color,
-          mood: 'elated',
+          mood: 'sad',
           state: 'completed',
           districtColor: 'red',
           borders: { top: true, right: false, bottom: true, left: false },
@@ -125,7 +126,7 @@ export default function DistrictAnimation() {
   };
 
   const getThirdVoterProps = (phase: AnimationPhase): VoterProps => {
-    const color = 'blue';
+    const color = 'red';
     switch (phase) {
       case 'drag-to-third':
         return {
@@ -137,7 +138,7 @@ export default function DistrictAnimation() {
       case 'final':
         return {
           color,
-          mood: 'sad',
+          mood: 'elated',
           state: 'completed',
           districtColor: 'red',
           borders: { top: true, right: true, bottom: true, left: false },
@@ -150,27 +151,11 @@ export default function DistrictAnimation() {
   return (
     <>
       <div className="illustration" role="presentation">
-        {/* Cursor */}
-        {[
-          'initial',
-          'cursor-appear',
-          'cursor-click',
-          'drag-to-second',
-          'drag-to-third',
-          'final',
-        ].includes(phase) && (
-          <div
-            className={`cursor ${phase}`}
-            style={
-              {
-                '--x': `${cursorPosition.x}`,
-                '--y': `${cursorPosition.y}`,
-              } as CSSProperties
-            }
-          >
-            👆
-          </div>
-        )}
+        <Cursor
+          x={cursorPosition.x}
+          y={cursorPosition.y}
+          visible={!['initial', 'final'].includes(phase)}
+        />
 
         {/* Individual speech bubbles for initial state */}
         {[
@@ -181,33 +166,16 @@ export default function DistrictAnimation() {
           'drag-to-third',
         ].includes(phase) && (
           <div className="bubbles">
-            {/* Red square 1 bubble */}
-            <div className="bubble">
-              I vote red!
-              <span className="arrow" style={{ left: '5rem' }}></span>
-            </div>
-            {/* Red square 2 bubble */}
-            <div className="bubble">
-              I vote red!
-              <span className="arrow"></span>
-            </div>
-            {/* Blue square bubble */}
-            <div className="bubble">
-              I vote blue!
-              <span className="arrow" style={{ left: '1rem' }}></span>
-            </div>
+            <Bubble arrow="right">I vote red!</Bubble>
+            <Bubble>I vote blue!</Bubble>
+            <Bubble arrow="left">I vote red!</Bubble>
           </div>
         )}
 
         {/* Combined speech bubble for final state */}
         {phase === 'final' && (
           <div className="bubbles">
-            <div className="bubble">
-              Together, we vote red!
-              <span className="arrow" style={{ left: '1.5rem' }}></span>
-              <span className="arrow"></span>
-              <span className="arrow" style={{ left: '9.5rem' }}></span>
-            </div>
+            <Bubble arrow="all">Together, we vote red!</Bubble>
           </div>
         )}
 

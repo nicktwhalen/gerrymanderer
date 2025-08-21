@@ -1,16 +1,18 @@
 import { Metadata } from 'next';
+import Hero from '@/components/Hero/Hero';
 import Button from '@/components/Button/Button';
 import Text from '@/components/Text/Text';
 
 export const metadata: Metadata = {
   title: 'The Gerrymanderer',
-  description: 'A game that teaches and plays with the concept of gerrymandering.',
+  description:
+    'A game that teaches and plays with the concept of gerrymandering.',
 };
 
 export default function Home() {
   return (
     <>
-      <div className="hero">🦸🏻‍♀️</div>
+      <Hero />
       <Text>
         <p>
           The world’s best

@@ -77,3 +77,16 @@ main {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+.bubbles {
+  display: flex;
+  position: absolute;
+  top: -1.25rem;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+}

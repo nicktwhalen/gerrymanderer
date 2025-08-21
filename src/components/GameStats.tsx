@@ -3,6 +3,8 @@
 import { GameState, District, DistrictWinner } from '@/types/game';
 import Button from '@/components/Button/Button';
 import ResetIcon from '@/icons/ResetIcon';
+import Meter from '@/components/Meter/Meter';
+import Text from '@/components/Text/Text';
 
 interface GameStatsProps {
   gameState: GameState;
@@ -22,27 +24,35 @@ export default function GameStats({ gameState, resetGame }: GameStatsProps) {
   };
 
   const completedDistricts = districts.filter((d) => d.isComplete);
-  const redDistricts = completedDistricts.filter((d) => getDistrictMajority(d) === 'red').length;
-  const blueDistricts = completedDistricts.filter((d) => getDistrictMajority(d) === 'blue').length;
+  const redDistricts = completedDistricts.filter(
+    (d) => getDistrictMajority(d) === 'red',
+  ).length;
+  const blueDistricts = completedDistricts.filter(
+    (d) => getDistrictMajority(d) === 'blue',
+  ).length;
 
   return (
     <>
       <div className="flex-center">
-        <div className="tile flex-center">
-          <h2>Districts:</h2>
-          <div className="district-meter">
-            <div className="district-meter-label district-meter-label-blue" style={{ width: `${(blueDistricts / totalDistricts) * 100}%` }}></div>
-            <div className="district-meter-label district-meter-label-open" style={{ width: `${((totalDistricts - redDistricts - blueDistricts) / totalDistricts) * 100}%` }}></div>
-            <div className="district-meter-label district-meter-label-red" style={{ width: `${(redDistricts / totalDistricts) * 100}%` }}></div>
+        <Text>
+          <div className="flex-center">
+            <h2>Districts:</h2>
+            <Meter
+              red={redDistricts}
+              blue={blueDistricts}
+              total={totalDistricts}
+            />
           </div>
-        </div>
+        </Text>
         <Button ariaLabel="Reset board" onClick={resetGame}>
           <ResetIcon />
         </Button>
       </div>
-      <p className="tile">
-        Draw {totalDistricts} districts of {requiredDistrictSize} voters each!
-      </p>
+      <Text>
+        <p>
+          Draw {totalDistricts} districts of {requiredDistrictSize} voters each!
+        </p>
+      </Text>
     </>
   );
 }

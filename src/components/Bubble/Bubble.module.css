@@ -1,0 +1,43 @@
+.bubble {
+  position: relative;
+  background: white;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  line-height: 1;
+  border-radius: 0.5rem;
+  border: 0.2rem solid black;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.arrows {
+  display: flex;
+  position: absolute;
+  inset: calc(100% - 0.25rem) 0 0;
+  top: calc(100% - 0.25rem);
+  justify-content: space-around;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.arrow {
+  display: block;
+  width: 0.75rem;
+  height: 0.75rem;
+  rotate: -45deg;
+  border-left: 0.2rem solid black;
+  border-bottom: 0.2rem solid black;
+  background: white;
+}
+
+.left .arrows {
+  justify-content: start;
+}
+
+.right .arrows {
+  justify-content: end;
+}
+
+.all .arrows {
+  justify-content: space-between;
+}
