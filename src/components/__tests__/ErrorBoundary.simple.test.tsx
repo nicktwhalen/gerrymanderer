@@ -50,9 +50,9 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     );
 
-    expect(screen.getByText('OOPS! SOMETHING BROKE!')).toBeInTheDocument();
+    expect(screen.getByText('Oops! Something broke!')).toBeInTheDocument();
     expect(screen.getByText(/The gerrymanderer has encountered an unexpected error/)).toBeInTheDocument();
-    expect(screen.getByText('RELOAD GAME')).toBeInTheDocument();
+    expect(screen.getByText('Reload game')).toBeInTheDocument();
   });
 
   it('should render custom fallback when provided', () => {
@@ -65,7 +65,7 @@ describe('ErrorBoundary', () => {
     );
 
     expect(screen.getByText('Custom Error UI')).toBeInTheDocument();
-    expect(screen.queryByText('OOPS! SOMETHING BROKE!')).not.toBeInTheDocument();
+    expect(screen.queryByText('Oops! Something broke!')).not.toBeInTheDocument();
   });
 
   it('should clear localStorage when error occurs', () => {
@@ -75,7 +75,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     );
 
-    expect(mockLocalStorage.removeItem).toHaveBeenCalledWith('gerrymander-tutorial-seen');
+    expect(mockLocalStorage.removeItem).toHaveBeenCalledWith('gerrymander-intro-seen');
   });
 
   it('should handle localStorage errors gracefully', () => {

@@ -1,0 +1,29 @@
+.text {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #ffe4b5;
+  border: 0.2rem solid black;
+  padding: 0.75rem 1rem;
+  box-shadow: 0.3rem 0.3rem 0 black;
+  transform: rotate(-0.5deg);
+  text-align: center;
+  margin: 0;
+  transform-origin: center;
+  transition-duration: var(--animation-duration);
+  transition-timing-function: ease;
+  transition-property: opacity, scale, rotate;
+  transition-behavior: allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    scale: 0.95;
+    rotate: 0deg;
+  }
+}
+
+.white {
+  background: white;
+}

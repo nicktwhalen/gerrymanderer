@@ -38,4 +38,17 @@ export interface GameResult {
 
 export type TileState = 'default' | 'available' | 'selected' | 'completed';
 
-export type DistrictWinner = 'red' | 'blue' | 'tie';
+export type DistrictWinner = VoterColor | 'tie';
+
+export type TileSide = 'top' | 'right' | 'bottom' | 'left';
+
+export type TileBorders = Record<TileSide, boolean>;
+
+export type VoterMood =
+  | 'elated'
+  | 'happy'
+  | 'neutral'
+  | 'thinking'
+  | 'worried'
+  | 'sad';
+export type Face = '😁' | '😊' | '😐' | '🤔' | '🥺' | '😢';

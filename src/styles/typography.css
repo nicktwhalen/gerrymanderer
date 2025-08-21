@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Permanent+Marker&family=Bangers&display=swap');
+
+html {
+  font-size: clamp(16px, 2.5dvh, 24px);
+}
+
+body {
+  font-family: 'Permanent Marker', sans-serif;
+  line-height: 1.25;
+  color: black;
+}
+
+h2 {
+  font-size: 1.25rem;
+  line-height: 1;
+  text-wrap: balance;
+  padding: 0;
+  margin: 0;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+h2 .gerrymanderer {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 1.75rem;
+}
+
+p {
+  text-wrap: balance;
+}
+
+.text-blue {
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.text-red {
+  text-transform: uppercase;
+  color: var(--red);
+}

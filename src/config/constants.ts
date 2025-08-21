@@ -16,6 +16,7 @@ export const GAME_CONFIG = {
 
   // LocalStorage keys
   STORAGE_KEYS: {
+    INTRO_SEEN: 'gerrymander-intro-seen',
     TUTORIAL_SEEN: 'gerrymander-tutorial-seen',
   } as const,
 

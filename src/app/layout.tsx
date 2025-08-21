@@ -1,24 +1,12 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import './globals.css';
-import '../styles/comic.css';
+import Logo from '@/components/Logo/Logo';
 import { GameProvider } from '@/context/GameContext';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
-
-export const metadata: Metadata = {
-  title: 'The Gerrymanderer',
-  description: 'A game that teaches and plays with the concept of gerrymandering.',
-};
+// global styles
+import '@/styles/reset.css';
+import '@/styles/vars.css';
+import '@/styles/layout.css';
+import '@/styles/typography.css';
 
 export default function RootLayout({
   children,
@@ -27,10 +15,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ErrorBoundary>
-          <GameProvider>{children}</GameProvider>
-        </ErrorBoundary>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin=""
+        />
+      </head>
+      <body>
+        <header>
+          <Logo />
+        </header>
+        <main>
+          <ErrorBoundary>
+            <GameProvider>{children}</GameProvider>
+          </ErrorBoundary>
+        </main>
       </body>
     </html>
   );

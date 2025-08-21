@@ -1,9 +1,10 @@
 'use client';
 
-import { useModal } from '@/hooks/useModal';
-import GameStats from './GameStats';
 import { GameState } from '@/types/game';
 import { Level } from '@/types/level';
+import GameBoard from './GameBoard';
+import Button from '@/components/Button/Button';
+import Text from './Text/Text';
 
 interface GameResultProps {
   blueWins: number;
@@ -17,45 +18,74 @@ interface GameResultProps {
   hasNextLevel: boolean;
   gameState: GameState;
   currentLevel: Level;
+  version?: string; // Optional version prop for conditional rendering
 }
 
-export default function GameResult({ blueWins, redWins, ties, playerWon, onNewGame, onNextLevel, redCount, blueCount, hasNextLevel, gameState, currentLevel }: GameResultProps) {
-  const { handleBackdropClick, handleModalClick } = useModal(true);
-
+export default function GameResult({
+  playerWon,
+  onNewGame,
+  onNextLevel,
+  hasNextLevel,
+  currentLevel,
+}: GameResultProps) {
   // Get target color and opposite color for dynamic copy
   const targetColor = currentLevel.targetColor;
   const otherColor = targetColor === 'blue' ? 'red' : 'blue';
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }} onClick={handleBackdropClick}>
-      <div className="comic-instructions p-6 max-w-sm w-full text-center" onClick={handleModalClick}>
-        <h2 className={`comic-title text-3xl sm:text-4xl mb-2 ${playerWon ? 'text-green-600' : 'text-red-600'}`}>{playerWon ? 'VICTORY!' : 'DEFEAT!'}</h2>
+    <>
+      {playerWon ? (
+        <>
+          <Text>
+            <h2>
+              Victory:{' '}
+              <span className={`text-${targetColor}`}>{targetColor}</span> wins!
+            </h2>
+          </Text>
 
-        <div className="mb-6">
-          {playerWon ? (
-            <>
-              {/* Victory copy */}
-              <div className="text-lg font-bold">{targetColor} wins a majority of districts..</div>
-              <div className="mb-4 text-sm">..Despite there being more {otherColor} voters.</div>
-            </>
-          ) : (
-            <>
-              {/* Defeat copy */}
-              <div className="text-lg font-bold">Oh no — democracy prevailed!</div>
-              <div className="mb-4 text-sm">{otherColor} has the majority of voters and districts.</div>
-            </>
-          )}
+          <GameBoard />
 
-          {/* Reuse GameStats component */}
-          <GameStats gameState={gameState} />
-        </div>
+          <Text>
+            <p>
+              <span className={`text-${targetColor}`}>{targetColor}</span> wins
+              a majority of districts...
+            </p>
+            <p>
+              Even though{' '}
+              <span className={`text-${otherColor}`}>{otherColor}</span> has
+              more voters!
+            </p>
+          </Text>
+        </>
+      ) : (
+        <>
+          <Text>
+            <h2>
+              Defeat:{' '}
+              <span className={`text-${targetColor}`}>{targetColor}</span>{' '}
+              loses!
+            </h2>
+          </Text>
 
-        <div className="mb-3 text-sm">{playerWon ? 'You win! Take that, democracy!' : `You lose! Draw more ${targetColor} districts next time.`}</div>
+          <GameBoard />
 
-        <button onClick={playerWon && hasNextLevel ? onNextLevel : onNewGame} className="comic-tile comic-red-tile text-white font-bold px-6 py-3 text-lg hover:scale-105 transition-transform">
-          {playerWon ? (hasNextLevel ? 'NEXT LEVEL' : 'PLAY AGAIN') : 'TRY AGAIN'}
-        </button>
-      </div>
-    </div>
+          <Text>
+            <p>
+              <span className={`text-${otherColor}`}>{otherColor}</span> wins
+              the majority of districts.
+            </p>
+            <p>
+              Draw more{' '}
+              <span className={`text-${targetColor}`}>{targetColor}</span>{' '}
+              districts next time!
+            </p>
+          </Text>
+        </>
+      )}
+
+      <Button onClick={playerWon && hasNextLevel ? onNextLevel : onNewGame}>
+        {playerWon ? (hasNextLevel ? 'Next level' : 'Play again') : 'Try again'}
+      </Button>
+    </>
   );
 }

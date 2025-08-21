@@ -1,0 +1,36 @@
+.dictionary {
+  font-family: Georgia, serif;
+  text-align: left;
+  padding: 1rem 1.5rem 1.5rem;
+  line-height: 1.5;
+  background-color: white;
+  border: 0.2rem solid black;
+  box-shadow: 0.3rem 0.3rem 0 black;
+ transform-origin: center;
+  transition-duration: var(--animation-duration);
+  transition-timing-function: ease;
+  transition-property: opacity, scale, rotate;
+  transition-behavior: allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    scale: 0.95;
+    rotate: 0deg;
+  }
+}
+
+.term {
+  font-size: 1.5rem;
+  letter-spacing: -0.025em;
+  font-weight: bold;
+}
+
+.pronunciation {
+  margin-bottom: 1rem;
+}
+
+.definition {
+  font-style: italic;
+  text-wrap: pretty;
+}
+

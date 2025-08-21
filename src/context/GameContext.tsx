@@ -33,6 +33,7 @@ type GameAction =
   | { type: 'SET_IS_DRAGGING'; payload: boolean }
   | { type: 'SET_SHOW_GAME_RESULT'; payload: boolean }
   | { type: 'SET_SHOW_TUTORIAL'; payload: boolean }
+  | { type: 'SET_SHOW_INTRO'; payload: boolean }
   | { type: 'RESET_GAME' }
   | { type: 'NEXT_LEVEL' }
   | { type: 'FORCE_RERENDER' };

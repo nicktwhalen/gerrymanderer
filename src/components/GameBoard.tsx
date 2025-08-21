@@ -1,214 +1,118 @@
 'use client';
 
-import { useEffect } from 'react';
+import { CSSProperties, useEffect, useRef } from 'react';
 import { useGame } from '@/context/GameContext';
 import { useGameLogic } from '@/hooks/useGameLogic';
 import { useInteractionStateMachine } from '@/hooks/useInteractionStateMachine';
-import { useTutorial } from '@/hooks/useTutorial';
-import { useWalkthrough } from '@/hooks/useWalkthrough';
-import { GAME_CONFIG, CSS_CLASSES } from '@/config/constants';
-import VoterTile from './VoterTile';
-import GameStats from './GameStats';
-import GameResult from './GameResult';
-import Tutorial from './Tutorial';
-import Walkthrough from './Walkthrough';
+import VoterButton from '@/components/Voter/Voter';
+import type { District, Voter, VoterMood } from '@/types/game';
+import { useDragToSelect } from '@/hooks/useDragToSelect';
 
 export default function GameBoard() {
-  const { gameState, currentLevel, gameKey, gameResult, hasNextLevel, showGameResult, resetGame, nextLevel } = useGame();
+  const { gameState, currentLevel, gameResult } = useGame();
+  const { getTileState, getDistrictForVoter, getTileBorders } = useGameLogic();
 
-  const { getTileState, getDistrictForVoter } = useGameLogic();
-  const { handleMouseDown, handleMouseEnter, handleMouseUp, handleTouchStart, handleTouchMove, interactionMode, isInPreviewSelection } = useInteractionStateMachine();
-  const { showTutorial, closeTutorial, openTutorial } = useTutorial();
-  const { showWalkthrough, currentStep, setCurrentStep, openWalkthrough, closeWalkthrough } = useWalkthrough();
+  // TODO: delete this hook (game state still relying on it?)
+  useInteractionStateMachine();
 
-  // Auto-start walkthrough for level 1 only after tutorial is dismissed and on fresh start
-  useEffect(() => {
-    // Only show walkthrough if:
-    // 1. We're on level 1
-    // 2. No tutorial is showing (tutorial takes precedence)
-    // 3. No game result is showing
-    // 4. Game is in fresh state (no districts created)
-    // 5. Walkthrough isn't already showing
-    // 6. Add a small delay to ensure tutorial logic has run first
-    const timer = setTimeout(() => {
-      if (currentLevel.id === 1 && !showTutorial && !showGameResult && gameState.districts.length === 0 && !showWalkthrough) {
-        openWalkthrough();
+  const board = useRef<HTMLDivElement>(null);
+  const { selection } = useDragToSelect({ board });
+
+  const getMood = (voter: Voter, district?: District | null): VoterMood => {
+    if (!district) return 'neutral';
+    const voterColor = voter.color;
+
+    // If the game is complete, determine the face based on the game result
+    if (gameResult) {
+      const { blueWins, redWins } = gameResult;
+      if (redWins > blueWins) {
+        if (voterColor === 'red') return 'elated';
+        if (voterColor === 'blue') return 'sad';
+      } else if (blueWins > redWins) {
+        if (voterColor === 'blue') return 'elated';
+        if (voterColor === 'red') return 'sad';
       }
-    }, 200); // Small delay to let tutorial initialize first
-
-    return () => clearTimeout(timer);
-  }, [currentLevel.id, showTutorial, showGameResult, gameState.districts.length, showWalkthrough, openWalkthrough]);
-
-  // Helper function to check if interaction is allowed during walkthrough
-  const isInteractionAllowed = (voter: any) => {
-    if (!showWalkthrough) {
-      return true; // Allow all interactions when walkthrough is not active
     }
 
-    if (currentStep === 'step2') {
-      // Only allow interaction with top 3 squares (row 0, positions 0, 1, 2)
-      const voterPosition = gameState.board.flat().findIndex((v) => v.id === voter.id);
-      const row = Math.floor(voterPosition / currentLevel.voterGrid[0].length);
-      const col = voterPosition % currentLevel.voterGrid[0].length;
+    // If the voter is not in a district, return neutral
+    if (!district.voters.includes(voter)) return 'neutral';
 
-      return row === 0; // Only top row (row 0) is allowed
+    // If the district is not complete, return thinking
+    if (!district.isComplete) return 'thinking';
+
+    // If the district is complete, determine the face based on the majority color
+    const redVotes = district.voters.filter((v) => v.color === 'red').length;
+    const blueVotes = district.voters.filter((v) => v.color === 'blue').length;
+    if (redVotes > blueVotes) {
+      return voterColor === 'red' ? 'happy' : 'worried';
+    } else if (blueVotes > redVotes) {
+      return voterColor === 'blue' ? 'happy' : 'worried';
+    } else {
+      return 'neutral';
     }
-
-    if (currentStep === 'step3') {
-      return false; // No interactions allowed in step 3
-    }
-
-    if (currentStep === 'step4') {
-      // Only allow interaction with bottom 3 squares (row 2, positions 6, 7, 8)
-      const voterPosition = gameState.board.flat().findIndex((v) => v.id === voter.id);
-      const row = Math.floor(voterPosition / currentLevel.voterGrid[0].length);
-      const col = voterPosition % currentLevel.voterGrid[0].length;
-
-      return row === 2; // Only bottom row (row 2) is allowed
-    }
-
-    if (currentStep === 'step5') {
-      // Only allow interaction with middle 3 squares (row 1, positions 3, 4, 5)
-      const voterPosition = gameState.board.flat().findIndex((v) => v.id === voter.id);
-      const row = Math.floor(voterPosition / currentLevel.voterGrid[0].length);
-      const col = voterPosition % currentLevel.voterGrid[0].length;
-
-      return row === 1; // Only middle row (row 1) is allowed
-    }
-
-    return true; // Allow all interactions for other steps
   };
 
-  // Global mouseup/touchend/touchmove listener for the state machine interaction system
-  useEffect(() => {
-    const handleGlobalMouseUp = () => {
-      if (interactionMode !== 'idle') {
-        handleMouseUp();
-      }
-    };
-
-    const handleGlobalTouchEnd = (e: TouchEvent) => {
-      if (interactionMode !== 'idle') {
-        e.preventDefault();
-        handleMouseUp();
-      }
-    };
-
-    const handleGlobalTouchMove = (e: TouchEvent) => {
-      if (interactionMode !== 'idle') {
-        e.preventDefault();
-        // Create a minimal synthetic event that matches our usage
-        const syntheticEvent = {
-          preventDefault: () => e.preventDefault(),
-          stopPropagation: () => e.stopPropagation(),
-          touches: e.touches,
-        } as unknown as React.TouchEvent;
-        handleTouchMove(syntheticEvent);
-      }
-    };
-
-    document.addEventListener('mouseup', handleGlobalMouseUp);
-    document.addEventListener('touchend', handleGlobalTouchEnd, { passive: false });
-    document.addEventListener('touchmove', handleGlobalTouchMove, { passive: false });
-
-    return () => {
-      document.removeEventListener('mouseup', handleGlobalMouseUp);
-      document.removeEventListener('touchend', handleGlobalTouchEnd);
-      document.removeEventListener('touchmove', handleGlobalTouchMove);
-    };
-  }, [interactionMode, handleMouseUp, handleTouchMove]);
-
   return (
-    <div className={`${CSS_CLASSES.COMIC.BG} flex flex-col items-center p-2 sm:p-4 min-h-screen`}>
-      <h1 className={`${CSS_CLASSES.COMIC.TITLE} text-4xl sm:text-5xl lg:text-6xl font-bold mb-2 sm:mb-4 text-center px-2`}>THE GERRYMANDERER</h1>
+    <>
+      <div className="board">
+        <div
+          ref={board}
+          className="grid"
+          style={
+            {
+              '--grid-size-x': currentLevel.voterGrid[0].length,
+              '--grid-size-y': currentLevel.voterGrid.length,
+            } as CSSProperties
+          }
+        >
+          {gameState.board.map((row) =>
+            row.map((voter) => {
+              const { currentDistrict } = gameState;
+              const voterDistrict = getDistrictForVoter(voter.id);
 
-      <div
-        data-instructions
-        className={`${CSS_CLASSES.COMIC.INSTRUCTIONS} mb-3 sm:mb-5 p-2 sm:p-2 max-w-xs sm:max-w-md text-center text-xs sm:text-sm mx-2`}
-        style={showWalkthrough && currentStep === 'instructions' ? { position: 'relative', zIndex: 60 } : {}}
-      >
-        <strong className="text-sm sm:text-base">Level {currentLevel.id}</strong>
-        <br />
-        <span>
-          Create <u>{currentLevel.districtCount}</u> districts of <u>{currentLevel.districtSize}</u> voters each to make <u>{currentLevel.targetColor}</u> win the majority of districts!
-        </span>
-        <div className="flex gap-2 mt-2 justify-between">
-          <button
-            onClick={showWalkthrough ? undefined : openTutorial}
-            className={`${CSS_CLASSES.COMIC.TILE} ${CSS_CLASSES.COMIC.BLUE_TILE} text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform ${showWalkthrough ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            TUTORIAL
-          </button>
-          <button
-            onClick={showWalkthrough ? undefined : resetGame}
-            className={`${CSS_CLASSES.COMIC.TILE} ${CSS_CLASSES.COMIC.RED_TILE} text-white font-bold px-3 py-1 text-xs hover:scale-105 transition-transform ${showWalkthrough ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            RESET
-          </button>
+              // check if voter is in preview selection
+              const selected = selection.has(voter);
+              const state = selected ? 'selected' : getTileState(voter);
+
+              // calculate the district winner color
+              const district = selected ? currentDistrict : voterDistrict;
+              const redVotes = district
+                ? district.voters.filter((v) => v.color === 'red').length
+                : 0;
+              const blueVotes = district
+                ? district.voters.filter((v) => v.color === 'blue').length
+                : 0;
+              const winnerColor =
+                redVotes > blueVotes
+                  ? 'red'
+                  : blueVotes > redVotes
+                    ? 'blue'
+                    : undefined;
+
+              // get the mood of the voter
+              const mood = getMood(voter, district || currentDistrict);
+
+              // get the district borders of the voter
+              const borders = getTileBorders(
+                voter,
+                district || gameState.currentDistrict || undefined,
+              );
+
+              return (
+                <VoterButton
+                  key={voter.id}
+                  data-voter-id={voter.id}
+                  borders={borders}
+                  color={voter.color}
+                  districtColor={winnerColor}
+                  mood={mood}
+                  state={state}
+                />
+              );
+            }),
+          )}
         </div>
       </div>
-
-      <div
-        key={gameKey}
-        data-gameboard
-        className={`${CSS_CLASSES.COMIC.BOARD} grid gap-0 p-3 sm:p-6 max-w-sm sm:max-w-none`}
-        style={{
-          gridTemplateColumns: `repeat(${currentLevel.voterGrid[0].length}, minmax(0, 1fr))`,
-        }}
-      >
-        {gameState.board.map((row) =>
-          row.map((voter) => {
-            const district = getDistrictForVoter(voter.id);
-            const districtId = district ? parseInt(district.id.split('-')[1]) : -1;
-
-            const backgroundColor = district && district.isComplete ? GAME_CONFIG.DISTRICT_COLORS[districtId % GAME_CONFIG.DISTRICT_COLORS.length] : 'transparent';
-
-            // Override tile state if voter is in preview selection
-            let tileState = getTileState(voter);
-            if (isInPreviewSelection(voter.id)) {
-              tileState = 'selected';
-            }
-
-            return (
-              <div key={voter.id} className="p-1" style={{ backgroundColor }} data-voter-id={voter.id}>
-                <VoterTile
-                  voter={voter}
-                  state={tileState}
-                  district={district}
-                  onMouseDown={(e) => (isInteractionAllowed(voter) ? handleMouseDown(voter, e) : undefined)}
-                  onMouseEnter={() => (isInteractionAllowed(voter) ? handleMouseEnter(voter) : undefined)}
-                  onTouchStart={(e) => (isInteractionAllowed(voter) ? handleTouchStart(voter, e) : undefined)}
-                  onTouchMove={handleTouchMove}
-                  currentDistrictVoters={gameState.currentDistrict?.voters || []}
-                />
-              </div>
-            );
-          }),
-        )}
-      </div>
-
-      <div data-scoreboard style={showWalkthrough && currentStep === 'step3' ? { position: 'relative', zIndex: 60 } : {}}>
-        <GameStats gameState={gameState} />
-      </div>
-
-      {gameResult && showGameResult && (
-        <GameResult
-          blueWins={gameResult.blueWins}
-          redWins={gameResult.redWins}
-          ties={gameResult.ties}
-          playerWon={gameResult.playerWon}
-          onNewGame={resetGame}
-          onNextLevel={nextLevel}
-          redCount={gameState.redCount}
-          blueCount={gameState.blueCount}
-          hasNextLevel={hasNextLevel}
-          gameState={gameState}
-          currentLevel={currentLevel}
-        />
-      )}
-
-      {showTutorial && <Tutorial onClose={closeTutorial} />}
-      {showWalkthrough && <Walkthrough onClose={closeWalkthrough} levelId={currentLevel.id} currentStep={currentStep} setCurrentStep={setCurrentStep} />}
-    </div>
+    </>
   );
 }
