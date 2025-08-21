@@ -7,8 +7,6 @@
   place-content: center;
   cursor: pointer;
   border: none;
-  /* padding: calc(var(--grid-cell-border-image-size) / 2); */
-  /* padding: 0.5rem; */
   font-size: calc(10rem / var(--grid-size-x));
 }
 .red {

@@ -118,13 +118,6 @@ export const useGameLogic = () => {
       // If the voter is not in the district, no borders
       if (!district.voters.includes(voter)) return borders;
 
-      if (voter.id === '1-1') {
-        console.log('');
-        console.log('--');
-        console.log({ voter });
-        console.log({ district });
-      }
-
       // get adjacent voters
       const voterAbove = gameState.board[voter.row - 1]?.[voter.col];
       const voterBelow = gameState.board[voter.row + 1]?.[voter.col];
@@ -358,6 +351,28 @@ export const useGameLogic = () => {
     ],
   );
 
+  const removeVotersFromDistrict = useCallback(
+    (voters: Voter[]) => {
+      if (!gameState.currentDistrict) return false;
+
+      const updatedDistrict = {
+        ...gameState.currentDistrict,
+        voters: gameState.currentDistrict.voters.filter(
+          (voter) => !voters.includes(voter),
+        ),
+      };
+
+      if (updatedDistrict.voters.length === 0) {
+        updateGameState({ currentDistrict: null });
+        return true;
+      }
+
+      updateGameState({ currentDistrict: updatedDistrict });
+      return true;
+    },
+    [gameState, updateGameState],
+  );
+
   return useMemo(
     () => ({
       isAdjacent,
@@ -370,6 +385,7 @@ export const useGameLogic = () => {
       getDistrictForVoter,
       addVoterToDistrict,
       addMultipleVotersToDistrict,
+      removeVotersFromDistrict,
     }),
     [
       isAdjacent,
@@ -382,6 +398,7 @@ export const useGameLogic = () => {
       getDistrictForVoter,
       addVoterToDistrict,
       addMultipleVotersToDistrict,
+      removeVotersFromDistrict,
     ],
   );
 };

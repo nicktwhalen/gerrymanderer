@@ -1,68 +1,22 @@
 'use client';
 
-import { CSSProperties, useEffect } from 'react';
+import { CSSProperties, useEffect, useRef } from 'react';
 import { useGame } from '@/context/GameContext';
 import { useGameLogic } from '@/hooks/useGameLogic';
 import { useInteractionStateMachine } from '@/hooks/useInteractionStateMachine';
 import VoterButton from '@/components/Voter/Voter';
 import type { District, Voter, VoterMood } from '@/types/game';
+import { useDragToSelect } from '@/hooks/useDragToSelect';
 
 export default function GameBoard() {
-  const { gameState, currentLevel, gameKey, gameResult } = useGame();
-
+  const { gameState, currentLevel, gameResult } = useGame();
   const { getTileState, getDistrictForVoter, getTileBorders } = useGameLogic();
-  const {
-    handleMouseDown,
-    handleMouseEnter,
-    handleMouseUp,
-    handleTouchStart,
-    handleTouchMove,
-    interactionMode,
-    isInPreviewSelection,
-  } = useInteractionStateMachine();
 
-  // Global mouseup/touchend/touchmove listener for the state machine interaction system
-  useEffect(() => {
-    const handleGlobalMouseUp = () => {
-      if (interactionMode !== 'idle') {
-        handleMouseUp();
-      }
-    };
+  // TODO: delete this hook (game state still relying on it?)
+  useInteractionStateMachine();
 
-    const handleGlobalTouchEnd = (e: TouchEvent) => {
-      if (interactionMode !== 'idle') {
-        e.preventDefault();
-        handleMouseUp();
-      }
-    };
-
-    const handleGlobalTouchMove = (e: TouchEvent) => {
-      if (interactionMode !== 'idle') {
-        e.preventDefault();
-        // Create a minimal synthetic event that matches our usage
-        const syntheticEvent = {
-          preventDefault: () => e.preventDefault(),
-          stopPropagation: () => e.stopPropagation(),
-          touches: e.touches,
-        } as unknown as React.TouchEvent;
-        handleTouchMove(syntheticEvent);
-      }
-    };
-
-    document.addEventListener('mouseup', handleGlobalMouseUp);
-    document.addEventListener('touchend', handleGlobalTouchEnd, {
-      passive: false,
-    });
-    document.addEventListener('touchmove', handleGlobalTouchMove, {
-      passive: false,
-    });
-
-    return () => {
-      document.removeEventListener('mouseup', handleGlobalMouseUp);
-      document.removeEventListener('touchend', handleGlobalTouchEnd);
-      document.removeEventListener('touchmove', handleGlobalTouchMove);
-    };
-  }, [interactionMode, handleMouseUp, handleTouchMove]);
+  const board = useRef<HTMLDivElement>(null);
+  const { selection } = useDragToSelect({ board });
 
   const getMood = (voter: Voter, district?: District | null): VoterMood => {
     if (!district) return 'neutral';
@@ -102,7 +56,7 @@ export default function GameBoard() {
     <>
       <div className="board">
         <div
-          key={gameKey}
+          ref={board}
           className="grid"
           style={
             {
@@ -117,7 +71,7 @@ export default function GameBoard() {
               const voterDistrict = getDistrictForVoter(voter.id);
 
               // check if voter is in preview selection
-              const selected = isInPreviewSelection(voter.id);
+              const selected = selection.has(voter);
               const state = selected ? 'selected' : getTileState(voter);
 
               // calculate the district winner color
@@ -153,10 +107,6 @@ export default function GameBoard() {
                   districtColor={winnerColor}
                   mood={mood}
                   state={state}
-                  onMouseDown={(e) => handleMouseDown(voter, e)}
-                  onMouseEnter={() => handleMouseEnter(voter)}
-                  onTouchStart={(e) => handleTouchStart(voter, e)}
-                  onTouchMove={handleTouchMove}
                 />
               );
             }),
