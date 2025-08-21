@@ -1,4 +1,4 @@
-export type VoterColor = 'red' | 'blue';
+export type VoterColor = 'red' | 'blue' | 'empty';
 
 export interface Voter {
   id: string;
