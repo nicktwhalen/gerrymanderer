@@ -9,7 +9,7 @@
   text-transform: uppercase;
   white-space: nowrap;
   transform-origin: bottom center;
-  transition-duration: 0.25s;
+  transition-duration: var(--animation-duration);
   transition-property: opacity, scale, translate;
   transition-behavior: allow-discrete;
 

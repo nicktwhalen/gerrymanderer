@@ -14,7 +14,7 @@ export default function Text({ children, color, delay = 0 }: TextProps) {
   const className = [styles.text, color === 'white' ? styles.white : ''];
 
   useEffect(() => {
-    // Random rotation between -2 and 2 degrees
+    // Random rotation between -1 and 1 degrees
     setRotate(2 * Math.random() - 1);
   }, []);
 
