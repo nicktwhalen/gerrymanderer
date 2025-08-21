@@ -46,7 +46,7 @@ export default function Game() {
                 win!
               </h2>
             </Text>
-            <Button ariaLabel="How to play" href="/voters/">
+            <Button ariaLabel="How to play" href="/voters">
               ?
             </Button>
           </div>

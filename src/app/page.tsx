@@ -39,8 +39,8 @@ export default function Home() {
       </Text>
 
       <div className="flex-center">
-        <Button href="/voters/">How to play</Button>
-        <Button href="/game/">Start game</Button>
+        <Button href="/voters">How to play</Button>
+        <Button href="/game">Start game</Button>
       </div>
     </>
   );

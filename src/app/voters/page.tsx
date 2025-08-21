@@ -42,11 +42,11 @@ export default function Voters() {
         <p>Each square is a voter.</p>
       </Text>
       <div className="flex-center" style={{ marginTop: 'auto' }}>
-        <Button disabled>
+        <Button href="/" ariaLabel="Back: Home">
           <ArrowLeftIcon />
         </Button>
         <Text color="white">Page 1 of 3</Text>
-        <Button href="/districts/" ariaLabel="Next: Districts">
+        <Button href="/districts" ariaLabel="Next: Districts">
           <ArrowRightIcon />
         </Button>
       </div>

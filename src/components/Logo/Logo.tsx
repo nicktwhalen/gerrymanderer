@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import styles from './Logo.module.css';
 
@@ -14,7 +15,7 @@ export default function Logo() {
 
   return (
     <h1 className={styles.logo}>
-      <a href="/" className={styles.link}>
+      <Link href="/" className={styles.link}>
         <span className={styles.yellow}>
           <span className={styles.the}>The</span>
           <span className={styles.gerrymanderer}>Gerrymanderer</span>
@@ -23,7 +24,7 @@ export default function Logo() {
           <span className={styles.the}>The</span>
           <span className={styles.gerrymanderer}>Gerrymanderer</span>
         </span>
-      </a>
+      </Link>
     </h1>
   );
 }
