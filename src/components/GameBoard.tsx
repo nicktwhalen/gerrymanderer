@@ -147,6 +147,7 @@ export default function GameBoard() {
               return (
                 <VoterButton
                   key={voter.id}
+                  data-voter-id={voter.id}
                   borders={borders}
                   color={voter.color}
                   districtColor={winnerColor}
