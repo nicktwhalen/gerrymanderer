@@ -1,4 +1,13 @@
 .hero {
   font-size: 16rem;
   line-height: 1;
+  transform-origin: center bottom;
+  transition-duration: 0.25s;
+  transition-timing-function: ease;
+  transition-property: opacity, scale;
+
+  @starting-style {
+    opacity: 0;
+    scale: 0.75;
+  }
 }

@@ -20,9 +20,9 @@ export default function DistrictAnimation() {
 
   useEffect(() => {
     const sequence = [
-      { phase: 'initial', duration: 500 },
+      { phase: 'initial', duration: 3000 },
       { phase: 'cursor-appear', duration: 500 },
-      { phase: 'cursor-click', duration: 500 },
+      { phase: 'cursor-click', duration: 0 },
       { phase: 'drag-to-second', duration: 500 },
       { phase: 'drag-to-third', duration: 500 },
       { phase: 'final', duration: 2500 },
@@ -59,7 +59,7 @@ export default function DistrictAnimation() {
       setTimeout(runAnimation, step.duration);
     };
 
-    const timer = setTimeout(runAnimation, 1000); // Initial delay
+    const timer = setTimeout(runAnimation, 1); // Initial delay
 
     return () => clearTimeout(timer);
   }, []);
@@ -67,6 +67,7 @@ export default function DistrictAnimation() {
   const getFirstVoterProps = (phase: AnimationPhase): VoterProps => {
     const color = 'red';
     switch (phase) {
+      case 'cursor-appear':
       case 'cursor-click':
         return {
           color,
@@ -166,9 +167,13 @@ export default function DistrictAnimation() {
           'drag-to-third',
         ].includes(phase) && (
           <div className="bubbles">
-            <Bubble arrow="right">I vote red!</Bubble>
-            <Bubble>I vote blue!</Bubble>
-            <Bubble arrow="left">I vote red!</Bubble>
+            <Bubble arrow="right" delay={1000}>
+              I vote red!
+            </Bubble>
+            <Bubble delay={1500}>I vote blue!</Bubble>
+            <Bubble arrow="left" delay={2000}>
+              I vote red!
+            </Bubble>
           </div>
         )}
 

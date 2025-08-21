@@ -26,8 +26,12 @@ export default function Voters() {
       />
       <div className="illustration" role="presentation">
         <div className="bubbles">
-          <Bubble arrow="right">I vote red!</Bubble>
-          <Bubble arrow="left">I vote blue!</Bubble>
+          <Bubble arrow="right" delay={500}>
+            I vote red!
+          </Bubble>
+          <Bubble arrow="left" delay={1000}>
+            I vote blue!
+          </Bubble>
         </div>
         <div className="voters" style={{ '--count': 2 } as React.CSSProperties}>
           <Voter color="red" />

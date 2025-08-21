@@ -6,8 +6,8 @@
   background-color: white;
   border: 0.2rem solid black;
   box-shadow: 0.3rem 0.3rem 0 black;
-  animation: dictionary-in 0.1s ease forwards;
   transform-origin: center;
+  /* animation: dictionary-in 0.1s ease forwards; */
 }
 
 .term {
@@ -25,6 +25,7 @@
   text-wrap: pretty;
 }
 
+/*
 @keyframes dictionary-in {
   0% {
     opacity: 0;
@@ -37,3 +38,4 @@
     rotate: var(--rotate);
   }
 }
+*/

@@ -8,7 +8,11 @@ type DefinitionProps = {
   definition: string;
 };
 
-export default function Definition({ term, pronunciation, definition }: DefinitionProps) {
+export default function Definition({
+  term,
+  pronunciation,
+  definition,
+}: DefinitionProps) {
   const [rotate, setRotate] = useState(0);
 
   useEffect(() => {
@@ -17,7 +21,10 @@ export default function Definition({ term, pronunciation, definition }: Definiti
   }, []);
 
   return (
-    <dl className={styles.dictionary} style={{ '--rotate': `${rotate}deg` } as React.CSSProperties}>
+    <dl
+      className={styles.dictionary}
+      style={{ rotate: `${rotate}deg` } as React.CSSProperties}
+    >
       <dt className={styles.term}>{term}</dt>
       <dt className={styles.pronunciation}>{pronunciation}</dt>
       <dd className={styles.definition}>{definition}</dd>

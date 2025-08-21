@@ -8,7 +8,28 @@
   border: 0.2rem solid black;
   text-transform: uppercase;
   white-space: nowrap;
+  transform-origin: bottom center;
+  transition-duration: 0.25s;
+  transition-property: opacity, scale, translate;
+  transition-behavior: allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+    scale: 0.5;
+    translate: 0 1rem;
+  }
 }
+.left {
+  @starting-style {
+    translate: -2rem 1rem;
+  }
+}
+.right {
+  @starting-style {
+    translate: 2rem 1rem;
+  }
+}
+
 
 .arrows {
   display: flex;
