@@ -1,61 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Permanent+Marker&family=Bangers&display=swap');
+
 html {
   font-size: clamp(16px, 2.5dvh, 24px);
 }
 
-/* calc(100dvh - 4rem - 2rem) */
 body {
   font-family: 'Permanent Marker', sans-serif;
   line-height: 1.25;
   color: black;
-}
-
-h1 {
-  display: flex;
-  place-items: center;
-  place-content: center;
-  font-family: 'Bangers', sans-serif;
-  font-size: 3.25rem;
-  font-weight: bold;
-  color: #ffffff;
-  transform: rotate(-2deg);
-  letter-spacing: 0.1rem;
-  text-align: center;
-  line-height: 2rem;
-  /* margin: 0.5rem 0 2.0rem; */
-}
-
-h1 a {
-  display: block;
-  color: inherit;
-  margin: auto;
-  text-decoration: none;
-}
-
-h1 .the {
-  position: relative;
-  display: block;
-  vertical-align: middle;
-  font-size: 1.5rem;
-  z-index: 0;
-  text-shadow:
-    0 0.2rem 0 black,
-    0 -0.2rem 0 black,
-    0.2rem 0.2rem 0 black,
-    0.2rem 0 0 black,
-    0.2rem -0.2rem 0 black,
-    -0.2rem 0.2rem 0 black,
-    -0.2rem 0 0 black,
-    -0.2rem -0.2rem 0 black;
-}
-
-h1 .gerrymanderer {
-  position: relative;
-  z-index: 1;
-  text-shadow:
-    0.5rem 0 black,
-    -0.25rem 0 black,
-    0 0.5rem black,
-    0 -0.25rem black;
 }
 
 h2 {
@@ -85,9 +37,4 @@ p {
 .text-red {
   text-transform: uppercase;
   color: var(--red);
-}
-
-.hero {
-  font-size: 16rem;
-  line-height: 1;
 }

@@ -78,3 +78,31 @@ main {
   white-space: nowrap;
 }
 
+.voters {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  width: calc(var(--count) * 4rem);
+  pointer-events: none;
+}
+
+.illustration {
+  position: relative;
+  margin: 1.5rem auto 0;
+  padding: 1rem;
+  background: #bd9cceff;
+}
+
+.bubbles {
+  display: flex;
+  position: absolute;
+  top: -1.25rem;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+}

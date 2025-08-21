@@ -1,6 +1,12 @@
+import Logo from '@/components/Logo/Logo';
 import { GameProvider } from '@/context/GameContext';
 import ErrorBoundary from '@/components/ErrorBoundary';
-import './globals.css';
+
+// global styles
+import '@/styles/reset.css';
+import '@/styles/vars.css';
+import '@/styles/layout.css';
+import '@/styles/typography.css';
 
 export default function RootLayout({
   children,
@@ -11,16 +17,15 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin=""
+        />
       </head>
       <body>
         <header>
-          <h1>
-            <a href="/">
-              <span className="the">The</span>
-              <span className="gerrymanderer">Gerrymanderer</span>
-            </a>
-          </h1>
+          <Logo />
         </header>
         <main>
           <ErrorBoundary>
