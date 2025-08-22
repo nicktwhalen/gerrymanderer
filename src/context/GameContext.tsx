@@ -1,7 +1,21 @@
 'use client';
 
-import { createContext, useContext, useReducer, ReactNode, useCallback, useMemo, useEffect } from 'react';
-import { GameState, Voter, District, GameResult, DistrictWinner } from '@/types/game';
+import {
+  createContext,
+  useContext,
+  useReducer,
+  ReactNode,
+  useCallback,
+  useMemo,
+  useEffect,
+} from 'react';
+import {
+  GameState,
+  Voter,
+  District,
+  GameResult,
+  DistrictWinner,
+} from '@/types/game';
 import { Level, LEVELS } from '@/types/level';
 
 interface GameContextType {
@@ -58,7 +72,10 @@ const createBoardFromLevel = (level: Level): Voter[][] => {
   );
 };
 
-const calculateGameResult = (gameState: GameState, currentLevel: Level): GameResult | null => {
+const calculateGameResult = (
+  gameState: GameState,
+  currentLevel: Level,
+): GameResult | null => {
   if (gameState.districts.length !== currentLevel.districtCount) return null;
 
   const calculateDistrictWinner = (district: District): DistrictWinner => {
@@ -71,7 +88,9 @@ const calculateGameResult = (gameState: GameState, currentLevel: Level): GameRes
   };
 
   const districtWins = gameState.districts.map(calculateDistrictWinner);
-  const targetWins = districtWins.filter((winner) => winner === currentLevel.targetColor).length;
+  const targetWins = districtWins.filter(
+    (winner) => winner === currentLevel.targetColor,
+  ).length;
   const blueWins = districtWins.filter((winner) => winner === 'blue').length;
   const redWins = districtWins.filter((winner) => winner === 'red').length;
   const ties = districtWins.filter((winner) => winner === 'tie').length;
@@ -87,7 +106,10 @@ const calculateGameResult = (gameState: GameState, currentLevel: Level): GameRes
 
 // Note: initialState is now dynamically created in GameProvider based on URL parameters
 
-const gameReducer = (state: GameContextState, action: GameAction): GameContextState => {
+const gameReducer = (
+  state: GameContextState,
+  action: GameAction,
+): GameContextState => {
   switch (action.type) {
     case 'SET_CURRENT_LEVEL':
       const board = createBoardFromLevel(action.payload);
@@ -127,8 +149,12 @@ const gameReducer = (state: GameContextState, action: GameAction): GameContextSt
 
     case 'RESET_GAME':
       const resetBoard = createBoardFromLevel(state.currentLevel);
-      const resetRedCount = resetBoard.flat().filter((v) => v.color === 'red').length;
-      const resetBlueCount = resetBoard.flat().filter((v) => v.color === 'blue').length;
+      const resetRedCount = resetBoard
+        .flat()
+        .filter((v) => v.color === 'red').length;
+      const resetBlueCount = resetBoard
+        .flat()
+        .filter((v) => v.color === 'blue').length;
 
       return {
         ...state,
@@ -147,12 +173,18 @@ const gameReducer = (state: GameContextState, action: GameAction): GameContextSt
       };
 
     case 'NEXT_LEVEL':
-      const currentIndex = LEVELS.findIndex((level) => level.id === state.currentLevel.id);
+      const currentIndex = LEVELS.findIndex(
+        (level) => level.id === state.currentLevel.id,
+      );
       if (currentIndex < LEVELS.length - 1) {
         const nextLevel = LEVELS[currentIndex + 1];
         const nextBoard = createBoardFromLevel(nextLevel);
-        const nextRedCount = nextBoard.flat().filter((v) => v.color === 'red').length;
-        const nextBlueCount = nextBoard.flat().filter((v) => v.color === 'blue').length;
+        const nextRedCount = nextBoard
+          .flat()
+          .filter((v) => v.color === 'red').length;
+        const nextBlueCount = nextBoard
+          .flat()
+          .filter((v) => v.color === 'blue').length;
 
         return {
           ...state,
@@ -187,8 +219,12 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   // Always start with level 1 to avoid hydration mismatch
   const defaultLevel = LEVELS[0];
   const defaultBoard = createBoardFromLevel(defaultLevel);
-  const defaultRedCount = defaultBoard.flat().filter((v) => v.color === 'red').length;
-  const defaultBlueCount = defaultBoard.flat().filter((v) => v.color === 'blue').length;
+  const defaultRedCount = defaultBoard
+    .flat()
+    .filter((v) => v.color === 'red').length;
+  const defaultBlueCount = defaultBoard
+    .flat()
+    .filter((v) => v.color === 'blue').length;
 
   const defaultInitialState: GameContextState = {
     gameState: {
@@ -257,7 +293,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const nextLevel = useCallback(() => {
-    const currentIndex = LEVELS.findIndex((level) => level.id === state.currentLevel.id);
+    const currentIndex = LEVELS.findIndex(
+      (level) => level.id === state.currentLevel.id,
+    );
     if (currentIndex < LEVELS.length - 1) {
       const nextLevelObj = LEVELS[currentIndex + 1];
       dispatch({ type: 'NEXT_LEVEL' });
@@ -276,7 +314,12 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     return result;
   }, [state.gameState, state.currentLevel, state.showGameResult]);
 
-  const hasNextLevel = useMemo(() => LEVELS.findIndex((level) => level.id === state.currentLevel.id) < LEVELS.length - 1, [state.currentLevel.id]);
+  const hasNextLevel = useMemo(
+    () =>
+      LEVELS.findIndex((level) => level.id === state.currentLevel.id) <
+      LEVELS.length - 1,
+    [state.currentLevel.id],
+  );
 
   const contextValue = useMemo(
     () => ({
@@ -291,10 +334,23 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       gameResult,
       hasNextLevel,
     }),
-    [state, setCurrentLevel, updateGameState, setIsDragging, setShowGameResult, setShowTutorial, resetGame, nextLevel, gameResult, hasNextLevel],
+    [
+      state,
+      setCurrentLevel,
+      updateGameState,
+      setIsDragging,
+      setShowGameResult,
+      setShowTutorial,
+      resetGame,
+      nextLevel,
+      gameResult,
+      hasNextLevel,
+    ],
   );
 
-  return <GameContext.Provider value={contextValue}>{children}</GameContext.Provider>;
+  return (
+    <GameContext.Provider value={contextValue}>{children}</GameContext.Provider>
+  );
 };
 
 export const useGame = () => {

@@ -4,7 +4,9 @@ import { GameProvider, useGame } from '../GameContext';
 import { LEVELS } from '@/types/level';
 
 const createWrapper = () => {
-  const TestWrapper = ({ children }: { children: ReactNode }) => <GameProvider>{children}</GameProvider>;
+  const TestWrapper = ({ children }: { children: ReactNode }) => (
+    <GameProvider>{children}</GameProvider>
+  );
   TestWrapper.displayName = 'TestWrapper';
   return TestWrapper;
 };
@@ -27,8 +29,12 @@ describe('GameContext', () => {
       const { result } = renderHook(() => useGame(), { wrapper });
 
       const level = LEVELS[0];
-      const expectedRedCount = level.voterGrid.flat().filter((c) => c === 'red').length;
-      const expectedBlueCount = level.voterGrid.flat().filter((c) => c === 'blue').length;
+      const expectedRedCount = level.voterGrid
+        .flat()
+        .filter((c) => c === 'red').length;
+      const expectedBlueCount = level.voterGrid
+        .flat()
+        .filter((c) => c === 'blue').length;
 
       expect(result.current.gameState.redCount).toBe(expectedRedCount);
       expect(result.current.gameState.blueCount).toBe(expectedBlueCount);
@@ -140,11 +146,21 @@ describe('GameContext', () => {
       const level = result.current.currentLevel;
 
       // Create test districts that complete the game
-      const testDistricts = Array.from({ length: level.districtCount }, (_, i) => ({
-        id: `district-${i}`,
-        voters: [{ id: `voter-${i}`, row: 0, col: i, color: (i % 2 === 0 ? 'red' : 'blue') as 'red' | 'blue' }],
-        isComplete: true,
-      }));
+      const testDistricts = Array.from(
+        { length: level.districtCount },
+        (_, i) => ({
+          id: `district-${i}`,
+          voters: [
+            {
+              id: `voter-${i}`,
+              row: 0,
+              col: i,
+              color: (i % 2 === 0 ? 'red' : 'blue') as 'red' | 'blue',
+            },
+          ],
+          isComplete: true,
+        }),
+      );
 
       act(() => {
         result.current.updateGameState({

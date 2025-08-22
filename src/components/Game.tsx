@@ -40,7 +40,7 @@ export default function Game() {
             <Text>
               <h2>
                 Level {currentLevel.id}: Help{' '}
-                <span className={`team text-${currentLevel.targetColor}`}>
+                <span className={`text-${currentLevel.targetColor}`}>
                   {currentLevel.targetColor}
                 </span>{' '}
                 win!
