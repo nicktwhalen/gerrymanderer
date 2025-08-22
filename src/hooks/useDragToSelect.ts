@@ -73,6 +73,11 @@ export const useDragToSelect = ({ board }: UseDragToSelectProps) => {
 
   // Helper function to check if a voter can be added to current district
   const canAddVoter = (voter: Voter): boolean => {
+    // Don't allow empty squares to be selected
+    if (voter.color === 'empty') {
+      return false;
+    }
+
     // Don't add voter if already in current district (defensive check)
     if (isVoterInCurrentDistrict(voter.id)) {
       return false;

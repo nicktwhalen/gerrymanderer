@@ -8,12 +8,18 @@
   cursor: pointer;
   border: none;
   font-size: calc(10rem / var(--grid-size-x));
+  background: none;
 }
 .red {
   background: linear-gradient(135deg, #dc143c, #b22222 50%, #8b0000);
 }
 .blue {
   background: linear-gradient(135deg, #0066cc, #0052a3 50%, #003d7a);
+}
+
+/* empty cell */
+.empty {
+  pointer-events: none;
 }
 
 /* when a nearby voter is selected */

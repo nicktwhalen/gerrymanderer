@@ -1,4 +1,3 @@
-'use client';
 import { TileBorders, TileState, VoterColor, VoterMood } from '@/types/game';
 import styles from './Voter.module.css';
 
@@ -52,7 +51,7 @@ export default function Voter(
       {districtColor && color !== districtColor && (
         <div className={styles.districtColor} />
       )}
-      <div className={styles.face}>{getFace(mood)}</div>
+      {color !== 'empty' && <div className={styles.face}>{getFace(mood)}</div>}
       {state === 'available' && <div className={styles.selectable} />}
       {borders && (
         <div className={styles.districtBorders}>
