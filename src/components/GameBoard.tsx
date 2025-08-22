@@ -2,7 +2,6 @@
 
 import { CSSProperties, useEffect, useRef } from 'react';
 import { useGame } from '@/context/GameContext';
-import { Voter } from '@/types/game';
 import { useGameLogic } from '@/hooks/useGameLogic';
 import { useInteractionStateMachine } from '@/hooks/useInteractionStateMachine';
 import VoterButton from '@/components/Voter/Voter';
