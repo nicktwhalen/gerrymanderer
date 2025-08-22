@@ -1,6 +1,7 @@
 'use client';
 
 import { useGame } from '@/context/GameContext';
+import { US } from '@/types/game';
 import GameBoard from './GameBoard';
 import GameStats from './GameStats';
 import GameResult from './GameResult';
@@ -22,14 +23,14 @@ export default function Game() {
     <>
       {gameResult && showGameResult ? (
         <GameResult
-          blueWins={gameResult.blueWins}
-          redWins={gameResult.redWins}
+          usWins={gameResult.usWins}
+          themWins={gameResult.themWins}
           ties={gameResult.ties}
           playerWon={gameResult.playerWon}
           onNewGame={resetGame}
           onNextLevel={nextLevel}
-          redCount={gameState.redCount}
-          blueCount={gameState.blueCount}
+          usCount={gameState.usCount}
+          themCount={gameState.themCount}
           hasNextLevel={hasNextLevel}
           gameState={gameState}
           currentLevel={currentLevel}
@@ -40,10 +41,7 @@ export default function Game() {
             <Text>
               <h2>
                 Level {currentLevel.id}: Help{' '}
-                <span className={`text-${currentLevel.targetColor}`}>
-                  {currentLevel.targetColor}
-                </span>{' '}
-                win!
+                <span className={`text-${US}`}>{US}</span> win!
               </h2>
             </Text>
             <Button ariaLabel="How to play" href="/voters">

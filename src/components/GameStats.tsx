@@ -1,6 +1,6 @@
 'use client';
 
-import { GameState, District, DistrictWinner } from '@/types/game';
+import { GameState, District, DistrictWinner, VoterType } from '@/types/game';
 import Button from '@/components/Button/Button';
 import ResetIcon from '@/icons/ResetIcon';
 import Meter from '@/components/Meter/Meter';
@@ -15,20 +15,24 @@ export default function GameStats({ gameState, resetGame }: GameStatsProps) {
   const { districts, requiredDistrictSize, totalDistricts } = gameState;
 
   const getDistrictMajority = (district: District): DistrictWinner => {
-    const redCount = district.voters.filter((v) => v.color === 'red').length;
-    const blueCount = district.voters.filter((v) => v.color === 'blue').length;
+    const usCount = district.voters.filter(
+      (v) => v.type === VoterType.Us,
+    ).length;
+    const themCount = district.voters.filter(
+      (v) => v.type === VoterType.Them,
+    ).length;
 
-    if (redCount > blueCount) return 'red';
-    if (blueCount > redCount) return 'blue';
+    if (usCount > themCount) return VoterType.Us;
+    if (themCount > usCount) return VoterType.Them;
     return 'tie';
   };
 
   const completedDistricts = districts.filter((d) => d.isComplete);
-  const redDistricts = completedDistricts.filter(
-    (d) => getDistrictMajority(d) === 'red',
+  const usDistricts = completedDistricts.filter(
+    (d) => getDistrictMajority(d) === VoterType.Us,
   ).length;
-  const blueDistricts = completedDistricts.filter(
-    (d) => getDistrictMajority(d) === 'blue',
+  const themDistricts = completedDistricts.filter(
+    (d) => getDistrictMajority(d) === VoterType.Them,
   ).length;
 
   return (
@@ -38,8 +42,8 @@ export default function GameStats({ gameState, resetGame }: GameStatsProps) {
           <div className="flex-center">
             <h2>Districts:</h2>
             <Meter
-              red={redDistricts}
-              blue={blueDistricts}
+              red={themDistricts}
+              blue={usDistricts}
               total={totalDistricts}
             />
           </div>

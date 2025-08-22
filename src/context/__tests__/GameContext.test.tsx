@@ -2,6 +2,7 @@ import { renderHook, act } from '@testing-library/react';
 import { ReactNode } from 'react';
 import { GameProvider, useGame } from '../GameContext';
 import { LEVELS } from '@/types/level';
+import { VoterType } from '@/types/game';
 
 const createWrapper = () => {
   const TestWrapper = ({ children }: { children: ReactNode }) => (
@@ -29,15 +30,15 @@ describe('GameContext', () => {
       const { result } = renderHook(() => useGame(), { wrapper });
 
       const level = LEVELS[0];
-      const expectedRedCount = level.voterGrid
+      const expectedUsCount = level.voterGrid
         .flat()
-        .filter((c) => c === 'red').length;
-      const expectedBlueCount = level.voterGrid
+        .filter((c) => c === VoterType.Us).length;
+      const expectedThemCount = level.voterGrid
         .flat()
-        .filter((c) => c === 'blue').length;
+        .filter((c) => c === VoterType.Them).length;
 
-      expect(result.current.gameState.redCount).toBe(expectedRedCount);
-      expect(result.current.gameState.blueCount).toBe(expectedBlueCount);
+      expect(result.current.gameState.usCount).toBe(expectedUsCount);
+      expect(result.current.gameState.themCount).toBe(expectedThemCount);
     });
   });
 
@@ -155,7 +156,7 @@ describe('GameContext', () => {
               id: `voter-${i}`,
               row: 0,
               col: i,
-              color: (i % 2 === 0 ? 'red' : 'blue') as 'red' | 'blue',
+              type: i % 2 === 0 ? VoterType.Them : VoterType.Us,
             },
           ],
           isComplete: true,

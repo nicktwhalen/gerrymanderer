@@ -6,6 +6,7 @@ import Voter from '@/components/Voter/Voter';
 import Bubble from '@/components/Bubble/Bubble';
 import ArrowLeftIcon from '@/icons/ArrowLeftIcon';
 import ArrowRightIcon from '@/icons/ArrowRightIcon';
+import { VoterColor } from '@/types/game';
 
 export const metadata: Metadata = {
   title: 'The Gerrymanderer: Meet the voters',
@@ -34,8 +35,8 @@ export default function Voters() {
           </Bubble>
         </div>
         <div className="voters" style={{ '--count': 2 } as React.CSSProperties}>
-          <Voter color="red" />
-          <Voter color="blue" />
+          <Voter color={VoterColor.Red} />
+          <Voter color={VoterColor.Blue} />
         </div>
       </div>
       <Text>
