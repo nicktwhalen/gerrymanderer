@@ -1,18 +1,7 @@
-'use client';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import styles from './Logo.module.css';
 
 export default function Logo() {
-  const [rotate, setRotate] = useState(0);
-
-  const className = [styles.logo];
-
-  useEffect(() => {
-    // Random rotation between -1 and 1 degrees
-    setRotate(2 * Math.random() - 1);
-  }, []);
-
   return (
     <h1 className={styles.logo}>
       <Link href="/" className={styles.link}>

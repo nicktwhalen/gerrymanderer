@@ -7,9 +7,9 @@
   font-weight: 400;
   rotate: -2deg;
   line-height: 2.25rem;
-  /* letter-spacing: 0.125rem; */
   text-align: center;
   transform-origin: center;
+  white-space: nowrap;
 }
 
 .link {
