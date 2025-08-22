@@ -20,10 +20,22 @@ type InteractionState =
       mode: 'click' | 'drag';
     };
 
-type InteractionEvent = { type: 'CLICK'; voter: Voter } | { type: 'MOUSE_DOWN'; voter: Voter } | { type: 'MOUSE_ENTER'; voter: Voter } | { type: 'MOUSE_UP' } | { type: 'APPLY_SELECTION' } | { type: 'RESET' };
+type InteractionEvent =
+  | { type: 'CLICK'; voter: Voter }
+  | { type: 'MOUSE_DOWN'; voter: Voter }
+  | { type: 'MOUSE_ENTER'; voter: Voter }
+  | { type: 'MOUSE_UP' }
+  | { type: 'APPLY_SELECTION' }
+  | { type: 'RESET' };
 
 // Helper function to check if a voter can be added to current selection
-const isValidForSelection = (voter: Voter, currentSelection: Voter[], gameLogic: ReturnType<typeof useGameLogic>, maxDistrictSize: number, gameState: any): boolean => {
+const isValidForSelection = (
+  voter: Voter,
+  currentSelection: Voter[],
+  gameLogic: ReturnType<typeof useGameLogic>,
+  maxDistrictSize: number,
+  gameState: any,
+): boolean => {
   // Don't add the same voter twice
   if (currentSelection.some((v) => v.id === voter.id)) {
     return false;
@@ -43,11 +55,19 @@ const isValidForSelection = (voter: Voter, currentSelection: Voter[], gameLogic:
     return true; // First voter is always valid
   }
 
-  return currentSelection.some((existingVoter) => gameLogic.isAdjacent(existingVoter, voter));
+  return currentSelection.some((existingVoter) =>
+    gameLogic.isAdjacent(existingVoter, voter),
+  );
 };
 
 // State Machine Reducer
-const interactionReducer = (state: InteractionState, event: InteractionEvent, gameLogic: ReturnType<typeof useGameLogic>, maxDistrictSize: number, gameState: any): InteractionState => {
+const interactionReducer = (
+  state: InteractionState,
+  event: InteractionEvent,
+  gameLogic: ReturnType<typeof useGameLogic>,
+  maxDistrictSize: number,
+  gameState: any,
+): InteractionState => {
   switch (state.type) {
     case 'idle':
       if (event.type === 'MOUSE_DOWN') {
@@ -61,9 +81,20 @@ const interactionReducer = (state: InteractionState, event: InteractionEvent, ga
       break;
 
     case 'selecting':
-      if (event.type === 'MOUSE_ENTER' && event.voter.id !== state.startVoter.id) {
+      if (
+        event.type === 'MOUSE_ENTER' &&
+        event.voter.id !== state.startVoter.id
+      ) {
         // Upgrade to drag mode
-        if (isValidForSelection(event.voter, state.currentSelection, gameLogic, maxDistrictSize, gameState)) {
+        if (
+          isValidForSelection(
+            event.voter,
+            state.currentSelection,
+            gameLogic,
+            maxDistrictSize,
+            gameState,
+          )
+        ) {
           return {
             ...state,
             currentSelection: [...state.currentSelection, event.voter],
@@ -76,7 +107,15 @@ const interactionReducer = (state: InteractionState, event: InteractionEvent, ga
 
       if (event.type === 'MOUSE_ENTER' && state.mode === 'drag') {
         // Continue dragging
-        if (isValidForSelection(event.voter, state.currentSelection, gameLogic, maxDistrictSize, gameState)) {
+        if (
+          isValidForSelection(
+            event.voter,
+            state.currentSelection,
+            gameLogic,
+            maxDistrictSize,
+            gameState,
+          )
+        ) {
           return {
             ...state,
             currentSelection: [...state.currentSelection, event.voter],
@@ -110,7 +149,13 @@ const interactionReducer = (state: InteractionState, event: InteractionEvent, ga
 };
 
 export const useInteractionStateMachine = () => {
-  const { setIsDragging, setShowGameResult, gameResult, gameState, currentLevel } = useGame();
+  const {
+    setIsDragging,
+    setShowGameResult,
+    gameResult,
+    gameState,
+    currentLevel,
+  } = useGame();
   const gameLogic = useGameLogic();
   const { addMultipleVotersToDistrict, addVoterToDistrict } = gameLogic;
 
@@ -119,7 +164,17 @@ export const useInteractionStateMachine = () => {
   const touchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // State machine with game logic, district size limit, and game state injected
-  const [state, dispatch] = useReducer((state: InteractionState, event: InteractionEvent) => interactionReducer(state, event, gameLogic, currentLevel.districtSize, gameState), { type: 'idle' } as InteractionState);
+  const [state, dispatch] = useReducer(
+    (state: InteractionState, event: InteractionEvent) =>
+      interactionReducer(
+        state,
+        event,
+        gameLogic,
+        currentLevel.districtSize,
+        gameState,
+      ),
+    { type: 'idle' } as InteractionState,
+  );
 
   // Apply selections when confirmed (not during selecting to avoid double processing)
   useEffect(() => {
@@ -137,7 +192,13 @@ export const useInteractionStateMachine = () => {
       // Move to idle after applying
       dispatch({ type: 'APPLY_SELECTION' });
     }
-  }, [state, addVoterToDistrict, addMultipleVotersToDistrict, gameResult, setShowGameResult]);
+  }, [
+    state,
+    addVoterToDistrict,
+    addMultipleVotersToDistrict,
+    gameResult,
+    setShowGameResult,
+  ]);
 
   // Update global dragging state
   useEffect(() => {
@@ -166,14 +227,17 @@ export const useInteractionStateMachine = () => {
     dispatch({ type: 'CLICK', voter });
   }, []);
 
-  const handleMouseDown = useCallback((voter: Voter, event: React.MouseEvent) => {
-    // Ignore synthetic mouse events from touch
-    if (touchInProgress.current) {
-      return;
-    }
-    event.preventDefault();
-    dispatch({ type: 'MOUSE_DOWN', voter });
-  }, []);
+  const handleMouseDown = useCallback(
+    (voter: Voter, event: React.MouseEvent) => {
+      // Ignore synthetic mouse events from touch
+      if (touchInProgress.current) {
+        return;
+      }
+      event.preventDefault();
+      dispatch({ type: 'MOUSE_DOWN', voter });
+    },
+    [],
+  );
 
   const handleMouseEnter = useCallback((voter: Voter) => {
     // Ignore synthetic mouse events from touch
@@ -199,23 +263,26 @@ export const useInteractionStateMachine = () => {
     dispatch({ type: 'MOUSE_UP' });
   }, []);
 
-  const handleTouchStart = useCallback((voter: Voter, event: React.TouchEvent) => {
-    // Clear any existing timeout
-    if (touchTimeoutRef.current) {
-      clearTimeout(touchTimeoutRef.current);
-    }
+  const handleTouchStart = useCallback(
+    (voter: Voter, event: React.TouchEvent) => {
+      // Clear any existing timeout
+      if (touchTimeoutRef.current) {
+        clearTimeout(touchTimeoutRef.current);
+      }
 
-    touchInProgress.current = true;
-    event.preventDefault();
-    event.stopPropagation();
-    dispatch({ type: 'MOUSE_DOWN', voter });
+      touchInProgress.current = true;
+      event.preventDefault();
+      event.stopPropagation();
+      dispatch({ type: 'MOUSE_DOWN', voter });
 
-    // Safety timeout to clear touch flag in case touchend doesn't fire
-    touchTimeoutRef.current = setTimeout(() => {
-      touchInProgress.current = false;
-      touchTimeoutRef.current = null;
-    }, 1000);
-  }, []);
+      // Safety timeout to clear touch flag in case touchend doesn't fire
+      touchTimeoutRef.current = setTimeout(() => {
+        touchInProgress.current = false;
+        touchTimeoutRef.current = null;
+      }, 1000);
+    },
+    [],
+  );
 
   const handleTouchMove = useCallback(
     (event: React.TouchEvent) => {
@@ -226,7 +293,10 @@ export const useInteractionStateMachine = () => {
       if (!touch) return;
 
       // Find the element under the touch point
-      const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+      const elementBelow = document.elementFromPoint(
+        touch.clientX,
+        touch.clientY,
+      );
       if (!elementBelow) return;
 
       // Look for voter-id data attribute (could be on the tile or its container)
@@ -253,7 +323,10 @@ export const useInteractionStateMachine = () => {
   // Helper function to check if a voter is in current preview selection
   const isInPreviewSelection = useCallback(
     (voterId: string): boolean => {
-      return state.type === 'selecting' && state.currentSelection.some((v) => v.id === voterId);
+      return (
+        state.type === 'selecting' &&
+        state.currentSelection.some((v) => v.id === voterId)
+      );
     },
     [state],
   );

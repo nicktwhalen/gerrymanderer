@@ -6,7 +6,7 @@ import Text from '@/components/Text/Text';
 export const metadata: Metadata = {
   title: 'The Gerrymanderer',
   description:
-    'A game that teaches and plays with the concept of gerrymandering.',
+    'A game that teaches the concepts of gerrymandering and democracy.',
 };
 
 export default function Home() {

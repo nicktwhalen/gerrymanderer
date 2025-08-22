@@ -51,4 +51,3 @@ export type VoterMood =
   | 'thinking'
   | 'worried'
   | 'sad';
-export type Face = '😁' | '😊' | '😐' | '🤔' | '🥺' | '😢';

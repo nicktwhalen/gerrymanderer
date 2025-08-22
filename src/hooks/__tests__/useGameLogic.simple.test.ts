@@ -2,7 +2,12 @@ import { Voter } from '@/types/game';
 
 // Simple utility tests that don't require React context
 describe('Game Logic Utilities', () => {
-  const createTestVoter = (id: string, row: number, col: number, color: 'red' | 'blue' = 'red'): Voter => ({
+  const createTestVoter = (
+    id: string,
+    row: number,
+    col: number,
+    color: 'red' | 'blue' = 'red',
+  ): Voter => ({
     id,
     row,
     col,
@@ -10,10 +15,15 @@ describe('Game Logic Utilities', () => {
   });
 
   describe('Adjacent Position Logic', () => {
-    const isAdjacent = (pos1: { row: number; col: number }, pos2: { row: number; col: number }): boolean => {
+    const isAdjacent = (
+      pos1: { row: number; col: number },
+      pos2: { row: number; col: number },
+    ): boolean => {
       const rowDiff = Math.abs(pos1.row - pos2.row);
       const colDiff = Math.abs(pos1.col - pos2.col);
-      return (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1);
+      return (
+        (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1)
+      );
     };
 
     it('should return true for horizontally adjacent positions', () => {
@@ -45,10 +55,15 @@ describe('Game Logic Utilities', () => {
     const isContiguous = (voters: Voter[]): boolean => {
       if (voters.length <= 1) return true;
 
-      const isAdjacent = (pos1: { row: number; col: number }, pos2: { row: number; col: number }): boolean => {
+      const isAdjacent = (
+        pos1: { row: number; col: number },
+        pos2: { row: number; col: number },
+      ): boolean => {
         const rowDiff = Math.abs(pos1.row - pos2.row);
         const colDiff = Math.abs(pos1.col - pos2.col);
-        return (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1);
+        return (
+          (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1)
+        );
       };
 
       const visited = new Set<string>();
@@ -80,12 +95,20 @@ describe('Game Logic Utilities', () => {
     });
 
     it('should return true for contiguous voters in a line', () => {
-      const voters = [createTestVoter('1', 0, 0), createTestVoter('2', 0, 1), createTestVoter('3', 0, 2)];
+      const voters = [
+        createTestVoter('1', 0, 0),
+        createTestVoter('2', 0, 1),
+        createTestVoter('3', 0, 2),
+      ];
       expect(isContiguous(voters)).toBe(true);
     });
 
     it('should return true for contiguous voters in L-shape', () => {
-      const voters = [createTestVoter('1', 0, 0), createTestVoter('2', 0, 1), createTestVoter('3', 1, 1)];
+      const voters = [
+        createTestVoter('1', 0, 0),
+        createTestVoter('2', 0, 1),
+        createTestVoter('3', 1, 1),
+      ];
       expect(isContiguous(voters)).toBe(true);
     });
 
