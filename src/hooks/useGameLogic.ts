@@ -64,6 +64,11 @@ export const useGameLogic = () => {
 
   const canAddVoterToCurrentDistrict = useCallback(
     (voter: Voter): boolean => {
+      // Don't allow empty squares to be added to districts
+      if (voter.color === 'empty') {
+        return false;
+      }
+
       if (!gameState.currentDistrict) return true;
 
       if (
@@ -157,6 +162,11 @@ export const useGameLogic = () => {
 
   const addVoterToDistrict = useCallback(
     (voter: Voter, isDragAction: boolean = false) => {
+      // Don't allow empty squares to be added to districts
+      if (voter.color === 'empty') {
+        return false;
+      }
+
       if (
         isVoterInAnyDistrict(voter.id) &&
         !isVoterInCurrentDistrict(voter.id)
@@ -245,15 +255,18 @@ export const useGameLogic = () => {
 
   const addMultipleVotersToDistrict = useCallback(
     (voters: Voter[], isDragAction: boolean = false) => {
-      if (voters.length === 0) return false;
+      // Filter out empty squares
+      const nonEmptyVoters = voters.filter((voter) => voter.color !== 'empty');
+      if (nonEmptyVoters.length === 0) return false;
 
       // If there's no current district, create one with all voters
       if (!gameState.currentDistrict) {
-        const isComplete = voters.length === gameState.requiredDistrictSize;
+        const isComplete =
+          nonEmptyVoters.length === gameState.requiredDistrictSize;
 
         const newDistrict: District = {
           id: `district-${gameState.districts.length}`,
-          voters: [...voters],
+          voters: [...nonEmptyVoters],
           isComplete,
         };
 
@@ -272,7 +285,7 @@ export const useGameLogic = () => {
       // For drag operations, we need to add voters in order of adjacency
       // Start with voters that can be added to current district
       const validVoters: Voter[] = [];
-      const remainingVoters = [...voters];
+      const remainingVoters = [...nonEmptyVoters];
 
       while (remainingVoters.length > 0) {
         const currentDistrictVoters = [
