@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import type { Voter } from '@/types/game';
+import { VoterType } from '@/types/game';
 import { useGame } from '@/context/GameContext';
 import { useGameLogic } from './useGameLogic';
 
@@ -74,7 +75,7 @@ export const useDragToSelect = ({ board }: UseDragToSelectProps) => {
   // Helper function to check if a voter can be added to current district
   const canAddVoter = (voter: Voter): boolean => {
     // Don't allow empty squares to be selected
-    if (voter.color === 'empty') {
+    if (voter.type === VoterType.Nobody) {
       return false;
     }
 

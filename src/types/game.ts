@@ -1,8 +1,21 @@
-export type VoterColor = 'red' | 'blue' | 'empty';
+export enum VoterColor {
+  Red = 'red',
+  Blue = 'blue',
+  Empty = 'empty',
+}
+
+export enum VoterType {
+  Them = 'them',
+  Us = 'us',
+  Nobody = 'nobody',
+}
+
+export const US = VoterColor.Blue;
+export const THEM = US === VoterColor.Blue ? VoterColor.Red : VoterColor.Blue;
 
 export interface Voter {
   id: string;
-  color: VoterColor;
+  type: VoterType;
   row: number;
   col: number;
 }
@@ -19,8 +32,8 @@ export interface GameState {
   currentDistrict: District | null;
   requiredDistrictSize: number;
   totalDistricts: number;
-  redCount: number;
-  blueCount: number;
+  usCount: number;
+  themCount: number;
 }
 
 export interface Position {
@@ -29,8 +42,8 @@ export interface Position {
 }
 
 export interface GameResult {
-  blueWins: number;
-  redWins: number;
+  usWins: number;
+  themWins: number;
   ties: number;
   playerWon: boolean;
   isComplete: boolean;
@@ -38,7 +51,7 @@ export interface GameResult {
 
 export type TileState = 'default' | 'available' | 'selected' | 'completed';
 
-export type DistrictWinner = VoterColor | 'tie';
+export type DistrictWinner = VoterType | 'tie';
 
 export type TileSide = 'top' | 'right' | 'bottom' | 'left';
 

@@ -15,6 +15,9 @@ import {
   District,
   GameResult,
   DistrictWinner,
+  VoterType,
+  US,
+  THEM,
 } from '@/types/game';
 import { Level, LEVELS } from '@/types/level';
 
@@ -63,9 +66,9 @@ interface GameContextState {
 
 const createBoardFromLevel = (level: Level): Voter[][] => {
   return level.voterGrid.map((row, rowIndex) =>
-    row.map((color, colIndex) => ({
+    row.map((type, colIndex) => ({
       id: `${rowIndex}-${colIndex}`,
-      color,
+      type,
       row: rowIndex,
       col: colIndex,
     })),
@@ -79,27 +82,32 @@ const calculateGameResult = (
   if (gameState.districts.length !== currentLevel.districtCount) return null;
 
   const calculateDistrictWinner = (district: District): DistrictWinner => {
-    const redVotes = district.voters.filter((v) => v.color === 'red').length;
-    const blueVotes = district.voters.filter((v) => v.color === 'blue').length;
+    const usVotes = district.voters.filter(
+      (v) => v.type === VoterType.Us,
+    ).length;
+    const themVotes = district.voters.filter(
+      (v) => v.type === VoterType.Them,
+    ).length;
 
-    if (redVotes > blueVotes) return 'red';
-    if (blueVotes > redVotes) return 'blue';
+    if (usVotes > themVotes) return VoterType.Us;
+    if (themVotes > usVotes) return VoterType.Them;
     return 'tie';
   };
 
   const districtWins = gameState.districts.map(calculateDistrictWinner);
-  const targetWins = districtWins.filter(
-    (winner) => winner === currentLevel.targetColor,
+  const usWins = districtWins.filter(
+    (winner) => winner === VoterType.Us,
   ).length;
-  const blueWins = districtWins.filter((winner) => winner === 'blue').length;
-  const redWins = districtWins.filter((winner) => winner === 'red').length;
+  const themWins = districtWins.filter(
+    (winner) => winner === VoterType.Them,
+  ).length;
   const ties = districtWins.filter((winner) => winner === 'tie').length;
 
   return {
-    blueWins,
-    redWins,
+    usWins,
+    themWins,
     ties,
-    playerWon: targetWins > currentLevel.districtCount - targetWins, // Target color wins majority
+    playerWon: usWins > themWins,
     isComplete: true,
   };
 };
@@ -113,8 +121,12 @@ const gameReducer = (
   switch (action.type) {
     case 'SET_CURRENT_LEVEL':
       const board = createBoardFromLevel(action.payload);
-      const redCount = board.flat().filter((v) => v.color === 'red').length;
-      const blueCount = board.flat().filter((v) => v.color === 'blue').length;
+      const usCount = board
+        .flat()
+        .filter((v) => v.type === VoterType.Us).length;
+      const themCount = board
+        .flat()
+        .filter((v) => v.type === VoterType.Them).length;
 
       return {
         ...state,
@@ -125,8 +137,8 @@ const gameReducer = (
           currentDistrict: null,
           requiredDistrictSize: action.payload.districtSize,
           totalDistricts: action.payload.districtCount,
-          redCount,
-          blueCount,
+          usCount,
+          themCount,
         },
         showGameResult: false, // Reset game result when switching levels
         gameKey: state.gameKey + 1,
@@ -149,12 +161,12 @@ const gameReducer = (
 
     case 'RESET_GAME':
       const resetBoard = createBoardFromLevel(state.currentLevel);
-      const resetRedCount = resetBoard
+      const resetUsCount = resetBoard
         .flat()
-        .filter((v) => v.color === 'red').length;
-      const resetBlueCount = resetBoard
+        .filter((v) => v.type === VoterType.Us).length;
+      const resetThemCount = resetBoard
         .flat()
-        .filter((v) => v.color === 'blue').length;
+        .filter((v) => v.type === VoterType.Them).length;
 
       return {
         ...state,
@@ -164,8 +176,8 @@ const gameReducer = (
           currentDistrict: null,
           requiredDistrictSize: state.currentLevel.districtSize,
           totalDistricts: state.currentLevel.districtCount,
-          redCount: resetRedCount,
-          blueCount: resetBlueCount,
+          usCount: resetUsCount,
+          themCount: resetThemCount,
         },
         isDragging: false,
         showGameResult: false,
@@ -179,12 +191,12 @@ const gameReducer = (
       if (currentIndex < LEVELS.length - 1) {
         const nextLevel = LEVELS[currentIndex + 1];
         const nextBoard = createBoardFromLevel(nextLevel);
-        const nextRedCount = nextBoard
+        const nextUsCount = nextBoard
           .flat()
-          .filter((v) => v.color === 'red').length;
-        const nextBlueCount = nextBoard
+          .filter((v) => v.type === VoterType.Us).length;
+        const nextThemCount = nextBoard
           .flat()
-          .filter((v) => v.color === 'blue').length;
+          .filter((v) => v.type === VoterType.Them).length;
 
         return {
           ...state,
@@ -195,8 +207,8 @@ const gameReducer = (
             currentDistrict: null,
             requiredDistrictSize: nextLevel.districtSize,
             totalDistricts: nextLevel.districtCount,
-            redCount: nextRedCount,
-            blueCount: nextBlueCount,
+            usCount: nextUsCount,
+            themCount: nextThemCount,
           },
           isDragging: false,
           showGameResult: false,
@@ -219,12 +231,12 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   // Always start with level 1 to avoid hydration mismatch
   const defaultLevel = LEVELS[0];
   const defaultBoard = createBoardFromLevel(defaultLevel);
-  const defaultRedCount = defaultBoard
+  const defaultUsCount = defaultBoard
     .flat()
-    .filter((v) => v.color === 'red').length;
-  const defaultBlueCount = defaultBoard
+    .filter((v) => v.type === VoterType.Us).length;
+  const defaultThemCount = defaultBoard
     .flat()
-    .filter((v) => v.color === 'blue').length;
+    .filter((v) => v.type === VoterType.Them).length;
 
   const defaultInitialState: GameContextState = {
     gameState: {
@@ -233,8 +245,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
       currentDistrict: null,
       requiredDistrictSize: defaultLevel.districtSize,
       totalDistricts: defaultLevel.districtCount,
-      redCount: defaultRedCount,
-      blueCount: defaultBlueCount,
+      usCount: defaultUsCount,
+      themCount: defaultThemCount,
     },
     currentLevel: defaultLevel,
     isDragging: false,

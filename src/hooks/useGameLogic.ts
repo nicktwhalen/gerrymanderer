@@ -7,6 +7,7 @@ import {
   Position,
   TileState,
   TileBorders,
+  VoterType,
 } from '@/types/game';
 import { useGame } from '@/context/GameContext';
 
@@ -65,7 +66,7 @@ export const useGameLogic = () => {
   const canAddVoterToCurrentDistrict = useCallback(
     (voter: Voter): boolean => {
       // Don't allow empty squares to be added to districts
-      if (voter.color === 'empty') {
+      if (voter.type === VoterType.Nobody) {
         return false;
       }
 
@@ -163,7 +164,7 @@ export const useGameLogic = () => {
   const addVoterToDistrict = useCallback(
     (voter: Voter, isDragAction: boolean = false) => {
       // Don't allow empty squares to be added to districts
-      if (voter.color === 'empty') {
+      if (voter.type === VoterType.Nobody) {
         return false;
       }
 
@@ -256,7 +257,9 @@ export const useGameLogic = () => {
   const addMultipleVotersToDistrict = useCallback(
     (voters: Voter[], isDragAction: boolean = false) => {
       // Filter out empty squares
-      const nonEmptyVoters = voters.filter((voter) => voter.color !== 'empty');
+      const nonEmptyVoters = voters.filter(
+        (voter) => voter.type !== VoterType.Nobody,
+      );
       if (nonEmptyVoters.length === 0) return false;
 
       // If there's no current district, create one with all voters

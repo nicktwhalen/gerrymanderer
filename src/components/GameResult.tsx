@@ -1,20 +1,20 @@
 'use client';
 
-import { GameState } from '@/types/game';
+import { GameState, US, THEM } from '@/types/game';
 import { Level } from '@/types/level';
 import GameBoard from './GameBoard';
 import Button from '@/components/Button/Button';
 import Text from './Text/Text';
 
 interface GameResultProps {
-  blueWins: number;
-  redWins: number;
+  usWins: number;
+  themWins: number;
   ties: number;
   playerWon: boolean;
   onNewGame: () => void;
   onNextLevel?: () => void;
-  redCount: number;
-  blueCount: number;
+  usCount: number;
+  themCount: number;
   hasNextLevel: boolean;
   gameState: GameState;
   currentLevel: Level;
@@ -28,9 +28,8 @@ export default function GameResult({
   hasNextLevel,
   currentLevel,
 }: GameResultProps) {
-  // Get target color and opposite color for dynamic copy
-  const targetColor = currentLevel.targetColor;
-  const otherColor = targetColor === 'blue' ? 'red' : 'blue';
+  const capitalize = (str: string): string =>
+    str.charAt(0).toUpperCase() + str.slice(1);
 
   return (
     <>
@@ -38,8 +37,8 @@ export default function GameResult({
         <>
           <Text>
             <h2>
-              Victory:{' '}
-              <span className={`text-${targetColor}`}>{targetColor}</span> wins!
+              Victory: <span className={`text-${US}`}>{capitalize(US)}</span>{' '}
+              wins!
             </h2>
           </Text>
 
@@ -47,12 +46,11 @@ export default function GameResult({
 
           <Text>
             <p>
-              <span className={`text-${targetColor}`}>{targetColor}</span> wins
-              a majority of districts...
+              <span className={`text-${US}`}>{capitalize(US)}</span> wins a
+              majority of districts...
             </p>
             <p>
-              Even though{' '}
-              <span className={`text-${otherColor}`}>{otherColor}</span> has
+              Even though <span className={`text-${THEM}`}>{THEM}</span> has
               more voters!
             </p>
           </Text>
@@ -61,8 +59,7 @@ export default function GameResult({
         <>
           <Text>
             <h2>
-              Defeat:{' '}
-              <span className={`text-${targetColor}`}>{targetColor}</span>{' '}
+              Defeat: <span className={`text-${US}`}>{capitalize(US)}</span>{' '}
               loses!
             </h2>
           </Text>
@@ -71,13 +68,12 @@ export default function GameResult({
 
           <Text>
             <p>
-              <span className={`text-${otherColor}`}>{otherColor}</span> wins
+              <span className={`text-${THEM}`}>{capitalize(THEM)}</span> wins
               the majority of districts.
             </p>
             <p>
-              Draw more{' '}
-              <span className={`text-${targetColor}`}>{targetColor}</span>{' '}
-              districts next time!
+              Draw more <span className={`text-${US}`}>{US}</span> districts
+              next time!
             </p>
           </Text>
         </>

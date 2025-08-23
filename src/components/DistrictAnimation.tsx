@@ -4,6 +4,7 @@ import { useState, useEffect, CSSProperties } from 'react';
 import Voter, { VoterProps } from '@/components/Voter/Voter';
 import Cursor from '@/components/Cursor/Cursor';
 import Bubble from '@/components/Bubble/Bubble';
+import { VoterColor } from '@/types/game';
 
 // Animation phases for the district demonstration
 type AnimationPhase =
@@ -65,7 +66,7 @@ export default function DistrictAnimation() {
   }, []);
 
   const getFirstVoterProps = (phase: AnimationPhase): VoterProps => {
-    const color = 'red';
+    const color = VoterColor.Red;
     switch (phase) {
       case 'cursor-appear':
       case 'cursor-click':
@@ -88,7 +89,7 @@ export default function DistrictAnimation() {
           color,
           mood: 'elated',
           state: 'completed',
-          districtColor: 'red',
+          districtColor: VoterColor.Red,
           borders: { top: true, right: false, bottom: true, left: true },
         };
       default:
@@ -97,7 +98,7 @@ export default function DistrictAnimation() {
   };
 
   const getSecondVoterProps = (phase: AnimationPhase): VoterProps => {
-    const color = 'blue';
+    const color = VoterColor.Blue;
     switch (phase) {
       case 'drag-to-second':
         return {
@@ -118,7 +119,7 @@ export default function DistrictAnimation() {
           color,
           mood: 'sad',
           state: 'completed',
-          districtColor: 'red',
+          districtColor: VoterColor.Red,
           borders: { top: true, right: false, bottom: true, left: false },
         };
       default:
@@ -127,7 +128,7 @@ export default function DistrictAnimation() {
   };
 
   const getThirdVoterProps = (phase: AnimationPhase): VoterProps => {
-    const color = 'red';
+    const color = VoterColor.Red;
     switch (phase) {
       case 'drag-to-third':
         return {
@@ -141,7 +142,7 @@ export default function DistrictAnimation() {
           color,
           mood: 'elated',
           state: 'completed',
-          districtColor: 'red',
+          districtColor: VoterColor.Red,
           borders: { top: true, right: true, bottom: true, left: false },
         };
       default:
