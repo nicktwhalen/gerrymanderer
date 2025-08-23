@@ -16,7 +16,15 @@ const getVoterColor = (voterType: VoterType): VoterColor => {
   return VoterColor.Empty;
 };
 
-export default function GameBoard() {
+interface GameBoardProps {
+  onBoardClick?: () => void;
+  isInteractive?: boolean;
+}
+
+export default function GameBoard({
+  onBoardClick,
+  isInteractive = false,
+}: GameBoardProps) {
   const { gameState, currentLevel, gameResult } = useGame();
   const { getTileState, getDistrictForVoter, getTileBorders } = useGameLogic();
 
@@ -73,8 +81,10 @@ export default function GameBoard() {
             {
               '--grid-size-x': currentLevel.voterGrid[0].length,
               '--grid-size-y': currentLevel.voterGrid.length,
+              cursor: isInteractive && onBoardClick ? 'pointer' : 'default',
             } as CSSProperties
           }
+          onClick={isInteractive && onBoardClick ? onBoardClick : undefined}
         >
           {gameState.board.map((row) =>
             row.map((voter) => {

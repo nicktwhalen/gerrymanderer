@@ -1,10 +1,17 @@
 'use client';
 
-import { GameState, US, THEM } from '@/types/game';
+import {
+  GameState,
+  US,
+  THEM,
+  District,
+  DistrictWinner,
+  VoterType,
+} from '@/types/game';
 import { Level } from '@/types/level';
 import GameBoard from './GameBoard';
-import Button from '@/components/Button/Button';
 import Text from './Text/Text';
+import Meter from '@/components/Meter/Meter';
 
 interface GameResultProps {
   usWins: number;
@@ -27,9 +34,32 @@ export default function GameResult({
   onNextLevel,
   hasNextLevel,
   currentLevel,
+  gameState,
 }: GameResultProps) {
   const capitalize = (str: string): string =>
     str.charAt(0).toUpperCase() + str.slice(1);
+
+  // Calculate district meter data (same logic as GameStats)
+  const getDistrictMajority = (district: District): DistrictWinner => {
+    const usCount = district.voters.filter(
+      (v) => v.type === VoterType.Us,
+    ).length;
+    const themCount = district.voters.filter(
+      (v) => v.type === VoterType.Them,
+    ).length;
+
+    if (usCount > themCount) return VoterType.Us;
+    if (themCount > usCount) return VoterType.Them;
+    return 'tie';
+  };
+
+  const completedDistricts = gameState.districts.filter((d) => d.isComplete);
+  const usDistricts = completedDistricts.filter(
+    (d) => getDistrictMajority(d) === VoterType.Us,
+  ).length;
+  const themDistricts = completedDistricts.filter(
+    (d) => getDistrictMajority(d) === VoterType.Them,
+  ).length;
 
   return (
     <>
@@ -37,51 +67,60 @@ export default function GameResult({
         <>
           <Text>
             <h2>
-              Victory: <span className={`text-${US}`}>{capitalize(US)}</span>{' '}
-              wins!
+              Victory: <span className={`text-${US}`}>you</span> win!
             </h2>
           </Text>
 
-          <GameBoard />
+          <GameBoard
+            onBoardClick={hasNextLevel ? onNextLevel : onNewGame}
+            isInteractive={true}
+          />
+
+          <div className="flex-center">
+            <Text>
+              <div className="flex-center">
+                <h2>Districts:</h2>
+                <Meter
+                  red={themDistricts}
+                  blue={usDistricts}
+                  total={gameState.totalDistricts}
+                />
+              </div>
+            </Text>
+          </div>
 
           <Text>
-            <p>
-              <span className={`text-${US}`}>{capitalize(US)}</span> wins a
-              majority of districts...
-            </p>
-            <p>
-              Even though <span className={`text-${THEM}`}>{THEM}</span> has
-              more voters!
-            </p>
+            <p>Click board for next level</p>
           </Text>
         </>
       ) : (
         <>
           <Text>
             <h2>
-              Defeat: <span className={`text-${US}`}>{capitalize(US)}</span>{' '}
-              loses!
+              Defeat: <span className={`text-${US}`}>you</span> lose!
             </h2>
           </Text>
 
-          <GameBoard />
+          <GameBoard onBoardClick={onNewGame} isInteractive={true} />
+
+          <div className="flex-center">
+            <Text>
+              <div className="flex-center">
+                <h2>Districts:</h2>
+                <Meter
+                  red={themDistricts}
+                  blue={usDistricts}
+                  total={gameState.totalDistricts}
+                />
+              </div>
+            </Text>
+          </div>
 
           <Text>
-            <p>
-              <span className={`text-${THEM}`}>{capitalize(THEM)}</span> wins
-              the majority of districts.
-            </p>
-            <p>
-              Draw more <span className={`text-${US}`}>{US}</span> districts
-              next time!
-            </p>
+            <p>Click board to try again</p>
           </Text>
         </>
       )}
-
-      <Button onClick={playerWon && hasNextLevel ? onNextLevel : onNewGame}>
-        {playerWon ? (hasNextLevel ? 'Next level' : 'Play again') : 'Try again'}
-      </Button>
     </>
   );
 }

@@ -209,7 +209,10 @@ export const useInteractionStateMachine = () => {
   // Check for game completion with fresh gameResult
   useEffect(() => {
     if (gameResult?.isComplete && state.type === 'idle') {
-      setShowGameResult(true);
+      // Delay showing game result to allow district meter animation to complete
+      setTimeout(() => {
+        setShowGameResult(true);
+      }, 250); // Match the CSS animation duration
     }
   }, [gameResult, state.type, setShowGameResult]);
 
