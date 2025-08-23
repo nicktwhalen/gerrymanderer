@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { TileBorders, TileState, VoterColor, VoterMood } from '@/types/game';
 import styles from './VoterButton.module.css';
 
@@ -38,16 +39,18 @@ export default function VoterButton(
     ...restProps
   } = props;
 
-  const classNames = [
+  const className = classNames(
     styles.voter,
     styles[color],
     styles[mood],
     styles[state],
-    districtColor && styles[`district-${districtColor}`],
-  ];
+    {
+      [styles[`district-${districtColor}`]]: districtColor,
+    },
+  );
 
   return (
-    <button className={classNames.join(' ')} {...restProps}>
+    <button className={className} {...restProps}>
       {districtColor && color !== districtColor && (
         <div className={styles['original-color']} />
       )}

@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import styles from './Bubble.module.css';
 
 type BubbleProps = {
@@ -11,12 +12,9 @@ export default function Bubble({
   arrow = 'center',
   delay = 0,
 }: BubbleProps) {
-  const className = [styles.bubble, styles[arrow]];
+  const className = classNames(styles.bubble, styles[arrow]);
   return (
-    <p
-      className={className.join(' ')}
-      style={{ transitionDelay: `${delay}ms` }}
-    >
+    <p className={className} style={{ transitionDelay: `${delay}ms` }}>
       <span className={styles.arrows}>
         {arrow === 'all' ? (
           <>
