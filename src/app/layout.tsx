@@ -1,6 +1,8 @@
+'use client';
 import Logo from '@/components/Logo/Logo';
 import { GameProvider } from '@/context/GameContext';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import { usePathname } from 'next/navigation';
 
 // global styles
 import '@/styles/reset.css';
@@ -13,6 +15,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
   return (
     <html lang="en">
       <head>
@@ -26,7 +29,7 @@ export default function RootLayout({
       </head>
       <body>
         <header>
-          <Logo />
+          <Logo home={pathname === '/'} />
         </header>
         <main>
           <ErrorBoundary>

@@ -1,6 +1,6 @@
 'use client';
 
-import { CSSProperties, useRef } from 'react';
+import { useRef } from 'react';
 import { useGame } from '@/context/GameContext';
 import { useGameLogic } from '@/hooks/useGameLogic';
 import { useInteractionStateMachine } from '@/hooks/useInteractionStateMachine';
@@ -8,6 +8,8 @@ import VoterButton from '@/components/VoterButton/VoterButton';
 import type { District, Voter, VoterMood } from '@/types/game';
 import { VoterType, VoterColor, US, THEM } from '@/types/game';
 import { useDragToSelect } from '@/hooks/useDragToSelect';
+import VoterGrid from './VoterGrid/VoterGrid';
+import Board from './Board/Board';
 
 // Helper function to convert voter type to display color
 const getVoterColor = (voterType: VoterType): VoterColor => {
@@ -65,16 +67,10 @@ export default function GameBoard() {
 
   return (
     <>
-      <div className="board">
-        <div
-          ref={board}
-          className="grid"
-          style={
-            {
-              '--grid-size-x': currentLevel.voterGrid[0].length,
-              '--grid-size-y': currentLevel.voterGrid.length,
-            } as CSSProperties
-          }
+      <Board square ref={board}>
+        <VoterGrid
+          rows={currentLevel.voterGrid.length}
+          cols={currentLevel.voterGrid[0].length}
         >
           {gameState.board.map((row) =>
             row.map((voter) => {
@@ -119,12 +115,13 @@ export default function GameBoard() {
                   districtColor={winnerColor}
                   mood={mood}
                   state={state}
+                  size={currentLevel.voterGrid[0].length}
                 />
               );
             }),
           )}
-        </div>
-      </div>
+        </VoterGrid>
+      </Board>
     </>
   );
 }

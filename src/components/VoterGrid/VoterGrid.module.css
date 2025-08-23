@@ -1,0 +1,6 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 1fr);
+  grid-template-rows: repeat(var(--rows), 1fr);
+  place-content: center;
+}

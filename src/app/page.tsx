@@ -27,7 +27,6 @@ export default function Home() {
           </span>
         </p>
       </Text>
-
       <Text>
         <p>
           It’s your job to draw districts
@@ -37,7 +36,6 @@ export default function Home() {
           the majority of districts.
         </p>
       </Text>
-
       <div className="flex-center">
         <Button href="/voters">How to play</Button>
         <Button href="/game">Start game</Button>

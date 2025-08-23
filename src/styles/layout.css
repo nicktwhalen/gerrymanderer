@@ -1,5 +1,7 @@
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  transition-behavior: allow-discrete;
   user-select: none;
 }
 
@@ -11,50 +13,27 @@
 
 html,
 body {
+  overflow: hidden;
+  width: 100dvw;
   height: 100dvh;
-  padding: 0;
-  margin: 0;
 }
 
 body {
-  max-width: 24rem;
-  padding: 1rem 0.5rem;
-  margin: 0 auto;
-  background: linear-gradient(45deg, #e6e6fa 25%, #f0f8ff 0, #f0f8ff 50%, #e6e6fa 0, #e6e6fa 75%, #f0f8ff 0) 0% 0% / 3rem 3rem;
-}
-
-header {
-  height: 6rem;
-}
-
-main {
   display: flex;
-  height: 32rem;
+  max-width: 24rem;
+  max-height: 40rem;
   flex-direction: column;
   align-items: center;
   justify-content: start;
-  gap: 0.5rem;
-}
-
-.board {
-  display: flex;
-  width: 20rem;
   padding: 1rem;
-  aspect-ratio: 1;
-  background: #bd9cceff;
-  place-content: center;
-  place-items: center;
+  margin: 0 auto;
+  background: linear-gradient(45deg, #e6e6fa 25%, #f0f8ff 0, #f0f8ff 50%, #e6e6fa 0, #e6e6fa 75%, #f0f8ff 0) 0% 0% / 3rem 3rem;
+  gap: 1rem;
 }
 
-.grid {
-  position: relative;
-  z-index: 0; 
-  display: grid;
-  width: 100%;
-  margin: auto;
-  grid-template-columns: repeat(var(--grid-size-x), 1fr);
-  grid-template-rows: repeat(var(--grid-size-y), 1fr);
-  place-items: center;
+header,
+main {
+  display: contents;
 }
 
 .flex-center {

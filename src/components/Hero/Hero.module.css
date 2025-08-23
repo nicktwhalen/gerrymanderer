@@ -1,17 +1,16 @@
 .hero {
-  margin-bottom: -1.5rem;
+  margin: 1.5rem 0 -1.5rem;
   animation: floating 2s ease-in-out infinite;
   font-size: 16rem;
   line-height: 1;
   transform-origin: center bottom;
-  transition-behavior: allow-discrete;
   transition-duration: var(--animation-duration);
   transition-property: opacity, scale;
-  transition-timing-function: ease; 
+  transition-timing-function: ease;
 
   @starting-style {
     opacity: 0;
-    scale: 0.75;
+    scale: 0.5;
   }
 }
 

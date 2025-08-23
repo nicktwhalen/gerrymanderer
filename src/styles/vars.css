@@ -1,8 +1,18 @@
 :root {
+  /* colors */
   --red: #dc143c;
   --blue: #06c;
   --purple: #814c9c;
+
+  /* animation */
   --animation-duration: 0.25s;
+
+  /* layering */
+  --layer-base: 10;
+  --layer-text: 20;
+  --layer-ui: 30;
+
+  /* grid */
   --grid-cell-border-color: white;
   --grid-cell-border-image-slice: 5;
   --grid-cell-border-image-size: calc(
