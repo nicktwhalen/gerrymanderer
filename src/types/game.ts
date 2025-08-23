@@ -10,8 +10,8 @@ export enum VoterType {
   Nobody = 'nobody',
 }
 
-export let US = VoterColor.Blue;
-export let THEM = US === VoterColor.Blue ? VoterColor.Red : VoterColor.Blue;
+export const US = VoterColor.Blue;
+export const THEM = US === VoterColor.Blue ? VoterColor.Red : VoterColor.Blue;
 
 export interface Voter {
   id: string;
