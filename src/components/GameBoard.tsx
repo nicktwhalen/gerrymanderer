@@ -66,62 +66,55 @@ export default function GameBoard() {
   };
 
   return (
-    <>
-      <Board square ref={board}>
-        <VoterGrid
-          rows={currentLevel.voterGrid.length}
-          cols={currentLevel.voterGrid[0].length}
-        >
-          {gameState.board.map((row) =>
-            row.map((voter) => {
-              const { currentDistrict } = gameState;
-              const voterDistrict = getDistrictForVoter(voter.id);
+    <Board square ref={board}>
+      <VoterGrid
+        rows={currentLevel.voterGrid.length}
+        cols={currentLevel.voterGrid[0].length}
+      >
+        {gameState.board.map((row) =>
+          row.map((voter) => {
+            const { currentDistrict } = gameState;
+            const voterDistrict = getDistrictForVoter(voter.id);
 
-              // check if voter is in preview selection
-              const selected = selection.has(voter);
-              const state = selected ? 'selected' : getTileState(voter);
+            // check if voter is in preview selection
+            const selected = selection.has(voter);
+            const state = selected ? 'selected' : getTileState(voter);
 
-              // calculate the district winner color
-              const district = selected ? currentDistrict : voterDistrict;
-              const usVotes = district
-                ? district.voters.filter((v) => v.type === VoterType.Us).length
-                : 0;
-              const themVotes = district
-                ? district.voters.filter((v) => v.type === VoterType.Them)
-                    .length
-                : 0;
-              const winnerColor =
-                usVotes > themVotes
-                  ? US
-                  : themVotes > usVotes
-                    ? THEM
-                    : undefined;
+            // calculate the district winner color
+            const district = selected ? currentDistrict : voterDistrict;
+            const usVotes = district
+              ? district.voters.filter((v) => v.type === VoterType.Us).length
+              : 0;
+            const themVotes = district
+              ? district.voters.filter((v) => v.type === VoterType.Them).length
+              : 0;
+            const winnerColor =
+              usVotes > themVotes ? US : themVotes > usVotes ? THEM : undefined;
 
-              // get the mood of the voter
-              const mood = getMood(voter, district || currentDistrict);
+            // get the mood of the voter
+            const mood = getMood(voter, district || currentDistrict);
 
-              // get the district borders of the voter
-              const borders = getTileBorders(
-                voter,
-                district || gameState.currentDistrict || undefined,
-              );
+            // get the district borders of the voter
+            const borders = getTileBorders(
+              voter,
+              district || gameState.currentDistrict || undefined,
+            );
 
-              return (
-                <VoterButton
-                  key={voter.id}
-                  data-voter-id={voter.id}
-                  borders={borders}
-                  color={getVoterColor(voter.type)}
-                  districtColor={winnerColor}
-                  mood={mood}
-                  state={state}
-                  size={currentLevel.voterGrid[0].length}
-                />
-              );
-            }),
-          )}
-        </VoterGrid>
-      </Board>
-    </>
+            return (
+              <VoterButton
+                key={voter.id}
+                data-voter-id={voter.id}
+                borders={borders}
+                color={getVoterColor(voter.type)}
+                districtColor={winnerColor}
+                mood={mood}
+                state={state}
+                size={currentLevel.voterGrid[0].length}
+              />
+            );
+          }),
+        )}
+      </VoterGrid>
+    </Board>
   );
 }
