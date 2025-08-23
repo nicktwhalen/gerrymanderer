@@ -1,15 +1,13 @@
 .hero {
+  margin-bottom: -1.5rem;
+  animation: floating 2s ease-in-out infinite;
   font-size: 16rem;
   line-height: 1;
-  margin-bottom: -1.5rem;
   transform-origin: center bottom;
-  transition-duration: var(--animation-duration);
-  transition-timing-function: ease;
-  transition-property: opacity, scale;
   transition-behavior: allow-discrete;
-  animation: floating 2s ease-in-out infinite;
-
-  -webkit-mask:linear-gradient(#000 0 0); 
+  transition-duration: var(--animation-duration);
+  transition-property: opacity, scale;
+  transition-timing-function: ease; 
 
   @starting-style {
     opacity: 0;
@@ -21,9 +19,11 @@
   0% {
     translate: 0 -0.5rem;
   }
+
   50% {
     translate: 0;
   }
+
   100% {
     translate: 0 -0.5rem;
   }

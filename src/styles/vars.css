@@ -1,16 +1,13 @@
 :root {
   --red: #dc143c;
-  --blue: #0066cc;
+  --blue: #06c;
   --purple: #814c9c;
-
   --animation-duration: 0.25s;
-
   --grid-cell-border-color: white;
   --grid-cell-border-image-slice: 5;
   --grid-cell-border-image-size: calc(
     var(--grid-cell-border-image-slice) * 1px
   );
-
   --grid-cell-border-image-top: linear-gradient(
     to bottom,
     var(--grid-cell-border-color) 0,
