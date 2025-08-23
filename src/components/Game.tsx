@@ -2,11 +2,11 @@
 
 import { useGame } from '@/context/GameContext';
 import { US } from '@/types/game';
-import GameBoard from './GameBoard';
-import GameStats from './GameStats';
-import GameResult from './GameResult';
+import GameBoard from '@/components/GameBoard';
+import GameStats from '@/components/GameStats';
+import GameResult from '@/components/GameResult';
 import Button from '@/components/Button/Button';
-import Text from './Text/Text';
+import Text from '@/components/Text/Text';
 
 export default function Game() {
   const {
