@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import classNames from 'classnames';
 import styles from './Button.module.css';
 
 type ButtonProps = {
@@ -16,7 +17,7 @@ export default function Button({
   href,
   disabled,
 }: ButtonProps) {
-  const className = [styles.button, disabled ? styles.disabled : ''].join(' ');
+  const className = classNames(styles.button, { [styles.disabled]: disabled });
 
   if (href) {
     return (

@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import styles from './Text.module.css';
 
 type TextProps = {
@@ -11,7 +12,9 @@ type TextProps = {
 export default function Text({ children, color, delay = 0 }: TextProps) {
   const [rotate, setRotate] = useState(0);
 
-  const className = [styles.text, color === 'white' ? styles.white : ''];
+  const className = classNames(styles.text, {
+    [styles.white]: color === 'white',
+  });
 
   useEffect(() => {
     // Random rotation between -1 and 1 degrees
@@ -20,7 +23,7 @@ export default function Text({ children, color, delay = 0 }: TextProps) {
 
   return (
     <div
-      className={className.join(' ')}
+      className={className}
       style={{ transitionDelay: `${delay}ms`, rotate: `${rotate}deg` }}
     >
       {children}

@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import styles from './Cursor.module.css';
 
 type CursorProps = {
@@ -7,10 +8,9 @@ type CursorProps = {
 };
 
 export default function Cursor({ x, y, visible = false }: CursorProps) {
-  const className = [
-    styles.cursor,
-    visible ? styles.visible : styles.hidden,
-  ].join(' ');
+  const className = classNames(styles.cursor, {
+    [styles.hidden]: !visible,
+  });
 
   return (
     <div
