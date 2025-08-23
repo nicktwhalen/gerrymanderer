@@ -21,7 +21,9 @@ body {
 }
 
 body {
-  background: linear-gradient(45deg, #e6e6fa 25%, #f0f8ff 0, #f0f8ff 50%, #e6e6fa 0, #e6e6fa 75%, #f0f8ff 0) 0% 0% / 3rem 3rem;
+  background: conic-gradient(from 0deg at 50% 50%, #FF1493, #00BFFF, #9370DB, #FF1493, #00BFFF, #9370DB, #FF1493);
+  background-size: 6rem 6rem;
+  animation: retro-spin 15s linear infinite;
   padding: 1rem 0.5rem;
   max-width: 24rem;
   margin: 0 auto;
@@ -44,10 +46,15 @@ main {
   display: flex;
   place-items: center;
   place-content: center;
-  background: #bd9cceff;
+  background: linear-gradient(135deg, #1C1C1C, #2C2C2C, #1C1C1C);
+  border: 4px solid #FFFFFF;
+  border-radius: 20px;
   width: 20rem;
   aspect-ratio: 1;
   padding: 1rem;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5), inset 0 4px 8px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
 }
 
 .grid {
@@ -91,7 +98,10 @@ main {
   position: relative;
   margin: 0.5rem auto 0;
   padding: 1rem;
-  background: #bd9cceff;
+  background: linear-gradient(135deg, #1C1C1C, #2C2C2C, #1C1C1C);
+  border: 4px solid #FFFFFF;
+  border-radius: 20px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5), inset 0 4px 8px rgba(255, 255, 255, 0.1);
 }
 
 .bubbles {
@@ -105,4 +115,15 @@ main {
   justify-content: center;
   gap: 0.25rem;
   white-space: nowrap;
+}
+
+@keyframes retro-spin {
+  0% {
+    background-position: 0% 0%;
+    transform: rotate(0deg);
+  }
+  100% {
+    background-position: 100% 100%;
+    transform: rotate(360deg);
+  }
 }

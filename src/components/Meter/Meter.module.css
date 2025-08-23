@@ -1,12 +1,15 @@
 .meter {
   display: flex;
   width: 8rem;
-  height: 1.5rem;
+  height: 2rem;
   flex-grow: 1;
-  background: black;
-  border: 0.25rem solid black;
+  background: linear-gradient(45deg, #2C2C2C, #1C1C1C);
+  border: 3px solid #FFFFFF;
   padding: 0;
   margin: 0;
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), inset 0 3px 6px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
 }
 
 .open,
@@ -29,13 +32,29 @@
 }
 
 .red {
-  background: var(--red);
+  background: linear-gradient(45deg, #FF1493, #FF69B4, #FFB6C1, #FF1493);
+  background-size: 400% 400%;
+  animation: gradient-shift 4s ease-in-out infinite;
   height: 100%;
   order: 3;
 }
 
 .blue {
-  background: var(--blue);
+  background: linear-gradient(45deg, #00BFFF, #87CEEB, #B0E0E6, #00BFFF);
+  background-size: 400% 400%;
+  animation: gradient-shift 4s ease-in-out infinite;
   height: 100%;
   order: 1;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
