@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Permanent+Marker&family=Bangers&display=swap');
 
 html {
-  font-size: clamp(16px, 2.5dvh, 24px);
+  font-size: clamp(14px, 2.5dvh, 24px);
+  transition: font-size var(--animation-duration) ease;
 }
 
 body {

@@ -7,6 +7,8 @@ import Bubble from '@/components/Bubble/Bubble';
 import ArrowLeftIcon from '@/icons/ArrowLeftIcon';
 import ArrowRightIcon from '@/icons/ArrowRightIcon';
 import { VoterColor } from '@/types/game';
+import VoterGrid from '@/components/VoterGrid/VoterGrid';
+import Board from '@/components/Board/Board';
 
 export const metadata: Metadata = {
   title: 'The Gerrymanderer: Meet the voters',
@@ -25,20 +27,16 @@ export default function Voters() {
         pronunciation="/ˈvōdər/ (noun)"
         definition="A human unit of democracy who shows up, fills in bubbles, and hopes their voice counts."
       />
-      <div className="illustration" role="presentation">
+      <Board interactive={false} style={{ margin: '0.5rem auto -1.5rem' }}>
         <div className="bubbles">
-          <Bubble arrow="right" delay={500}>
-            I vote red!
-          </Bubble>
-          <Bubble arrow="left" delay={1000}>
-            I vote blue!
-          </Bubble>
+          <Bubble delay={500}>I vote red!</Bubble>
+          <Bubble delay={1000}>I vote blue!</Bubble>
         </div>
-        <div className="voters" style={{ '--count': 2 } as React.CSSProperties}>
-          <VoterButton color={VoterColor.Red} />
-          <VoterButton color={VoterColor.Blue} />
-        </div>
-      </div>
+        <VoterGrid cols={2} rows={1}>
+          <VoterButton color={VoterColor.Red} size={3} />
+          <VoterButton color={VoterColor.Blue} size={3} />
+        </VoterGrid>
+      </Board>
       <Text>
         <p>Each square is a voter.</p>
       </Text>

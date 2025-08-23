@@ -1,14 +1,10 @@
 .voter {
   position: relative;
-  display: flex;
-  width: 100%;
   border: none;
   aspect-ratio: 1;
   background: none;
   cursor: pointer;
-  font-size: calc(10rem / var(--grid-size-x));
-  place-content: center;
-  place-items: center;
+  font-size: calc(9rem / var(--size));
 }
 
 .red {
@@ -76,7 +72,7 @@
 .face {
   position: relative;
   filter: drop-shadow(0 0.1em 0.1em rgb(0 0 0 / 50%));
-  line-height: 1;
+  line-height: 2;
   pointer-events: none;
 }
 

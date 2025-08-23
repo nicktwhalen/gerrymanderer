@@ -7,6 +7,7 @@ import GameStats from '@/components/GameStats';
 import GameResult from '@/components/GameResult';
 import Button from '@/components/Button/Button';
 import Text from '@/components/Text/Text';
+import GameInstructions from './GameInstructions';
 
 export default function Game() {
   const {
@@ -22,35 +23,34 @@ export default function Game() {
   return (
     <>
       {gameResult && showGameResult ? (
-        <GameResult
-          usWins={gameResult.usWins}
-          themWins={gameResult.themWins}
-          ties={gameResult.ties}
-          playerWon={gameResult.playerWon}
-          onNewGame={resetGame}
-          onNextLevel={nextLevel}
-          usCount={gameState.usCount}
-          themCount={gameState.themCount}
-          hasNextLevel={hasNextLevel}
-          gameState={gameState}
-          currentLevel={currentLevel}
-        />
+        <GameResult playerWon={gameResult.playerWon}></GameResult>
       ) : (
-        <>
-          <div className="flex-center">
-            <Text>
-              <h2>
-                Level {currentLevel.id}: Help{' '}
-                <span className={`text-${US}`}>{US}</span> win!
-              </h2>
-            </Text>
-            <Button ariaLabel="How to play" href="/voters">
-              ?
-            </Button>
-          </div>
-          <GameBoard />
-          <GameStats gameState={gameState} resetGame={resetGame} />
-        </>
+        <div className="flex-center">
+          <Text>
+            <h2>
+              Level {currentLevel.id}: Help{' '}
+              <span className={`text-${US}`}>{US}</span> win!
+            </h2>
+          </Text>
+          <Button ariaLabel="How to play" href="/voters">
+            ?
+          </Button>
+        </div>
+      )}
+      <GameBoard />
+      <GameStats gameState={gameState} resetGame={resetGame} />
+      {gameResult && showGameResult ? (
+        <Button
+          onClick={gameResult.playerWon && hasNextLevel ? nextLevel : resetGame}
+        >
+          {gameResult.playerWon
+            ? hasNextLevel
+              ? 'Next level'
+              : 'Play again'
+            : 'Try again'}
+        </Button>
+      ) : (
+        <GameInstructions gameState={gameState} />
       )}
     </>
   );

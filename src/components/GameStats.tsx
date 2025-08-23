@@ -52,11 +52,6 @@ export default function GameStats({ gameState, resetGame }: GameStatsProps) {
           <ResetIcon />
         </Button>
       </div>
-      <Text>
-        <p>
-          Draw {totalDistricts} districts of {requiredDistrictSize} voters each!
-        </p>
-      </Text>
     </>
   );
 }
