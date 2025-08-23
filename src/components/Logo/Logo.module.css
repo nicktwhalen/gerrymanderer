@@ -5,11 +5,14 @@
   margin: 0 auto;
   font-family: 'Bangers', sans-serif;
   font-weight: 400;
-  rotate: -2deg;
-  line-height: 2.25rem;
+  line-height: 1;
   text-align: center;
-  transform-origin: center;
   white-space: nowrap;
+  rotate: -2deg;
+  transition: all 0.25s ease;
+  transition-behavior: allow-discrete;
+  transform-origin: center bottom;
+  z-index: 100;
 }
 
 .link {
@@ -19,12 +22,14 @@
 }
 
 .gerrymanderer {
-  font-size: 3.5rem;
+  display: block;
+  font-size: 2.5rem;
+  margin-top: -0.25rem;
 }
 
 .the {
   display: block;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 }
 
 /* yellow text */
@@ -46,7 +51,6 @@
 
 /* shadow text */
 .shadow {
-  font-size: 3rem;
   display: block;
   position: absolute;
   z-index: 1;
@@ -63,12 +67,24 @@
 
 .shadow .the {
   text-shadow:
-    0 0.2rem 0 black,
-    0 -0.2rem 0 black,
-    0.2rem 0.2rem 0 black,
-    0.2rem 0 0 black,
-    0.2rem -0.2rem 0 black,
-    -0.2rem 0.2rem 0 black,
-    -0.2rem 0 0 black,
-    -0.2rem -0.2rem 0 black;
+    0 0.15rem 0 black,
+    0 -0.15rem 0 black,
+    0.15rem 0.15rem 0 black,
+    0.15rem 0 0 black,
+    0.15rem -0.15rem 0 black,
+    -0.15rem 0.15rem 0 black,
+    -0.15rem 0 0 black,
+    -0.15rem -0.15rem 0 black;
+}
+
+.home {
+  scale: 1.5;
+  rotate: -10deg;
+  translate: 0 2rem;
+  transition: all 0.5s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+
+  @starting-style {
+    opacity: 0;
+    scale: 0.5;
+  }
 }

@@ -16,8 +16,8 @@ export default function Definition({
   const [rotate, setRotate] = useState(0);
 
   useEffect(() => {
-    // Random rotation between -1 and 1 degrees
-    setRotate(2 * Math.random() - 1);
+    // Random rotation between -2.5 and 2.5 degrees
+    setRotate(5 * Math.random() - 2.5);
   }, []);
 
   return (

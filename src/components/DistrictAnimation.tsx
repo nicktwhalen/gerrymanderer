@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, useEffect, CSSProperties } from 'react';
+import { useState, useEffect } from 'react';
 import VoterButton, {
   VoterButtonProps,
 } from '@/components/VoterButton/VoterButton';
 import Cursor from '@/components/Cursor/Cursor';
 import Bubble from '@/components/Bubble/Bubble';
 import { VoterColor } from '@/types/game';
+import VoterGrid from './VoterGrid/VoterGrid';
+import Board from './Board/Board';
 
 // Animation phases for the district demonstration
 type AnimationPhase =
@@ -44,18 +46,18 @@ export default function DistrictAnimation() {
 
       // Update cursor position based on phase
       if (step.phase === 'initial') {
-        setCursorPosition({ x: '3.5rem', y: '7rem' });
+        setCursorPosition({ x: '4.5rem', y: '9rem' });
       } else if (
         step.phase === 'cursor-appear' ||
         step.phase === 'cursor-click'
       ) {
-        setCursorPosition({ x: '3.5rem', y: '6rem' }); // Center of first square
+        setCursorPosition({ x: '4.5rem', y: '7rem' }); // Center of first square
       } else if (step.phase === 'drag-to-second') {
-        setCursorPosition({ x: '7.5rem', y: '6rem' }); // Center of second square
+        setCursorPosition({ x: '10.5rem', y: '7rem' }); // Center of second square
       } else if (step.phase === 'drag-to-third') {
-        setCursorPosition({ x: '11.5rem', y: '6rem' }); // Center of third square
+        setCursorPosition({ x: '17rem', y: '7rem' }); // Center of third square
       } else if (step.phase === 'final') {
-        setCursorPosition({ x: '11.5rem', y: '7rem' }); // disappear
+        setCursorPosition({ x: '17rem', y: '9rem' }); // disappear
       }
 
       currentStep++;
@@ -159,46 +161,40 @@ export default function DistrictAnimation() {
   };
 
   return (
-    <>
-      <div className="illustration" role="presentation">
-        <Cursor
-          x={cursorPosition.x}
-          y={cursorPosition.y}
-          visible={!['initial', 'final'].includes(phase)}
-        />
+    <Board interactive={false} style={{ margin: '0.5rem auto -1.5rem' }}>
+      <Cursor
+        x={cursorPosition.x}
+        y={cursorPosition.y}
+        visible={!['initial', 'final'].includes(phase)}
+      />
 
-        {/* Individual speech bubbles for initial state */}
-        {[
-          'initial',
-          'cursor-appear',
-          'cursor-click',
-          'drag-to-second',
-          'drag-to-third',
-        ].includes(phase) && (
-          <div className="bubbles">
-            <Bubble arrow="right" delay={1000}>
-              I vote red!
-            </Bubble>
-            <Bubble delay={1500}>I vote blue!</Bubble>
-            <Bubble arrow="left" delay={2000}>
-              I vote red!
-            </Bubble>
-          </div>
-        )}
-
-        {/* Combined speech bubble for final state */}
-        {phase === 'final' && (
-          <div className="bubbles">
-            <Bubble arrow="all">Together, we vote red!</Bubble>
-          </div>
-        )}
-
-        <div className="voters" style={{ '--count': 3 } as CSSProperties}>
-          <VoterButton {...getFirstVoterButtonProps(phase)} />
-          <VoterButton {...getSecondVoterButtonProps(phase)} />
-          <VoterButton {...getThirdVoterButtonProps(phase)} />
+      {/* Individual speech bubbles for initial state */}
+      {[
+        'initial',
+        'cursor-appear',
+        'cursor-click',
+        'drag-to-second',
+        'drag-to-third',
+      ].includes(phase) && (
+        <div className="bubbles">
+          <Bubble delay={1000}>I vote red!</Bubble>
+          <Bubble delay={1500}>I vote blue!</Bubble>
+          <Bubble delay={2000}>I vote red!</Bubble>
         </div>
-      </div>
-    </>
+      )}
+
+      {/* Combined speech bubble for final state */}
+      {phase === 'final' && (
+        <div className="bubbles">
+          <Bubble arrow="all">Together, our district votes red!</Bubble>
+        </div>
+      )}
+
+      <VoterGrid cols={3} rows={1}>
+        <VoterButton size={3} {...getFirstVoterButtonProps(phase)} />
+        <VoterButton size={3} {...getSecondVoterButtonProps(phase)} />
+        <VoterButton size={3} {...getThirdVoterButtonProps(phase)} />
+      </VoterGrid>
+    </Board>
   );
 }

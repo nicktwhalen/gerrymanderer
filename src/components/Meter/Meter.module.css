@@ -3,8 +3,8 @@
   width: 8rem;
   height: 1.5rem;
   flex-grow: 1;
-  background: black;
-  border: 0.25rem solid black;
+  background: var(--black);
+  border: 0.25rem solid var(--black);
   padding: 0;
   margin: 0;
 }
@@ -21,7 +21,7 @@
 
 .open {
   order: 2;
-  background: black;
+  background: var(--black);
   height: 100%;
   flex-grow: 1;
   flex-shrink: 1;

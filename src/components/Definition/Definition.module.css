@@ -1,12 +1,13 @@
 .dictionary {
+  z-index: var(--layer-text);
   font-family: Georgia, serif;
   text-align: left;
   padding: 1rem 1.5rem 1.5rem;
   line-height: 1.5;
-  background-color: white;
+  background-color: var(--white);
   border: 0.2rem solid black;
   box-shadow: 0.3rem 0.3rem 0 black;
- transform-origin: center;
+  transform-origin: center;
   transition-duration: var(--animation-duration);
   transition-timing-function: ease;
   transition-property: opacity, scale, rotate;
@@ -14,7 +15,7 @@
 
   @starting-style {
     opacity: 0;
-    scale: 0.95;
+    scale: 0.75;
     rotate: 0deg;
   }
 }

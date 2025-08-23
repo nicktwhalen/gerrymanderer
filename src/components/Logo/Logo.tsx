@@ -1,9 +1,14 @@
+import classNames from 'classnames';
 import Link from 'next/link';
 import styles from './Logo.module.css';
 
-export default function Logo() {
+export default function Logo({ home }: { home: boolean }) {
+  const logoClasses = classNames(styles.logo, {
+    [styles.home]: home,
+  });
+
   return (
-    <h1 className={styles.logo}>
+    <h1 className={logoClasses}>
       <Link href="/" className={styles.link}>
         <span className={styles.yellow}>
           <span className={styles.the}>The</span>

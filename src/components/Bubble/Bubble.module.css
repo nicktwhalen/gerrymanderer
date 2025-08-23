@@ -1,11 +1,11 @@
 .bubble {
   position: relative;
-  background: white;
+  background: var(--white);
   padding: 0.5rem 0.75rem;
   font-size: 0.75rem;
   line-height: 1;
   border-radius: 0.5rem;
-  border: 0.2rem solid black;
+  border: 0.2rem solid var(--black);
   text-transform: uppercase;
   white-space: nowrap;
   transform-origin: bottom center;
@@ -30,7 +30,6 @@
   }
 }
 
-
 .arrows {
   display: flex;
   position: absolute;
@@ -48,7 +47,7 @@
   rotate: -45deg;
   border-left: 0.2rem solid black;
   border-bottom: 0.2rem solid black;
-  background: white;
+  background: var(--white);
 }
 
 .left .arrows {

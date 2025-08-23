@@ -1,14 +1,10 @@
 .voter {
-  width: 100%;
   aspect-ratio: 1;
   position: relative;
-  display: flex;
-  place-items: center;
-  place-content: center;
   cursor: pointer;
   border: none;
-  font-size: calc(10rem / var(--grid-size-x));
   background: none;
+  font-size: calc(9rem / var(--size));
 }
 .red {
   background: linear-gradient(135deg, #dc143c, #b22222 50%, #8b0000);
@@ -68,7 +64,7 @@
 /* face emoji */
 .face {
   select: none;
-  line-height: 1;
+  line-height: 2;
   pointer-events: none;
   position: relative;
   filter: drop-shadow(0 0.1em 0.1em rgba(0, 0, 0, 0.5));

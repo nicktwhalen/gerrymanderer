@@ -1,0 +1,18 @@
+.board {
+  display: flex;
+  position: relative;
+  place-items: center;
+  place-content: center;
+  background: #bd9cceff;
+  padding: 1rem;
+  width: 100%;
+}
+
+.square {
+  aspect-ratio: 1;
+  margin: -1rem 0;
+}
+
+.board:not(.interactive) {
+  pointer-events: none;
+}

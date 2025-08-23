@@ -25,7 +25,7 @@ export default function Districts() {
       />
       <DistrictAnimation />
       <Text>
-        <p>Click or swipe to create a district of voters.</p>
+        <p>Tap or swipe to draw a district.</p>
       </Text>
       <div className="flex-center" style={{ marginTop: 'auto' }}>
         <Button ariaLabel="Previous: Voters" href="/voters">

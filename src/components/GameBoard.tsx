@@ -1,12 +1,14 @@
 'use client';
 
-import { CSSProperties, useRef } from 'react';
+import { useRef } from 'react';
+import { VoterType, VoterColor, US, THEM } from '@/types/game';
+import type { District, Voter, VoterMood } from '@/types/game';
 import { useGame } from '@/context/GameContext';
 import { useGameLogic } from '@/hooks/useGameLogic';
 import { useInteractionStateMachine } from '@/hooks/useInteractionStateMachine';
 import VoterButton from '@/components/VoterButton/VoterButton';
-import type { District, Voter, VoterMood } from '@/types/game';
-import { VoterType, VoterColor, US, THEM } from '@/types/game';
+import VoterGrid from '@/components/VoterGrid/VoterGrid';
+import Board from '@/components/Board/Board';
 import { useDragToSelect } from '@/hooks/useDragToSelect';
 
 // Helper function to convert voter type to display color
@@ -23,7 +25,7 @@ export default function GameBoard() {
   // TODO: delete this hook (game state still relying on it?)
   useInteractionStateMachine();
 
-  const board = useRef<HTMLDivElement>(null);
+  const board = useRef<HTMLDivElement | null>(null);
   const { selection } = useDragToSelect({ board });
 
   const getMood = (voter: Voter, district?: District | null): VoterMood => {
@@ -64,67 +66,55 @@ export default function GameBoard() {
   };
 
   return (
-    <>
-      <div className="board">
-        <div
-          ref={board}
-          className="grid"
-          style={
-            {
-              '--grid-size-x': currentLevel.voterGrid[0].length,
-              '--grid-size-y': currentLevel.voterGrid.length,
-            } as CSSProperties
-          }
-        >
-          {gameState.board.map((row) =>
-            row.map((voter) => {
-              const { currentDistrict } = gameState;
-              const voterDistrict = getDistrictForVoter(voter.id);
+    <Board square ref={board}>
+      <VoterGrid
+        rows={currentLevel.voterGrid.length}
+        cols={currentLevel.voterGrid[0].length}
+      >
+        {gameState.board.map((row) =>
+          row.map((voter) => {
+            const { currentDistrict } = gameState;
+            const voterDistrict = getDistrictForVoter(voter.id);
 
-              // check if voter is in preview selection
-              const selected = selection.has(voter);
-              const state = selected ? 'selected' : getTileState(voter);
+            // check if voter is in preview selection
+            const selected = selection.has(voter);
+            const state = selected ? 'selected' : getTileState(voter);
 
-              // calculate the district winner color
-              const district = selected ? currentDistrict : voterDistrict;
-              const usVotes = district
-                ? district.voters.filter((v) => v.type === VoterType.Us).length
-                : 0;
-              const themVotes = district
-                ? district.voters.filter((v) => v.type === VoterType.Them)
-                    .length
-                : 0;
-              const winnerColor =
-                usVotes > themVotes
-                  ? US
-                  : themVotes > usVotes
-                    ? THEM
-                    : undefined;
+            // calculate the district winner color
+            const district = selected ? currentDistrict : voterDistrict;
+            const usVotes = district
+              ? district.voters.filter((v) => v.type === VoterType.Us).length
+              : 0;
+            const themVotes = district
+              ? district.voters.filter((v) => v.type === VoterType.Them).length
+              : 0;
+            const winnerColor =
+              usVotes > themVotes ? US : themVotes > usVotes ? THEM : undefined;
 
-              // get the mood of the voter
-              const mood = getMood(voter, district || currentDistrict);
+            // get the mood of the voter
+            const mood = getMood(voter, district || currentDistrict);
 
-              // get the district borders of the voter
-              const borders = getTileBorders(
-                voter,
-                district || gameState.currentDistrict || undefined,
-              );
+            // get the district borders of the voter
+            const borders = getTileBorders(
+              voter,
+              district || gameState.currentDistrict || undefined,
+            );
 
-              return (
-                <VoterButton
-                  key={voter.id}
-                  data-voter-id={voter.id}
-                  borders={borders}
-                  color={getVoterColor(voter.type)}
-                  districtColor={winnerColor}
-                  mood={mood}
-                  state={state}
-                />
-              );
-            }),
-          )}
-        </div>
-      </div>
-    </>
+            return (
+              <VoterButton
+                key={voter.id}
+                data-voter-id={voter.id}
+                borders={borders}
+                color={getVoterColor(voter.type)}
+                districtColor={winnerColor}
+                mood={mood}
+                state={state}
+                size={currentLevel.voterGrid[0].length}
+              />
+            );
+          }),
+        )}
+      </VoterGrid>
+    </Board>
   );
 }

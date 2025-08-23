@@ -1,13 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Permanent+Marker&family=Bangers&display=swap');
 
 html {
-  font-size: clamp(16px, 2.5dvh, 24px);
+  font-size: clamp(14px, 2.5dvh, 20px);
+  transition: font-size var(--animation-duration) ease;
 }
 
 body {
   font-family: 'Permanent Marker', sans-serif;
   line-height: 1.25;
-  color: black;
+  color: #333;
 }
 
 h2 {

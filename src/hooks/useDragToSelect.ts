@@ -27,24 +27,24 @@ export const useDragToSelect = ({ board }: UseDragToSelectProps) => {
 
   // attach listeners on mount
   useEffect(() => {
-    const boardElement = board.current;
-    if (!boardElement) return;
+    const target = board.current;
+    if (!target) return;
 
-    boardElement.addEventListener('mousedown', onDragStart);
-    boardElement.addEventListener('touchstart', onDragStart);
-    boardElement.addEventListener('mousemove', onDragMove);
-    boardElement.addEventListener('touchmove', onDragMove);
-    boardElement.addEventListener('mouseup', onDragEnd);
-    boardElement.addEventListener('touchend', onDragEnd);
+    target.addEventListener('mousedown', onDragStart);
+    target.addEventListener('touchstart', onDragStart);
+    target.addEventListener('mousemove', onDragMove);
+    target.addEventListener('touchmove', onDragMove);
+    target.addEventListener('mouseup', onDragEnd);
+    target.addEventListener('touchend', onDragEnd);
 
     // clean up listeners on unmount
     return () => {
-      boardElement.removeEventListener('mousedown', onDragStart);
-      boardElement.removeEventListener('touchstart', onDragStart);
-      boardElement.removeEventListener('mousemove', onDragMove);
-      boardElement.removeEventListener('touchmove', onDragMove);
-      boardElement.removeEventListener('mouseup', onDragEnd);
-      boardElement.removeEventListener('touchend', onDragEnd);
+      target.removeEventListener('mousedown', onDragStart);
+      target.removeEventListener('touchstart', onDragStart);
+      target.removeEventListener('mousemove', onDragMove);
+      target.removeEventListener('touchmove', onDragMove);
+      target.removeEventListener('mouseup', onDragEnd);
+      target.removeEventListener('touchend', onDragEnd);
     };
   });
 

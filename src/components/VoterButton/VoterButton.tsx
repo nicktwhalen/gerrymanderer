@@ -1,12 +1,13 @@
 import { TileBorders, TileState, VoterColor, VoterMood } from '@/types/game';
 import styles from './VoterButton.module.css';
 
-export type VoterButtonProps = {
+export type VoterButtonProps = React.HTMLAttributes<HTMLButtonElement> & {
   borders?: TileBorders;
   color: VoterColor;
   districtColor?: VoterColor;
   mood?: VoterMood;
   state?: TileState;
+  size?: number;
 };
 
 const getFace = (face: VoterMood) => {
@@ -21,20 +22,23 @@ const getFace = (face: VoterMood) => {
       return '🥺';
     case 'thinking':
       return '🤔';
+    case 'party':
+      return '🥳';
+    case 'dignified':
+      return '🧐';
     default:
       return '😐';
   }
 };
 
-export default function VoterButton(
-  props: VoterButtonProps & React.HTMLAttributes<HTMLButtonElement>,
-) {
+export default function VoterButton(props: VoterButtonProps) {
   const {
     borders,
     color,
     districtColor,
     mood = 'neutral',
     state = 'default',
+    size,
     ...restProps
   } = props;
 
@@ -47,7 +51,15 @@ export default function VoterButton(
   ];
 
   return (
-    <button className={classNames.join(' ')} {...restProps}>
+    <button
+      className={classNames.join(' ')}
+      style={
+        {
+          '--size': size,
+        } as React.CSSProperties
+      }
+      {...restProps}
+    >
       {districtColor && color !== districtColor && (
         <div className={styles.districtColor} />
       )}
