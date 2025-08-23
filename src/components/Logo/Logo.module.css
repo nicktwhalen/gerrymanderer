@@ -3,10 +3,10 @@
   display: block;
   width: 100%;
   margin: 0 auto;
-  font-family: 'Bangers', sans-serif;
+  font-family: Bangers, sans-serif;
   font-weight: 400;
-  rotate: -2deg;
   line-height: 2.25rem;
+  rotate: -2deg;
   text-align: center;
   transform-origin: center;
   white-space: nowrap;
@@ -29,10 +29,9 @@
 
 /* yellow text */
 .yellow {
-  display: block;
   position: relative;
   z-index: 2;
-  color: transparent;
+  display: block;
   background-clip: text;
   background-image: linear-gradient(
     to bottom,
@@ -42,14 +41,15 @@
     #f4ba4b 75%,
     #eb9d3fff 100%
   );
+  color: transparent;
 }
 
 /* shadow text */
 .shadow {
-  font-size: 3rem;
-  display: block;
   position: absolute;
   z-index: 1;
+  display: block;
+  font-size: 3rem;
   inset: 0;
 }
 

@@ -1,17 +1,17 @@
 .bubble {
   position: relative;
-  background: white;
   padding: 0.5rem 0.75rem;
+  border: 0.2rem solid black;
+  border-radius: 0.5rem;
+  background: white;
   font-size: 0.75rem;
   line-height: 1;
-  border-radius: 0.5rem;
-  border: 0.2rem solid black;
   text-transform: uppercase;
-  white-space: nowrap;
   transform-origin: bottom center;
+  transition-behavior: allow-discrete;
   transition-duration: var(--animation-duration);
   transition-property: opacity, scale, translate;
-  transition-behavior: allow-discrete;
+  white-space: nowrap;
 
   @starting-style {
     opacity: 0;
@@ -19,36 +19,36 @@
     translate: 0 1rem;
   }
 }
+
 .left {
   @starting-style {
     translate: -2rem 1rem;
   }
 }
+
 .right {
   @starting-style {
     translate: 2rem 1rem;
   }
 }
 
-
 .arrows {
-  display: flex;
   position: absolute;
-  inset: calc(100% - 0.25rem) 0 0;
-  top: calc(100% - 0.25rem);
-  justify-content: space-around;
+  display: flex;
   width: 100%;
+  justify-content: space-around;
   padding: 0 1rem;
+  inset: calc(100% - 0.25rem) 0 0;
 }
 
 .arrow {
   display: block;
   width: 0.75rem;
   height: 0.75rem;
-  rotate: -45deg;
-  border-left: 0.2rem solid black;
   border-bottom: 0.2rem solid black;
+  border-left: 0.2rem solid black;
   background: white;
+  rotate: -45deg;
 }
 
 .left .arrows {

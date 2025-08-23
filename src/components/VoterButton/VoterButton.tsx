@@ -49,12 +49,12 @@ export default function VoterButton(
   return (
     <button className={classNames.join(' ')} {...restProps}>
       {districtColor && color !== districtColor && (
-        <div className={styles.districtColor} />
+        <div className={styles['original-color']} />
       )}
       {color !== 'empty' && <div className={styles.face}>{getFace(mood)}</div>}
       {state === 'available' && <div className={styles.selectable} />}
       {borders && (
-        <div className={styles.districtBorders}>
+        <div className={styles.borders}>
           {borders.top && <div className={styles.top} />}
           {borders.right && <div className={styles.right} />}
           {borders.bottom && <div className={styles.bottom} />}

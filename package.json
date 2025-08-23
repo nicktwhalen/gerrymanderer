@@ -12,7 +12,9 @@
     "prepare": "husky",
     "check-format": "prettier --check '**/*.ts' '**/*.tsx'",
     "format": "prettier --write '**/*.ts' '**/*.tsx'",
-    "clean": "rm -rf node_modules .next yarn.lock && yarn cache clean"
+    "clean": "rm -rf node_modules .next yarn.lock && yarn cache clean",
+    "lint:css": "stylelint '**/*.css'",
+    "lint:css:fix": "stylelint '**/*.css' --fix"
   },
   "dependencies": {
     "next": "15.4.5",
@@ -21,7 +23,8 @@
   },
   "lint-staged": {
     "**/*.ts": "prettier --write --ignore-unknown",
-    "**/*.tsx": "prettier --write --ignore-unknown"
+    "**/*.tsx": "prettier --write --ignore-unknown",
+    "**/*.css": "stylelint '**/*.css' --fix"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -41,6 +44,9 @@
     "jest-environment-jsdom": "^30.0.5",
     "lint-staged": "^16.1.4",
     "prettier": "^3.6.2",
+    "stylelint": "^16.23.1",
+    "stylelint-config-idiomatic-order": "^10.0.0",
+    "stylelint-config-standard": "^39.0.0",
     "typescript": "^5"
   }
 }

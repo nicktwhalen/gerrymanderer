@@ -1,13 +1,13 @@
 .cursor {
-  transform-origin: left top;
   position: absolute;
-  transition: all 250ms ease;
-  transform: translate(-50%, -50%);
-  left: var(--x, 0);
-  top: var(--y, 0);
-  font-size: 4rem;
-  filter: drop-shadow(0 0.1em 0.1em rgba(0, 0, 0, 0.5));
   z-index: 10;
+  top: var(--y, 0);
+  left: var(--x, 0);
+  filter: drop-shadow(0 0.1em 0.1em rgb(0 0 0 / 50%));
+  font-size: 4rem;
+  transform: translate(-50%, -50%);
+  transform-origin: left top;
+  transition: all 250ms ease;
 }
 
 .hidden {

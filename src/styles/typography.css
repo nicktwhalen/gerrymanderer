@@ -5,17 +5,17 @@ html {
 }
 
 body {
+  color: black;
   font-family: 'Permanent Marker', sans-serif;
   line-height: 1.25;
-  color: black;
 }
 
 h2 {
+  padding: 0;
+  margin: 0;
   font-size: 1.25rem;
   line-height: 1;
   text-wrap: balance;
-  padding: 0;
-  margin: 0;
   vertical-align: middle;
   white-space: nowrap;
 }
@@ -31,10 +31,11 @@ p {
 }
 
 .text-blue {
-  text-transform: uppercase;
   color: var(--blue);
-}
-.text-red {
   text-transform: uppercase;
+}
+
+.text-red {
   color: var(--red);
+  text-transform: uppercase;
 }
