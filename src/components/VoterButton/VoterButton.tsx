@@ -1,7 +1,7 @@
 import { TileBorders, TileState, VoterColor, VoterMood } from '@/types/game';
-import styles from './Voter.module.css';
+import styles from './VoterButton.module.css';
 
-export type VoterProps = {
+export type VoterButtonProps = {
   borders?: TileBorders;
   color: VoterColor;
   districtColor?: VoterColor;
@@ -26,8 +26,8 @@ const getFace = (face: VoterMood) => {
   }
 };
 
-export default function Voter(
-  props: VoterProps & React.HTMLAttributes<HTMLButtonElement>,
+export default function VoterButton(
+  props: VoterButtonProps & React.HTMLAttributes<HTMLButtonElement>,
 ) {
   const {
     borders,

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Text from '@/components/Text/Text';
 import Definition from '@/components/Definition/Definition';
 import Button from '@/components/Button/Button';
-import Voter from '@/components/Voter/Voter';
+import VoterButton from '@/components/VoterButton/VoterButton';
 import Bubble from '@/components/Bubble/Bubble';
 import ArrowLeftIcon from '@/icons/ArrowLeftIcon';
 import ArrowRightIcon from '@/icons/ArrowRightIcon';
@@ -35,8 +35,8 @@ export default function Voters() {
           </Bubble>
         </div>
         <div className="voters" style={{ '--count': 2 } as React.CSSProperties}>
-          <Voter color={VoterColor.Red} />
-          <Voter color={VoterColor.Blue} />
+          <VoterButton color={VoterColor.Red} />
+          <VoterButton color={VoterColor.Blue} />
         </div>
       </div>
       <Text>

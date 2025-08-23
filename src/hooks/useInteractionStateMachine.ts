@@ -3,7 +3,7 @@
 import { useCallback, useReducer, useEffect, useRef } from 'react';
 import { Voter } from '@/types/game';
 import { useGame } from '@/context/GameContext';
-import { useGameLogic } from './useGameLogic';
+import { useGameLogic } from '@/hooks/useGameLogic';
 
 // State Machine Types
 type InteractionState =

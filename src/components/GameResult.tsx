@@ -2,9 +2,9 @@
 
 import { GameState, US, THEM } from '@/types/game';
 import { Level } from '@/types/level';
-import GameBoard from './GameBoard';
+import GameBoard from '@/components/GameBoard';
 import Button from '@/components/Button/Button';
-import Text from './Text/Text';
+import Text from '@/components/Text/Text';
 
 interface GameResultProps {
   usWins: number;

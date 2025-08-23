@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import type { Voter } from '@/types/game';
 import { VoterType } from '@/types/game';
 import { useGame } from '@/context/GameContext';
-import { useGameLogic } from './useGameLogic';
+import { useGameLogic } from '@/hooks/useGameLogic';
 
 type UseDragToSelectProps = {
   board: React.RefObject<HTMLDivElement | null>;

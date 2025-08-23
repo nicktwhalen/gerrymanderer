@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect, CSSProperties } from 'react';
-import Voter, { VoterProps } from '@/components/Voter/Voter';
+import VoterButton, {
+  VoterButtonProps,
+} from '@/components/VoterButton/VoterButton';
 import Cursor from '@/components/Cursor/Cursor';
 import Bubble from '@/components/Bubble/Bubble';
 import { VoterColor } from '@/types/game';
@@ -65,7 +67,9 @@ export default function DistrictAnimation() {
     return () => clearTimeout(timer);
   }, []);
 
-  const getFirstVoterProps = (phase: AnimationPhase): VoterProps => {
+  const getFirstVoterButtonProps = (
+    phase: AnimationPhase,
+  ): VoterButtonProps => {
     const color = VoterColor.Red;
     switch (phase) {
       case 'cursor-appear':
@@ -97,7 +101,9 @@ export default function DistrictAnimation() {
     }
   };
 
-  const getSecondVoterProps = (phase: AnimationPhase): VoterProps => {
+  const getSecondVoterButtonProps = (
+    phase: AnimationPhase,
+  ): VoterButtonProps => {
     const color = VoterColor.Blue;
     switch (phase) {
       case 'drag-to-second':
@@ -127,7 +133,9 @@ export default function DistrictAnimation() {
     }
   };
 
-  const getThirdVoterProps = (phase: AnimationPhase): VoterProps => {
+  const getThirdVoterButtonProps = (
+    phase: AnimationPhase,
+  ): VoterButtonProps => {
     const color = VoterColor.Red;
     switch (phase) {
       case 'drag-to-third':
@@ -186,9 +194,9 @@ export default function DistrictAnimation() {
         )}
 
         <div className="voters" style={{ '--count': 3 } as CSSProperties}>
-          <Voter {...getFirstVoterProps(phase)} />
-          <Voter {...getSecondVoterProps(phase)} />
-          <Voter {...getThirdVoterProps(phase)} />
+          <VoterButton {...getFirstVoterButtonProps(phase)} />
+          <VoterButton {...getSecondVoterButtonProps(phase)} />
+          <VoterButton {...getThirdVoterButtonProps(phase)} />
         </div>
       </div>
     </>

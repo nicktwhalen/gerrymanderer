@@ -1,10 +1,10 @@
 'use client';
 
-import { CSSProperties, useEffect, useRef } from 'react';
+import { CSSProperties, useRef } from 'react';
 import { useGame } from '@/context/GameContext';
 import { useGameLogic } from '@/hooks/useGameLogic';
 import { useInteractionStateMachine } from '@/hooks/useInteractionStateMachine';
-import VoterButton from '@/components/Voter/Voter';
+import VoterButton from '@/components/VoterButton/VoterButton';
 import type { District, Voter, VoterMood } from '@/types/game';
 import { VoterType, VoterColor, US, THEM } from '@/types/game';
 import { useDragToSelect } from '@/hooks/useDragToSelect';
