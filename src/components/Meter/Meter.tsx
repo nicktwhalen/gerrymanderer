@@ -8,24 +8,34 @@ type MeterProps = {
 
 export default function Meter({ red, blue, total }: MeterProps) {
   return (
-    <ul className={styles.meter}>
-      <li
-        className={styles.open}
-        style={{ width: `${((total - red - blue) / total) * 100}%` }}
-      >
-        <span className="visually-hidden">
-          {total - red - blue} open districts
-        </span>
-      </li>
-      <li className={styles.blue} style={{ width: `${(blue / total) * 100}%` }}>
-        <span className="visually-hidden">{blue} blue districts</span>
-      </li>
-      <li
-        className={`red ${styles.red}`}
-        style={{ width: `${(red / total) * 100}%` }}
-      >
-        <span className="visually-hidden">{red} red districts</span>
-      </li>
-    </ul>
+    <div className={styles.container}>
+      <div className="visually-hidden">
+        <h2>Districts:</h2>
+        <ul>
+          <li>{total - red - blue} open districts</li>
+          <li>{blue} blue districts</li>
+          <li>{red} red districts</li>
+        </ul>
+      </div>
+      <div className={styles.meter}>
+        <div
+          className={styles.open}
+          style={{ width: `${((total - red - blue) / total) * 100}%` }}
+        ></div>
+        <div
+          className={styles.blue}
+          style={{ width: `${(blue / total) * 100}%` }}
+        ></div>
+        <div
+          className={styles.red}
+          style={{ width: `${(red / total) * 100}%` }}
+        ></div>
+        <div className={styles.ticks}>
+          {Array.from({ length: total + 1 }, (_, index) => (
+            <div key={index} className={styles.tick} />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }

@@ -63,4 +63,6 @@ export type VoterMood =
   | 'neutral'
   | 'thinking'
   | 'worried'
-  | 'sad';
+  | 'sad'
+  | 'party'
+  | 'dignified';

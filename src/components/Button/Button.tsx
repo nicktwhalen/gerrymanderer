@@ -21,7 +21,12 @@ export default function Button({
 
   if (href) {
     return (
-      <Link className={className} href={href} aria-label={ariaLabel}>
+      <Link
+        className={className}
+        onClick={onClick}
+        href={href}
+        aria-label={ariaLabel}
+      >
         {children}
       </Link>
     );
