@@ -19,9 +19,7 @@ export const metadata: Metadata = {
 export default function Voters() {
   return (
     <>
-      <Text>
-        <h2>Meet the voters</h2>
-      </Text>
+      <Text tag="h2">Meet the voters</Text>
       <Definition
         term="Voter"
         pronunciation="/ˈvōdər/ (noun)"
@@ -37,9 +35,7 @@ export default function Voters() {
           <VoterButton color={VoterColor.Blue} size={3} />
         </VoterGrid>
       </Board>
-      <Text>
-        <p>Each square is a voter.</p>
-      </Text>
+      <Text>Each square is a voter.</Text>
       <div className="flex-center" style={{ marginTop: 'auto' }}>
         <Button href="/" ariaLabel="Back: Home">
           <ArrowLeftIcon />

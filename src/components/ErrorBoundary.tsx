@@ -46,14 +46,10 @@ class ErrorBoundary extends Component<Props, State> {
 
       return (
         <>
+          <Text tag="h2">Oops! Something broke!</Text>
           <Text>
-            <h2>Oops! Something broke!</h2>
-          </Text>
-          <Text>
-            <p>
-              The gerrymanderer has encountered an unexpected error. Don’t worry
-              - democracy is still intact (probably).
-            </p>
+            The gerrymanderer has encountered an unexpected error. Don’t worry -
+            democracy is still intact (probably).
           </Text>
           <Button
             onClick={() => {
