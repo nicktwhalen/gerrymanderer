@@ -84,9 +84,9 @@ export const useDragToSelect = ({ board }: UseDragToSelectProps) => {
       return false;
     }
 
-    // For a new selection, check if voter can be added to current district
     if (selection.size === 0) {
-      return canAddVoterToCurrentDistrict(voter);
+      // let addMultipleVotersToDistrict handle complex logic
+      return true;
     }
 
     // Don't add the same voter twice
@@ -103,10 +103,8 @@ export const useDragToSelect = ({ board }: UseDragToSelectProps) => {
       return false;
     }
 
-    // Check adjacency - voter must be adjacent to at least one voter in current selection
-    return Array.from(selection).some((existingVoter) =>
-      isAdjacent(existingVoter, voter),
-    );
+    // let addMultipleVotersToDistrict handle complex logic
+    return true;
   };
 
   // Helper function to check if a voter can be removed from current district
