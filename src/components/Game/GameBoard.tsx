@@ -10,6 +10,7 @@ import { VoterType, VoterColor } from '@/types/game';
 import { useDragToSelect } from '@/hooks/useDragToSelect';
 import VoterGrid from '@/components/VoterGrid/VoterGrid';
 import Board from '@/components/Board/Board';
+import Confetti from '@/components/Confetti/Confetti';
 
 export default function GameBoard({ party }: { party: VoterColor }) {
   const { gameState, currentLevel, gameResult } = useGame();
@@ -70,7 +71,8 @@ export default function GameBoard({ party }: { party: VoterColor }) {
   };
 
   return (
-    <Board square ref={board}>
+    <Board square ref={board} interactive={!gameResult}>
+      {gameResult?.playerWon && <Confetti party={party} />}
       <VoterGrid
         rows={currentLevel.voterGrid.length}
         cols={currentLevel.voterGrid[0].length}
