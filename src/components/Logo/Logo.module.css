@@ -6,10 +6,8 @@
   margin: 0 auto;
   font-family: Bangers, sans-serif;
   font-weight: 400;
-  line-height: 1;
-  rotate: -2deg;
+  rotate: -2.5deg;
   text-align: center;
-  transform-origin: center bottom;
   transition: all 0.25s ease;
   white-space: nowrap;
 }
@@ -20,16 +18,19 @@
   text-decoration: none;
 }
 
-.gerrymanderer {
-  display: block;
-  margin-top: -0.25rem;
-  font-size: 3rem;
-}
-
 .the {
   display: block;
+  margin-bottom: -0.25rem;
   font-size: 1.25rem;
+  line-height: 1;
 }
+
+.gerrymanderer {
+  display: block;
+  font-size: 3rem;
+  line-height: 1;
+}
+
 
 /* yellow text */
 .yellow {
@@ -80,11 +81,11 @@
   rotate: -10deg;
   scale: 1.25;
   transition: all 0.5s cubic-bezier(0.68, -0.6, 0.32, 1.6);
-  translate: 0 2rem;
+  translate: 0 3rem;
 
   @starting-style {
     opacity: 0;
     rotate: 0deg;
-    scale: 0.5;
+    scale: 0;
   }
 }

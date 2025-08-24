@@ -1,7 +1,7 @@
 html {
   color: var(--black);
   font-family: 'Permanent Marker', sans-serif;
-  font-size: clamp(16px, min(2.5dvh, 2.5dvw), 24px);
+  font-size: clamp(16px, min(2.25dvh, 2.25dvw), 24px);
   line-height: 1.25;
   transition: font-size var(--animation-duration) ease;
 }
