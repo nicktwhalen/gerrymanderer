@@ -15,20 +15,16 @@ export default function GameResult({ playerWon }: GameResultProps) {
     <>
       {playerWon ? (
         <>
-          <Text>
-            <h2>
-              Victory: <span className={`text-${US}`}>{capitalize(US)}</span>{' '}
-              wins!
-            </h2>
+          <Text tag="h2">
+            Victory: <span className={`text-${US}`}>{capitalize(US)}</span>{' '}
+            wins!
           </Text>
         </>
       ) : (
         <>
-          <Text>
-            <h2>
-              Defeat: <span className={`text-${US}`}>{capitalize(US)}</span>{' '}
-              loses!
-            </h2>
+          <Text tag="h2">
+            Defeat: <span className={`text-${US}`}>{capitalize(US)}</span>{' '}
+            loses!
           </Text>
         </>
       )}

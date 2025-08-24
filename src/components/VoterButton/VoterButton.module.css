@@ -4,7 +4,7 @@
   aspect-ratio: 1;
   background: none;
   cursor: pointer;
-  font-size: calc(9rem / var(--size));
+  font-size: calc(10rem / var(--size));
 }
 
 .red {

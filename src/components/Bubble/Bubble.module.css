@@ -1,14 +1,13 @@
 .bubble {
   position: relative;
   padding: 0.5rem 0.75rem;
-  border: 0.2rem solid black;
+  border: 0.2rem solid var(--black);
   border-radius: 0.5rem;
-  background: white;
+  background: var(--white);
   font-size: 0.75rem;
   line-height: 1;
   text-transform: uppercase;
   transform-origin: bottom center;
-  transition-behavior: allow-discrete;
   transition-duration: var(--animation-duration);
   transition-property: opacity, scale, translate;
   white-space: nowrap;
@@ -45,8 +44,8 @@
   display: block;
   width: 0.75rem;
   height: 0.75rem;
-  border-bottom: 0.2rem solid black;
-  border-left: 0.2rem solid black;
+  border-bottom: 0.2rem solid var(--black);
+  border-left: 0.2rem solid var(--black);
   background: white;
   rotate: -45deg;
 }

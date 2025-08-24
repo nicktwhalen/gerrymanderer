@@ -5,7 +5,6 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import { usePathname } from 'next/navigation';
 
 // global styles
-import '@/styles/reset.css';
 import '@/styles/vars.css';
 import '@/styles/layout.css';
 import '@/styles/typography.css';

@@ -11,9 +11,7 @@ export default function GameInstructions({ gameState }: GameInstructionProps) {
 
   return (
     <Text>
-      <p>
-        Draw {totalDistricts} districts of {requiredDistrictSize} voters each!
-      </p>
+      Draw {totalDistricts} districts of {requiredDistrictSize} voters each!
     </Text>
   );
 }
