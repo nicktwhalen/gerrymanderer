@@ -1,21 +1,26 @@
+.container {
+  z-index: var(--layer-text);
+  display: block;
+  width: 12rem;
+  padding: 0.5rem;
+  border: 0.2rem solid var(--black);
+  background: var(--white);
+  box-shadow: 0.3rem 0.3rem 0 var(--black);
+}
+
 .meter {
+  position: relative;
   display: flex;
-  width: 8rem;
   height: 1.5rem;
-  flex-grow: 1;
   padding: 0;
-  border: 0.25rem solid var(--black);
   margin: 0;
-  background: var(--black);
+  background-color: var(--black);
 }
 
 .open,
 .red,
 .blue {
   display: block;
-  padding: 0;
-  margin: 0;
-  color: transparent;
   transition: width 0.25s ease;
 }
 
@@ -25,7 +30,6 @@
   flex-grow: 1;
   flex-shrink: 1;
   order: 2;
-  background: var(--black);
 }
 
 .red {
@@ -38,4 +42,24 @@
   height: 100%;
   order: 1;
   background: var(--blue);
+}
+
+.ticks {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  inset: 0;
+  pointer-events: none;
+}
+
+.tick {
+  width: 0.125rem;
+  height: 0.5rem;
+  background: var(--white);
+}
+
+.tick:first-child,
+.tick:last-child {
+  background: none;
 }
