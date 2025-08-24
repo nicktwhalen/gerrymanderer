@@ -84,9 +84,9 @@ export const useDragToSelect = ({ board }: UseDragToSelectProps) => {
       return false;
     }
 
-    // For a new selection, check if voter can be added to current district
     if (selection.size === 0) {
-      return canAddVoterToCurrentDistrict(voter);
+      // let addMultipleVotersToDistrict handle complex logic
+      return true;
     }
 
     // Don't add the same voter twice
@@ -103,7 +103,7 @@ export const useDragToSelect = ({ board }: UseDragToSelectProps) => {
       return false;
     }
 
-    // Let addMultipleVotersToDistrict handle adjacency checks
+    // let addMultipleVotersToDistrict handle complex logic
     return true;
   };
 
