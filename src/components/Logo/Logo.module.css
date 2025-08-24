@@ -23,7 +23,7 @@
 .gerrymanderer {
   display: block;
   margin-top: -0.25rem;
-  font-size: 2.5rem;
+  font-size: 3rem;
 }
 
 .the {
@@ -58,32 +58,33 @@
 
 .shadow .gerrymanderer {
   text-shadow:
-    0.35rem 0 black,
-    -0.25rem 0 black,
-    0 0.35rem black,
-    0 -0.25rem black;
+    0.35rem 0 var(--black),
+    -0.25rem 0 var(--black),
+    0 0.35rem var(--black),
+    0 -0.25rem var(--black);
 }
 
 .shadow .the {
   text-shadow:
-    0 0.15rem 0 black,
-    0 -0.15rem 0 black,
-    0.15rem 0.15rem 0 black,
-    0.15rem 0 0 black,
-    0.15rem -0.15rem 0 black,
-    -0.15rem 0.15rem 0 black,
-    -0.15rem 0 0 black,
-    -0.15rem -0.15rem 0 black;
+    0 0.15rem 0 var(--black),
+    0 -0.15rem 0 var(--black),
+    0.15rem 0.15rem 0 var(--black),
+    0.15rem 0 0 var(--black),
+    0.15rem -0.15rem 0 var(--black),
+    -0.15rem 0.15rem 0 var(--black),
+    -0.15rem 0 0 var(--black),
+    -0.15rem -0.15rem 0 var(--black);
 }
 
 .home {
   rotate: -10deg;
-  scale: 1.5;
+  scale: 1.25;
   transition: all 0.5s cubic-bezier(0.68, -0.6, 0.32, 1.6);
   translate: 0 2rem;
 
   @starting-style {
     opacity: 0;
+    rotate: 0deg;
     scale: 0.5;
   }
 }

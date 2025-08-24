@@ -1,32 +1,23 @@
 html {
-  font-size: clamp(14px, 2.5dvh, 24px);
+  color: var(--black);
+  font-family: 'Permanent Marker', sans-serif;
+  font-size: clamp(16px, min(2.5dvh, 2.5dvw), 24px);
+  line-height: 1.25;
   transition: font-size var(--animation-duration) ease;
 }
 
-body {
-  color: black;
-  font-family: 'Permanent Marker', sans-serif;
-  line-height: 1.25;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  text-wrap: balance;
 }
 
 h2 {
-  padding: 0;
-  margin: 0;
-  font-size: 1.25rem;
-  line-height: 1;
-  text-wrap: balance;
-  vertical-align: middle;
-  white-space: nowrap;
-}
-
-h2 .gerrymanderer {
-  display: block;
-  margin-top: 0.25rem;
-  font-size: 1.75rem;
-}
-
-p {
-  text-wrap: balance;
+  font-size: 1.125rem;
 }
 
 .text-blue {

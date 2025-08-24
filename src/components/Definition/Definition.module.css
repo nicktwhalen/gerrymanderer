@@ -1,9 +1,9 @@
 .dictionary {
   z-index: var(--layer-text);
   padding: 1.25rem 1rem 1.5rem;
-  border: 0.2rem solid black;
-  background-color: white;
-  box-shadow: 0.3rem 0.3rem 0 black;
+  border: 0.2rem solid var(--black);
+  background-color: var(--white);
+  box-shadow: 0.3rem 0.3rem 0 var(--black);
   font-family: Merriweather, serif;
   line-height: 1.25;
   text-align: left;
