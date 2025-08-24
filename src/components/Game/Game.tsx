@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { redirect, RedirectType } from 'next/navigation';
 import { VoterColor } from '@/types/game';
 import GameBoard from '@/components/Game/GameBoard';
 import GameHeader from '@/components/Game/GameHeader';
@@ -9,7 +9,6 @@ import GameStats from '@/components/Game/GameStats';
 import GameFooter from '@/components/Game/GameFooter';
 
 export default function Game() {
-  const router = useRouter();
   const [party, setParty] = useState<VoterColor>();
 
   useEffect(() => {
@@ -17,7 +16,7 @@ export default function Game() {
     if (party) {
       setParty(party);
     } else {
-      router.push('/settings');
+      redirect('/settings', RedirectType.replace);
     }
   }, []);
 
