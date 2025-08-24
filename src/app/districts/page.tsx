@@ -15,18 +15,14 @@ export const metadata: Metadata = {
 export default function Districts() {
   return (
     <>
-      <Text>
-        <h2>Draw the district</h2>
-      </Text>
+      <Text tag="h2">Draw the district</Text>
       <Definition
         term="District"
         pronunciation="/ˈdistrikt/ (noun)"
         definition="A group of voters where the majority wins—often drawn with the creativity of a villainous Michelangelo."
       />
       <DistrictAnimation />
-      <Text>
-        <p>Tap or swipe to draw a district.</p>
-      </Text>
+      <Text>Tap or swipe to draw a district.</Text>
       <div className="flex-center" style={{ marginTop: 'auto' }}>
         <Button ariaLabel="Previous: Voters" href="/voters">
           <ArrowLeftIcon />

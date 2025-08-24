@@ -1,5 +1,8 @@
 * {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font: inherit;
   -webkit-tap-highlight-color: transparent;
   transition-behavior: allow-discrete;
   user-select: none;
@@ -9,7 +12,6 @@
   background-color: inherit;
   color: inherit;
 }
-
 
 html,
 body {
@@ -50,22 +52,6 @@ main {
   height: 1px;
   clip-path: inset(50%);
   white-space: nowrap;
-}
-
-.voters {
-  display: flex;
-  width: calc(var(--count) * 4rem);
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  pointer-events: none;
-}
-
-.illustration {
-  position: relative;
-  padding: 1rem;
-  margin: 0.5rem auto 0;
-  background: #bd9cceff;
 }
 
 .bubbles {

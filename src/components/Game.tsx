@@ -25,17 +25,10 @@ export default function Game() {
       {gameResult && showGameResult ? (
         <GameResult playerWon={gameResult.playerWon}></GameResult>
       ) : (
-        <div className="flex-center">
-          <Text>
-            <h2>
-              Level {currentLevel.id}: Help{' '}
-              <span className={`text-${US}`}>{US}</span> win!
-            </h2>
-          </Text>
-          <Button ariaLabel="How to play" href="/voters">
-            ?
-          </Button>
-        </div>
+        <Text tag="h2" className="flex-center">
+          Level {currentLevel.id}: Help{' '}
+          <span className={`text-${US}`}>{US}</span> win!
+        </Text>
       )}
       <GameBoard />
       <GameStats gameState={gameState} resetGame={resetGame} />

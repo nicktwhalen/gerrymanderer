@@ -38,7 +38,7 @@ export default function GameStats({ gameState, resetGame }: GameStatsProps) {
   return (
     <>
       <div className="flex-center">
-        <Text>
+        <Text tag="div">
           <div className="flex-center">
             <h2>Districts:</h2>
             <Meter

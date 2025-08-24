@@ -14,27 +14,23 @@ export default function Home() {
     <>
       <Hero />
       <Text>
-        <p>
-          The world’s best
-          <span
-            style={{
-              display: 'block',
-              marginTop: '-0.25rem',
-              fontSize: '1.75rem',
-            }}
-          >
-            gerrymanderer
-          </span>
-        </p>
+        The world’s best
+        <span
+          style={{
+            display: 'block',
+            marginTop: '-0.5rem',
+            fontSize: '2rem',
+          }}
+        >
+          gerrymanderer
+        </span>
       </Text>
       <Text>
-        <p>
-          It’s your job to draw districts
-          <br />
-          so that the voting minority wins
-          <br />
-          the majority of districts.
-        </p>
+        It’s your job to draw districts
+        <br />
+        so that the voting minority wins
+        <br />
+        the majority of districts.
       </Text>
       <div className="flex-center">
         <Button href="/voters">How to play</Button>
