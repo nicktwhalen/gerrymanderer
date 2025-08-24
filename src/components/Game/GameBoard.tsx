@@ -6,21 +6,17 @@ import { useGameLogic } from '@/hooks/useGameLogic';
 import { useInteractionStateMachine } from '@/hooks/useInteractionStateMachine';
 import VoterButton from '@/components/VoterButton/VoterButton';
 import type { District, Voter, VoterMood } from '@/types/game';
-import { VoterType, VoterColor, US, THEM } from '@/types/game';
+import { VoterType, VoterColor } from '@/types/game';
 import { useDragToSelect } from '@/hooks/useDragToSelect';
-import VoterGrid from './VoterGrid/VoterGrid';
-import Board from './Board/Board';
+import VoterGrid from '@/components/VoterGrid/VoterGrid';
+import Board from '@/components/Board/Board';
 
-// Helper function to convert voter type to display color
-const getVoterColor = (voterType: VoterType): VoterColor => {
-  if (voterType === VoterType.Us) return US;
-  if (voterType === VoterType.Them) return THEM;
-  return VoterColor.Empty;
-};
-
-export default function GameBoard() {
+export default function GameBoard({ party }: { party: VoterColor }) {
   const { gameState, currentLevel, gameResult } = useGame();
   const { getTileState, getDistrictForVoter, getTileBorders } = useGameLogic();
+
+  const US = party;
+  const THEM = US === VoterColor.Red ? VoterColor.Blue : VoterColor.Red;
 
   // TODO: delete this hook (game state still relying on it?)
   useInteractionStateMachine();
@@ -28,6 +24,14 @@ export default function GameBoard() {
   const board = useRef<HTMLDivElement>(null);
   const { selection } = useDragToSelect({ board });
 
+  // Helper function to convert voter type to display color
+  const getVoterColor = (voterType: VoterType): VoterColor => {
+    if (voterType === VoterType.Us) return US;
+    if (voterType === VoterType.Them) return THEM;
+    return VoterColor.Empty;
+  };
+
+  // Helper function to get voter mood
   const getMood = (voter: Voter, district?: District | null): VoterMood => {
     if (!district) return 'neutral';
 
