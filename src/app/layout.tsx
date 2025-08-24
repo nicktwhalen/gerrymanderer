@@ -30,6 +30,8 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <div className="halftone"></div>
+        <div className="bg-color"></div>
         <header>
           <Logo home={pathname === '/'} />
         </header>
