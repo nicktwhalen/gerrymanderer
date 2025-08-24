@@ -1,5 +1,5 @@
 import { GameProvider } from '@/context/GameContext';
-import Game from '@/components/Game';
+import Game from '@/components/Game/Game';
 
 export default function Home() {
   return (
