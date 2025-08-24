@@ -4,7 +4,7 @@
   width: 100%;
   max-width: 20rem;
   padding: 1rem;
-  background: #bd9cceff;
+  background: var(--pink);
   place-content: center;
   place-items: center;
 }
