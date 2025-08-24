@@ -55,7 +55,7 @@ export type DistrictWinner = VoterType | 'tie';
 
 export type TileSide = 'top' | 'right' | 'bottom' | 'left';
 
-export type TileBorders = Record<TileSide, boolean>;
+export type TileBorders = Partial<Record<TileSide, boolean>>;
 
 export type VoterMood =
   | 'elated'
