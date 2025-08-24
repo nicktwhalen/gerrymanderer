@@ -103,10 +103,8 @@ export const useDragToSelect = ({ board }: UseDragToSelectProps) => {
       return false;
     }
 
-    // Check adjacency - voter must be adjacent to at least one voter in current selection
-    return Array.from(selection).some((existingVoter) =>
-      isAdjacent(existingVoter, voter),
-    );
+    // Let addMultipleVotersToDistrict handle adjacency checks
+    return true;
   };
 
   // Helper function to check if a voter can be removed from current district
