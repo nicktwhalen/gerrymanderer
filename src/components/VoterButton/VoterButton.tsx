@@ -23,6 +23,10 @@ const getFace = (face: VoterMood) => {
       return '🥺';
     case 'thinking':
       return '🤔';
+    case 'party':
+      return '🥳';
+    case 'dignified':
+      return '🧐';
     default:
       return '😐';
   }

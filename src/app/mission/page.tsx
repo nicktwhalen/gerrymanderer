@@ -63,7 +63,7 @@ export default function Mission() {
         pronunciation="/ˈjerēˌmandəriNG/ (noun)"
         definition="The art of drawing districts so that politicians get to choose their voters — rather than the other way around."
       />
-      <Board interactive={false} style={{ margin: '-1rem auto -1.5rem' }}>
+      <Board interactive={false} style={{ marginBottom: '-1.5rem' }}>
         <VoterGrid cols={5} rows={3}>
           {LEVELS[1].voterGrid.map((row, rowIndex) =>
             row.map((voter, colIndex) => {
@@ -77,7 +77,7 @@ export default function Mission() {
                 <VoterButton
                   key={colIndex}
                   color={color}
-                  size={6}
+                  size={7}
                   borders={WIN_STATE_BORDERS[rowIndex][colIndex]}
                   districtColor={winner}
                   mood={WIN_STATE_MOODS[rowIndex][colIndex]}

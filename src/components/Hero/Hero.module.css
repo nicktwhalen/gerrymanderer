@@ -1,7 +1,7 @@
 .hero {
   max-width: 16rem;
   height: auto;
-  margin: 0 0 -2rem;
+  margin: 1rem 0 -2rem;
   animation: floating 2s ease-in-out infinite;
   aspect-ratio: 1;
   filter: drop-shadow(0 0.1em 0.1em rgb(0 0 0 / 50%));

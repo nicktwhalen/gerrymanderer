@@ -15,6 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
+  const slug = pathname.split('/').pop();
   return (
     <html lang="en">
       <head>
@@ -29,7 +30,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>
+      <body className={slug}>
         <header>
           <Logo home={pathname === '/'} />
         </header>
