@@ -1,9 +1,10 @@
 .hero {
   max-width: 16rem;
   height: auto;
-  margin: 2rem 0 -2rem;
+  margin: 0 0 -2rem;
   animation: floating 2s ease-in-out infinite;
   aspect-ratio: 1;
+  filter: drop-shadow(0 0.1em 0.1em rgb(0 0 0 / 50%));
   transform-origin: center bottom;
   transition-duration: var(--animation-duration);
   transition-property: opacity, scale;

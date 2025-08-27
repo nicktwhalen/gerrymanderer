@@ -3,6 +3,8 @@
   --red: #dc143c;
   --blue: #06c;
   --purple: #814c9c;
+  --white: #f0f0f0;
+  --black: #222;
 
   /* animation */
   --animation-duration: 0.25s;
@@ -13,7 +15,7 @@
   --layer-ui: 30;
 
   /* grid */
-  --grid-cell-border-color: white;
+  --grid-cell-border-color: var(--white);
   --grid-cell-border-image-slice: 5;
   --grid-cell-border-image-size: calc(
     var(--grid-cell-border-image-slice) * 1px

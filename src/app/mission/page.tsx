@@ -57,9 +57,7 @@ export const metadata: Metadata = {
 export default function Mission() {
   return (
     <>
-      <Text>
-        <h2>Your mission</h2>
-      </Text>
+      <Text tag="h2">Your mission</Text>
       <Definition
         term="Gerrymandering"
         pronunciation="/ˈjerēˌmandəriNG/ (noun)"
@@ -89,9 +87,7 @@ export default function Mission() {
           )}
         </VoterGrid>
       </Board>
-      <Text>
-        <p>Win the majority of districts!</p>
-      </Text>
+      <Text>Win the majority of districts!</Text>
       <div className="flex-center" style={{ marginTop: 'auto' }}>
         <Button href="/districts" ariaLabel="Previous: Districts">
           <ArrowLeftIcon />
