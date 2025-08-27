@@ -66,7 +66,7 @@ export default function GameBoard({ party }: { party: VoterColor }) {
     } else if (themVotes > usVotes) {
       return voter.type === VoterType.Them ? 'happy' : 'worried';
     } else {
-      return 'neutral';
+      return 'thinking';
     }
   };
 
@@ -94,8 +94,13 @@ export default function GameBoard({ party }: { party: VoterColor }) {
             const themVotes = district
               ? district.voters.filter((v) => v.type === VoterType.Them).length
               : 0;
-            const winnerColor =
-              usVotes > themVotes ? US : themVotes > usVotes ? THEM : undefined;
+            const winnerColor = district?.isComplete
+              ? usVotes > themVotes
+                ? US
+                : themVotes > usVotes
+                  ? THEM
+                  : VoterColor.Purple
+              : undefined;
 
             // get the mood of the voter
             const mood = getMood(voter, district || currentDistrict);

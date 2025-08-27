@@ -19,7 +19,8 @@
 
 .open,
 .red,
-.blue {
+.blue,
+.purple {
   display: block;
   transition: width 0.25s ease;
 }
@@ -42,6 +43,12 @@
   height: 100%;
   order: 1;
   background: var(--blue);
+}
+
+.purple {
+  height: 100%;
+  order: 4;
+  background: var(--purple);
 }
 
 .ticks {
