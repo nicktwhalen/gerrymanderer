@@ -2,6 +2,7 @@ export enum VoterColor {
   Red = 'red',
   Blue = 'blue',
   Empty = 'empty',
+  Purple = 'purple',
 }
 
 export enum VoterType {

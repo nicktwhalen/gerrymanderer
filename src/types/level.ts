@@ -22,23 +22,21 @@ export const LEVELS: Level[] = [
   {
     id: 2,
     districtCount: 3,
-    districtSize: 5,
+    districtSize: 4,
     voterGrid: [
-      [VoterType.Us, VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Us],
-      [VoterType.Us, VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Us],
-      [VoterType.Us, VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Us],
+      [VoterType.Us, VoterType.Us, VoterType.Them, VoterType.Them],
+      [VoterType.Us, VoterType.Us, VoterType.Them, VoterType.Them],
+      [VoterType.Us, VoterType.Us, VoterType.Them, VoterType.Them],
     ],
   },
   {
     id: 3,
-    districtCount: 5,
+    districtCount: 3,
     districtSize: 5,
     voterGrid: [
-      [VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Them],
-      [VoterType.Them, VoterType.Us, VoterType.Us, VoterType.Them, VoterType.Them],
-      [VoterType.Us, VoterType.Us, VoterType.Us, VoterType.Us, VoterType.Us],
-      [VoterType.Them, VoterType.Us, VoterType.Us, VoterType.Them, VoterType.Them],
-      [VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Them],
+      [VoterType.Us, VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Us],
+      [VoterType.Us, VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Us],
+      [VoterType.Us, VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Us],
     ],
   },
   {
@@ -47,6 +45,18 @@ export const LEVELS: Level[] = [
     districtSize: 5,
     voterGrid: [
       [VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Them],
+      [VoterType.Them, VoterType.Us, VoterType.Us, VoterType.Them, VoterType.Them],
+      [VoterType.Us, VoterType.Us, VoterType.Us, VoterType.Us, VoterType.Us],
+      [VoterType.Them, VoterType.Us, VoterType.Us, VoterType.Them, VoterType.Them],
+      [VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Them],
+    ],
+  },
+  {
+    id: 5,
+    districtCount: 5,
+    districtSize: 5,
+    voterGrid: [
+      [VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Them],
       [VoterType.Us, VoterType.Us, VoterType.Us, VoterType.Us, VoterType.Us],
       [VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Them],
       [VoterType.Us, VoterType.Us, VoterType.Us, VoterType.Us, VoterType.Us],
@@ -54,7 +64,7 @@ export const LEVELS: Level[] = [
     ],
   },
   {
-    id: 5,
+    id: 6,
     districtCount: 5,
     districtSize: 5,
     voterGrid: [
@@ -66,7 +76,7 @@ export const LEVELS: Level[] = [
     ],
   },
   {
-    id: 6,
+    id: 7,
     districtCount: 5,
     districtSize: 7,
     voterGrid: [

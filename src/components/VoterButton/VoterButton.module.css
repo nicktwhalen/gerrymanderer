@@ -52,6 +52,10 @@
   background: var(--blue);
 }
 
+.district-purple {
+  background: var(--purple);
+}
+
 /* completed with district mismatch */
 .original-color {
   position: absolute;
@@ -66,6 +70,10 @@
 
 .blue .original-color {
   background: var(--blue);
+}
+
+.purple .original-color {
+  background: var(--purple);
 }
 
 /* face emoji */
