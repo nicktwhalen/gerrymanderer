@@ -1,12 +1,11 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useGame } from '@/context/GameContext';
 import { useGameLogic } from '@/hooks/useGameLogic';
 import { useInteractionStateMachine } from '@/hooks/useInteractionStateMachine';
 import VoterButton from '@/components/VoterButton/VoterButton';
-import type { District, Voter, VoterMood } from '@/types/game';
-import { VoterType, VoterColor } from '@/types/game';
+import { VoterColor } from '@/types/game';
 import { useDragToSelect } from '@/hooks/useDragToSelect';
 import VoterGrid from '@/components/VoterGrid/VoterGrid';
 import Board from '@/components/Board/Board';
@@ -18,7 +17,14 @@ import {
 } from '@/utils/boardUtils';
 
 export default function GameBoard({ party }: { party: VoterColor }) {
-  const { gameState, currentLevel, gameResult } = useGame();
+  const {
+    showGameResult,
+    gameState,
+    currentLevel,
+    gameResult,
+    nextLevel,
+    hasNextLevel,
+  } = useGame();
   const { getTileState, getDistrictForVoter, getTileBorders } = useGameLogic();
 
   const US = party;
@@ -29,6 +35,16 @@ export default function GameBoard({ party }: { party: VoterColor }) {
 
   const board = useRef<HTMLDivElement>(null);
   const { selection } = useDragToSelect({ board });
+
+  useEffect(() => {
+    if (showGameResult && gameResult?.playerWon && hasNextLevel) {
+      const timer = setTimeout(() => {
+        nextLevel();
+      }, 2500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [showGameResult, gameResult, hasNextLevel, nextLevel]);
 
   return (
     <Board square ref={board} interactive={!gameResult}>
