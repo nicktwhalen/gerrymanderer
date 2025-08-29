@@ -11,6 +11,11 @@ import { useDragToSelect } from '@/hooks/useDragToSelect';
 import VoterGrid from '@/components/VoterGrid/VoterGrid';
 import Board from '@/components/Board/Board';
 import Confetti from '@/components/Confetti/Confetti';
+import {
+  getVoterColor,
+  getDistrictWinnerColor,
+  getVoterMood,
+} from '@/utils/boardUtils';
 
 export default function GameBoard({ party }: { party: VoterColor }) {
   const { gameState, currentLevel, gameResult } = useGame();
@@ -24,51 +29,6 @@ export default function GameBoard({ party }: { party: VoterColor }) {
 
   const board = useRef<HTMLDivElement>(null);
   const { selection } = useDragToSelect({ board });
-
-  // Helper function to convert voter type to display color
-  const getVoterColor = (voterType: VoterType): VoterColor => {
-    if (voterType === VoterType.Us) return US;
-    if (voterType === VoterType.Them) return THEM;
-    return VoterColor.Empty;
-  };
-
-  // Helper function to get voter mood
-  const getMood = (voter: Voter, district?: District | null): VoterMood => {
-    if (!district) return 'neutral';
-
-    // If the game is complete, determine the face based on the game result
-    if (gameResult) {
-      const { usWins, themWins } = gameResult;
-      if (usWins > themWins) {
-        if (voter.type === VoterType.Us) return 'elated';
-        if (voter.type === VoterType.Them) return 'sad';
-      } else if (themWins > usWins) {
-        if (voter.type === VoterType.Us) return 'sad';
-        if (voter.type === VoterType.Them) return 'elated';
-      }
-    }
-
-    // If the voter is not in a district, return neutral
-    if (!district.voters.includes(voter)) return 'neutral';
-
-    // If the district is not complete, return thinking
-    if (!district.isComplete) return 'thinking';
-
-    // If the district is complete, determine the face based on the majority type
-    const usVotes = district.voters.filter(
-      (v) => v.type === VoterType.Us,
-    ).length;
-    const themVotes = district.voters.filter(
-      (v) => v.type === VoterType.Them,
-    ).length;
-    if (usVotes > themVotes) {
-      return voter.type === VoterType.Us ? 'happy' : 'worried';
-    } else if (themVotes > usVotes) {
-      return voter.type === VoterType.Them ? 'happy' : 'worried';
-    } else {
-      return 'neutral';
-    }
-  };
 
   return (
     <Board square ref={board} interactive={!gameResult}>
@@ -86,19 +46,14 @@ export default function GameBoard({ party }: { party: VoterColor }) {
             const selected = selection.has(voter);
             const state = selected ? 'selected' : getTileState(voter);
 
-            // calculate the district winner color
+            // calculate the district winner color and mood
             const district = selected ? currentDistrict : voterDistrict;
-            const usVotes = district
-              ? district.voters.filter((v) => v.type === VoterType.Us).length
-              : 0;
-            const themVotes = district
-              ? district.voters.filter((v) => v.type === VoterType.Them).length
-              : 0;
-            const winnerColor =
-              usVotes > themVotes ? US : themVotes > usVotes ? THEM : undefined;
-
-            // get the mood of the voter
-            const mood = getMood(voter, district || currentDistrict);
+            const winnerColor = getDistrictWinnerColor(district, US, THEM);
+            const mood = getVoterMood(
+              voter,
+              district || currentDistrict,
+              gameResult,
+            );
 
             // get the district borders of the voter
             const borders = getTileBorders(
@@ -111,7 +66,7 @@ export default function GameBoard({ party }: { party: VoterColor }) {
                 key={voter.id}
                 data-voter-id={voter.id}
                 borders={borders}
-                color={getVoterColor(voter.type)}
+                color={getVoterColor(voter.type, US, THEM)}
                 districtColor={winnerColor}
                 mood={mood}
                 state={state}
