@@ -51,8 +51,11 @@ export const getVoterMood = (
     }
   }
 
-  // If the voter is not in a district, return neutral
-  if (!district.voters.includes(voter)) return 'neutral';
+  // Check if voter is in district by position
+  const isVoterInDistrict = district.voters.some(
+    (v) => v.row === voter.row && v.col === voter.col,
+  );
+  if (!isVoterInDistrict) return 'neutral';
 
   // If the district is not complete, return thinking
   if (!district.isComplete) return 'thinking';

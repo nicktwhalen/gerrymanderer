@@ -140,10 +140,14 @@ const Board = React.forwardRef<HTMLDivElement, BoardProps>(
                   return themVotes > usVotes;
                 }).length;
 
-                const gameResult = {
-                  usWins: usDistrictWins,
-                  themWins: themDistrictWins,
-                };
+                // Only show final game emotions when all districts are complete
+                const gameResult =
+                  currentMoveIndex === moves.length - 1
+                    ? {
+                        usWins: usDistrictWins,
+                        themWins: themDistrictWins,
+                      }
+                    : null;
                 const mood = getVoterMood(voter, voterDistrict, gameResult);
                 const borders = getTileBorders(voter, voterDistrict, board);
 
