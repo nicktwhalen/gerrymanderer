@@ -12,7 +12,7 @@ interface GameStatsProps {
 }
 
 export default function GameStats({ party }: GameStatsProps) {
-  const { gameState, resetGame, gameResult } = useGame();
+  const { gameState, resetGame, currentLevel, gameResult } = useGame();
   const { districts, totalDistricts } = gameState;
 
   const getDistrictMajority = (district: District): DistrictWinner => {
@@ -48,6 +48,11 @@ export default function GameStats({ party }: GameStatsProps) {
         ariaLabel="Settings"
         href={isPlayerWon ? undefined : '/settings'}
         disabled={isPlayerWon}
+        onClick={() => {
+          if (typeof window !== 'undefined') {
+            sessionStorage.setItem('returnLevel', currentLevel.id.toString());
+          }
+        }}
       >
         <SettingsIcon />
       </Button>
