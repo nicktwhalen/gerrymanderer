@@ -1,5 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { VoterColor } from '@/types/game';
 import Board from '@/components/Board/Board';
 import Text from '@/components/Text/Text';
@@ -12,6 +13,17 @@ export type PartyPickerProps = {};
 
 export default function PartyPicker(props: PartyPickerProps) {
   const router = useRouter();
+  const [returnPath, setReturnPath] = useState('/game');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const returnLevel = sessionStorage.getItem('returnLevel');
+      if (returnLevel) {
+        setReturnPath(`/game?level=${returnLevel}`);
+        sessionStorage.removeItem('returnLevel');
+      }
+    }
+  }, []);
 
   return (
     <>
@@ -24,7 +36,7 @@ export default function PartyPicker(props: PartyPickerProps) {
           <VoterButton
             onClick={() => {
               localStorage.setItem('party', VoterColor.Blue);
-              router.push('/game');
+              router.push(returnPath);
             }}
             color={VoterColor.Blue}
             mood="party"
@@ -33,7 +45,7 @@ export default function PartyPicker(props: PartyPickerProps) {
           <VoterButton
             onClick={() => {
               localStorage.setItem('party', VoterColor.Red);
-              router.push('/game');
+              router.push(returnPath);
             }}
             color={VoterColor.Red}
             mood="dignified"
