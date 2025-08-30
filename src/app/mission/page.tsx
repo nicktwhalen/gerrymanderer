@@ -6,9 +6,7 @@ import Definition from '@/components/Definition/Definition';
 import ArrowRightIcon from '@/icons/ArrowRightIcon';
 import ArrowLeftIcon from '@/icons/ArrowLeftIcon';
 import Board from '@/components/Board/Board';
-import VoterGrid from '@/components/VoterGrid/VoterGrid';
-import VoterButton from '@/components/VoterButton/VoterButton';
-import { THEM, US, VoterType, VoterColor, Move } from '@/types/game';
+import { US, Move } from '@/types/game';
 
 const WINNING_MOVES: Move[] = [
   {
@@ -59,7 +57,7 @@ export default function Mission() {
         interactive={false}
         style={{ marginBottom: '-1.5rem' }}
         moves={WINNING_MOVES}
-        initialLevel={LEVELS[1]}
+        initialLevel={LEVELS[2]}
         party={US}
       />
       <Text>Win the majority of districts!</Text>

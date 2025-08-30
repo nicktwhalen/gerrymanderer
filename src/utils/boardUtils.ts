@@ -29,7 +29,11 @@ export const getDistrictWinnerColor = (
     (v) => v.type === VoterType.Them,
   ).length;
 
-  return usVotes > themVotes ? US : themVotes > usVotes ? THEM : undefined;
+  return usVotes > themVotes
+    ? US
+    : themVotes > usVotes
+      ? THEM
+      : VoterColor.Purple;
 };
 
 export const getVoterMood = (
