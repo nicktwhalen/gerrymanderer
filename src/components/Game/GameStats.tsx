@@ -32,12 +32,7 @@ export default function GameStats({ party }: GameStatsProps) {
   const usDistricts = completedDistricts.filter(
     (d) => getDistrictMajority(d) === VoterType.Us,
   ).length;
-  const themDistricts = completedDistricts.filter(
-    (d) => getDistrictMajority(d) === VoterType.Them,
-  ).length;
-
-  const redDistricts = party === VoterColor.Red ? usDistricts : themDistricts;
-  const blueDistricts = party === VoterColor.Red ? themDistricts : usDistricts;
+  const districtsNeeded = Math.floor(totalDistricts / 2) + 1;
 
   // Disable buttons when player has won
   const isPlayerWon = gameResult?.playerWon;
@@ -56,7 +51,11 @@ export default function GameStats({ party }: GameStatsProps) {
       >
         <SettingsIcon />
       </Button>
-      <Meter red={redDistricts} blue={blueDistricts} total={totalDistricts} />
+      <Meter
+        party={party}
+        districtsWon={usDistricts}
+        districtsNeeded={districtsNeeded}
+      />
       <Button
         ariaLabel="Reset board"
         onClick={isPlayerWon ? undefined : resetGame}

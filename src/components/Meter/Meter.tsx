@@ -1,37 +1,26 @@
+import { VoterColor } from '@/types/game';
 import styles from './Meter.module.css';
 
 type MeterProps = {
-  red: number;
-  blue: number;
-  total: number;
+  party: VoterColor;
+  districtsWon: number;
+  districtsNeeded: number;
 };
 
-export default function Meter({ red, blue, total }: MeterProps) {
+export default function Meter({
+  party,
+  districtsWon,
+  districtsNeeded,
+}: MeterProps) {
   return (
     <div className={styles.container}>
-      <div className="visually-hidden">
-        <h2>Districts:</h2>
-        <ul>
-          <li>{total - red - blue} open districts</li>
-          <li>{blue} blue districts</li>
-          <li>{red} red districts</li>
-        </ul>
-      </div>
       <div className={styles.meter}>
         <div
-          className={styles.open}
-          style={{ width: `${((total - red - blue) / total) * 100}%` }}
-        ></div>
-        <div
-          className={styles.blue}
-          style={{ width: `${(blue / total) * 100}%` }}
-        ></div>
-        <div
-          className={styles.red}
-          style={{ width: `${(red / total) * 100}%` }}
+          className={styles[party]}
+          style={{ width: `${(districtsWon / districtsNeeded) * 100}%` }}
         ></div>
         <div className={styles.ticks}>
-          {Array.from({ length: total + 1 }, (_, index) => (
+          {Array.from({ length: districtsNeeded + 1 }, (_, index) => (
             <div key={index} className={styles.tick} />
           ))}
         </div>
