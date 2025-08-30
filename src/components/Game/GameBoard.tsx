@@ -72,16 +72,43 @@ export default function GameBoard({ party }: { party: VoterColor }) {
             );
 
             // get the district borders of the voter
-            const borders = getTileBorders(
+            let previewBorders = getTileBorders(
               voter,
               district || gameState.currentDistrict || undefined,
             );
+
+            if (
+              selected ||
+              (currentDistrict &&
+                currentDistrict.voters.some((v) => v.id === voter.id))
+            ) {
+              // Include both committed district voters and current selection
+              const allVoters = [
+                ...(currentDistrict?.voters || []),
+                ...Array.from(selection),
+              ];
+
+              const hasVoterAt = (row: number, col: number) =>
+                allVoters.some((v) => v.row === row && v.col === col);
+
+              const hasAbove = hasVoterAt(voter.row - 1, voter.col);
+              const hasBelow = hasVoterAt(voter.row + 1, voter.col);
+              const hasLeft = hasVoterAt(voter.row, voter.col - 1);
+              const hasRight = hasVoterAt(voter.row, voter.col + 1);
+
+              previewBorders = {
+                top: !hasAbove,
+                bottom: !hasBelow,
+                left: !hasLeft,
+                right: !hasRight,
+              };
+            }
 
             return (
               <VoterButton
                 key={voter.id}
                 data-voter-id={voter.id}
-                borders={borders}
+                borders={previewBorders}
                 color={getVoterColor(voter.type, US, THEM)}
                 districtColor={winnerColor}
                 mood={mood}
