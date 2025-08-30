@@ -72,13 +72,11 @@ export default function GameBoard({ party }: { party: VoterColor }) {
             );
 
             // get the district borders of the voter
-            const borders = getTileBorders(
+            let previewBorders = getTileBorders(
               voter,
               district || gameState.currentDistrict || undefined,
             );
 
-            // add preview borders for district + selection shape
-            let previewBorders = borders;
             if (
               selected ||
               (currentDistrict &&
