@@ -1,13 +1,15 @@
 import styles from './Meter.module.css';
+import { VoterColor } from '@/types/game';
 
 type MeterProps = {
   red: number;
   blue: number;
   purple: number;
   total: number;
+  party: VoterColor;
 };
 
-export default function Meter({ red, blue, purple, total }: MeterProps) {
+export default function Meter({ red, blue, purple, total, party }: MeterProps) {
   // Pie chart constants
   const CENTER_X = 100;
   const CENTER_Y = 120;
@@ -49,6 +51,67 @@ export default function Meter({ red, blue, purple, total }: MeterProps) {
   // Starting angle (pointing left = 180 degrees)
   const START_ANGLE = 180;
 
+  // Helper function to get Us/Them district mapping based on party
+  const getDistrictMapping = () => {
+    if (party === VoterColor.Red) {
+      return {
+        usColor: 'red',
+        usDistricts: red,
+        nonUsDistricts: blue + purple,
+        nonUsOrder: [
+          ...Array(blue).fill('blue'),
+          ...Array(purple).fill('purple'),
+        ],
+      };
+    } else {
+      return {
+        usColor: 'blue',
+        usDistricts: blue,
+        nonUsDistricts: red + purple,
+        nonUsOrder: [
+          ...Array(red).fill('red'),
+          ...Array(purple).fill('purple'),
+        ],
+      };
+    }
+  };
+
+  // Helper function to render Us districts (clockwise)
+  const renderUsDistricts = (usColor: string, usDistricts: number) => {
+    const sections = [];
+    for (let i = 0; i < usDistricts && i < total; i++) {
+      const currentAngle = START_ANGLE + i * sectionAngle;
+      const nextAngle = START_ANGLE + (i + 1) * sectionAngle;
+      sections.push(
+        createPieSection(currentAngle, nextAngle, 1, usColor, `us-${i}`),
+      );
+    }
+    return sections;
+  };
+
+  // Helper function to render non-Us districts (counter-clockwise)
+  const renderNonUsDistricts = (
+    nonUsDistricts: number,
+    nonUsOrder: string[],
+    usDistricts: number,
+  ) => {
+    const sections = [];
+    for (let i = 0; i < nonUsDistricts && total - usDistricts - i > 0; i++) {
+      const currentAngle = START_ANGLE - i * sectionAngle;
+      const nextAngle = START_ANGLE - (i + 1) * sectionAngle;
+      sections.push(
+        createPieSection(
+          currentAngle,
+          nextAngle,
+          0,
+          nonUsOrder[i],
+          `nonus-${i}`,
+        ),
+      );
+    }
+    return sections;
+  };
+
   return (
     <div className={styles.container}>
       <div className="visually-hidden">
@@ -73,45 +136,13 @@ export default function Meter({ red, blue, purple, total }: MeterProps) {
 
           {/* Dynamic pie sections */}
           {(() => {
-            const sections = [];
+            const { usColor, usDistricts, nonUsDistricts, nonUsOrder } =
+              getDistrictMapping();
 
-            // Blue districts - fill clockwise from left
-            for (let i = 0; i < blue && i < total; i++) {
-              const currentAngle = START_ANGLE + i * sectionAngle;
-              const nextAngle = START_ANGLE + (i + 1) * sectionAngle;
-              sections.push(
-                createPieSection(
-                  currentAngle,
-                  nextAngle,
-                  1,
-                  'blue',
-                  `blue-${i}`,
-                ),
-              );
-            }
-
-            // Red/Purple districts - fill counter-clockwise from left
-            const nonBlueDistricts = red + purple;
-            const redPurpleOrder = [
-              ...Array(red).fill('red'),
-              ...Array(purple).fill('purple'),
+            return [
+              ...renderUsDistricts(usColor, usDistricts),
+              ...renderNonUsDistricts(nonUsDistricts, nonUsOrder, usDistricts),
             ];
-
-            for (let i = 0; i < nonBlueDistricts && total - blue - i > 0; i++) {
-              const currentAngle = START_ANGLE - i * sectionAngle;
-              const nextAngle = START_ANGLE - (i + 1) * sectionAngle;
-              sections.push(
-                createPieSection(
-                  currentAngle,
-                  nextAngle,
-                  0,
-                  redPurpleOrder[i],
-                  `nonblue-${i}`,
-                ),
-              );
-            }
-
-            return sections;
           })()}
 
           {/* Circle border on top */}

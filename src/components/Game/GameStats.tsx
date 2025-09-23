@@ -52,6 +52,7 @@ export default function GameStats({ party }: GameStatsProps) {
         blue={blueDistricts}
         purple={tiedDistricts}
         total={totalDistricts}
+        party={party}
       />
       <Button ariaLabel="Reset board" onClick={resetGame}>
         <ResetIcon />
