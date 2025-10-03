@@ -1,13 +1,13 @@
 .container {
   z-index: var(--layer-text);
   display: block;
-  width: 9rem;
+  width: 7.2rem;
 }
 
 .pie-chart {
   position: relative;
-  width: 9rem;
-  height: 10.35rem;
+  width: 7.2rem;
+  height: 8.28rem;
   margin: 0 auto -0.5rem;
 }
 

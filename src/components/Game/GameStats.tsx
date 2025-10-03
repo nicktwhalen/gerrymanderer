@@ -43,7 +43,7 @@ export default function GameStats({ party }: GameStatsProps) {
   const blueDistricts = party === VoterColor.Red ? themDistricts : usDistricts;
 
   return (
-    <div className="flex-center" style={{ marginTop: '-.5rem' }}>
+    <div className="flex-center" style={{ marginTop: '-.25rem' }}>
       <Button ariaLabel="Settings" href="/settings">
         <SettingsIcon />
       </Button>
