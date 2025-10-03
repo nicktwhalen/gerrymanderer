@@ -9,7 +9,7 @@ import ArrowLeftIcon from '@/icons/ArrowLeftIcon';
 export const metadata: Metadata = {
   title: 'The Gerrymanderer: Draw the district',
   description:
-    'A group of voters where the majority wins—often drawn with the creativity of a villainous Michelangelo.',
+    'A geographical group of voters where the majority wins—often drawn with the creativity of a villainous Michelangelo.',
 };
 
 export default function Districts() {
@@ -19,7 +19,7 @@ export default function Districts() {
       <Definition
         term="District"
         pronunciation="/ˈdistrikt/ (noun)"
-        definition="A group of voters where the majority wins—often drawn with the creativity of a villainous Michelangelo."
+        definition="A geographical group of voters where the majority wins—often drawn with the creativity of a villainous Michelangelo."
       />
       <DistrictAnimation />
       <Text>Tap or swipe to draw a district.</Text>

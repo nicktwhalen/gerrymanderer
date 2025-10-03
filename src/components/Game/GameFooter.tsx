@@ -10,14 +10,7 @@ interface GameFooterProps {
 }
 
 export default function GameFooter({ party }: GameFooterProps) {
-  const {
-    gameState,
-    gameResult,
-    showGameResult,
-    hasNextLevel,
-    nextLevel,
-    resetGame,
-  } = useGame();
+  const { gameState, gameResult, showGameResult } = useGame();
   const { requiredDistrictSize, totalDistricts } = gameState;
   const { playerWon } = gameResult || {};
 
@@ -31,24 +24,15 @@ export default function GameFooter({ party }: GameFooterProps) {
 
   if (playerWon) {
     return (
-      <>
-        <Text>
-          <span className={`text-${party}`}>You</span> win! Take that,
-          Democracy!
-        </Text>
-        <Button onClick={hasNextLevel ? nextLevel : resetGame}>
-          {hasNextLevel ? 'Next level' : 'Play again'}
-        </Button>
-      </>
+      <Text>
+        <span className={`text-${party}`}>You</span> win! Take that, Democracy!
+      </Text>
     );
   } else {
     return (
-      <>
-        <Text>
-          <span className={`text-${party}`}>You</span> lose! Democracy prevails.
-        </Text>
-        <Button onClick={resetGame}>Try again</Button>
-      </>
+      <Text>
+        <span className={`text-${party}`}>You</span> lose! Democracy prevails.
+      </Text>
     );
   }
 }

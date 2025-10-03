@@ -103,7 +103,20 @@ export const useDragToSelect = ({ board }: UseDragToSelectProps) => {
       return false;
     }
 
-    // let addMultipleVotersToDistrict handle complex logic
+    // Check adjacency for drag operations - voter must be adjacent to existing district or current selection
+    const currentDistrictVoters = gameState.currentDistrict?.voters || [];
+    const selectionVoters = Array.from(selection);
+    const allExistingVoters = [...currentDistrictVoters, ...selectionVoters];
+
+    if (allExistingVoters.length > 0) {
+      const voterIsAdjacent = allExistingVoters.some((existingVoter) =>
+        isAdjacent(existingVoter, voter),
+      );
+      if (!voterIsAdjacent) {
+        return false;
+      }
+    }
+
     return true;
   };
 

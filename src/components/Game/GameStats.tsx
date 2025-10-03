@@ -12,7 +12,7 @@ interface GameStatsProps {
 }
 
 export default function GameStats({ party }: GameStatsProps) {
-  const { gameState, resetGame } = useGame();
+  const { gameState, resetGame, currentLevel, gameResult } = useGame();
   const { districts, totalDistricts } = gameState;
 
   const getDistrictMajority = (district: District): DistrictWinner => {
@@ -42,9 +42,21 @@ export default function GameStats({ party }: GameStatsProps) {
   const redDistricts = party === VoterColor.Red ? usDistricts : themDistricts;
   const blueDistricts = party === VoterColor.Red ? themDistricts : usDistricts;
 
+  // Disable buttons when player has won
+  const isPlayerWon = gameResult?.playerWon;
+
   return (
-    <div className="flex-center" style={{ marginTop: '-.25rem' }}>
-      <Button ariaLabel="Settings" href="/settings">
+    <div className="flex-center" style={{ marginTop: '-.5rem' }}>
+      <Button
+        ariaLabel="Settings"
+        href={isPlayerWon ? undefined : '/settings'}
+        disabled={isPlayerWon}
+        onClick={() => {
+          if (typeof window !== 'undefined') {
+            sessionStorage.setItem('returnLevel', currentLevel.id.toString());
+          }
+        }}
+      >
         <SettingsIcon />
       </Button>
       <Meter
@@ -54,7 +66,11 @@ export default function GameStats({ party }: GameStatsProps) {
         total={totalDistricts}
         party={party}
       />
-      <Button ariaLabel="Reset board" onClick={resetGame}>
+      <Button
+        ariaLabel="Reset board"
+        onClick={isPlayerWon ? undefined : resetGame}
+        disabled={isPlayerWon}
+      >
         <ResetIcon />
       </Button>
     </div>

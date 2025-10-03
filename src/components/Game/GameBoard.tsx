@@ -1,19 +1,30 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useGame } from '@/context/GameContext';
 import { useGameLogic } from '@/hooks/useGameLogic';
 import { useInteractionStateMachine } from '@/hooks/useInteractionStateMachine';
 import VoterButton from '@/components/VoterButton/VoterButton';
-import type { District, Voter, VoterMood } from '@/types/game';
-import { VoterType, VoterColor } from '@/types/game';
+import { VoterColor } from '@/types/game';
 import { useDragToSelect } from '@/hooks/useDragToSelect';
 import VoterGrid from '@/components/VoterGrid/VoterGrid';
 import Board from '@/components/Board/Board';
 import Confetti from '@/components/Confetti/Confetti';
+import {
+  getVoterColor,
+  getDistrictWinnerColor,
+  getVoterMood,
+} from '@/utils/boardUtils';
 
 export default function GameBoard({ party }: { party: VoterColor }) {
-  const { gameState, currentLevel, gameResult } = useGame();
+  const {
+    showGameResult,
+    gameState,
+    currentLevel,
+    gameResult,
+    nextLevel,
+    hasNextLevel,
+  } = useGame();
   const { getTileState, getDistrictForVoter, getTileBorders } = useGameLogic();
 
   const US = party;
@@ -25,50 +36,15 @@ export default function GameBoard({ party }: { party: VoterColor }) {
   const board = useRef<HTMLDivElement>(null);
   const { selection } = useDragToSelect({ board });
 
-  // Helper function to convert voter type to display color
-  const getVoterColor = (voterType: VoterType): VoterColor => {
-    if (voterType === VoterType.Us) return US;
-    if (voterType === VoterType.Them) return THEM;
-    return VoterColor.Empty;
-  };
+  useEffect(() => {
+    if (showGameResult && gameResult?.playerWon && hasNextLevel) {
+      const timer = setTimeout(() => {
+        nextLevel();
+      }, 2500);
 
-  // Helper function to get voter mood
-  const getMood = (voter: Voter, district?: District | null): VoterMood => {
-    if (!district) return 'neutral';
-
-    // If the game is complete, determine the face based on the game result
-    if (gameResult) {
-      const { usWins, themWins } = gameResult;
-      if (usWins > themWins) {
-        if (voter.type === VoterType.Us) return 'elated';
-        if (voter.type === VoterType.Them) return 'sad';
-      } else if (themWins > usWins) {
-        if (voter.type === VoterType.Us) return 'sad';
-        if (voter.type === VoterType.Them) return 'elated';
-      }
+      return () => clearTimeout(timer);
     }
-
-    // If the voter is not in a district, return neutral
-    if (!district.voters.includes(voter)) return 'neutral';
-
-    // If the district is not complete, return thinking
-    if (!district.isComplete) return 'thinking';
-
-    // If the district is complete, determine the face based on the majority type
-    const usVotes = district.voters.filter(
-      (v) => v.type === VoterType.Us,
-    ).length;
-    const themVotes = district.voters.filter(
-      (v) => v.type === VoterType.Them,
-    ).length;
-    if (usVotes > themVotes) {
-      return voter.type === VoterType.Us ? 'happy' : 'worried';
-    } else if (themVotes > usVotes) {
-      return voter.type === VoterType.Them ? 'happy' : 'worried';
-    } else {
-      return 'thinking';
-    }
-  };
+  }, [showGameResult, gameResult, hasNextLevel, nextLevel]);
 
   return (
     <Board square ref={board} interactive={!gameResult}>
@@ -86,37 +62,54 @@ export default function GameBoard({ party }: { party: VoterColor }) {
             const selected = selection.has(voter);
             const state = selected ? 'selected' : getTileState(voter);
 
-            // calculate the district winner color
+            // calculate the district winner color and mood
             const district = selected ? currentDistrict : voterDistrict;
-            const usVotes = district
-              ? district.voters.filter((v) => v.type === VoterType.Us).length
-              : 0;
-            const themVotes = district
-              ? district.voters.filter((v) => v.type === VoterType.Them).length
-              : 0;
-            const winnerColor = district?.isComplete
-              ? usVotes > themVotes
-                ? US
-                : themVotes > usVotes
-                  ? THEM
-                  : VoterColor.Purple
-              : undefined;
-
-            // get the mood of the voter
-            const mood = getMood(voter, district || currentDistrict);
+            const winnerColor = getDistrictWinnerColor(district, US, THEM);
+            const mood = getVoterMood(
+              voter,
+              district || currentDistrict,
+              gameResult,
+            );
 
             // get the district borders of the voter
-            const borders = getTileBorders(
+            let previewBorders = getTileBorders(
               voter,
               district || gameState.currentDistrict || undefined,
             );
+
+            if (
+              selected ||
+              (currentDistrict &&
+                currentDistrict.voters.some((v) => v.id === voter.id))
+            ) {
+              // Include both committed district voters and current selection
+              const allVoters = [
+                ...(currentDistrict?.voters || []),
+                ...Array.from(selection),
+              ];
+
+              const hasVoterAt = (row: number, col: number) =>
+                allVoters.some((v) => v.row === row && v.col === col);
+
+              const hasAbove = hasVoterAt(voter.row - 1, voter.col);
+              const hasBelow = hasVoterAt(voter.row + 1, voter.col);
+              const hasLeft = hasVoterAt(voter.row, voter.col - 1);
+              const hasRight = hasVoterAt(voter.row, voter.col + 1);
+
+              previewBorders = {
+                top: !hasAbove,
+                bottom: !hasBelow,
+                left: !hasLeft,
+                right: !hasRight,
+              };
+            }
 
             return (
               <VoterButton
                 key={voter.id}
                 data-voter-id={voter.id}
-                borders={borders}
-                color={getVoterColor(voter.type)}
+                borders={previewBorders}
+                color={getVoterColor(voter.type, US, THEM)}
                 districtColor={winnerColor}
                 mood={mood}
                 state={state}

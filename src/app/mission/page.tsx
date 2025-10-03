@@ -8,44 +8,36 @@ import ArrowLeftIcon from '@/icons/ArrowLeftIcon';
 import Board from '@/components/Board/Board';
 import VoterGrid from '@/components/VoterGrid/VoterGrid';
 import VoterButton from '@/components/VoterButton/VoterButton';
-import { THEM, US, VoterType } from '@/types/game';
+import { THEM, US, VoterType, VoterColor, Move } from '@/types/game';
 
-const WIN_STATE_DISTRICTS = [
-  [VoterType.Us, VoterType.Them, VoterType.Them, VoterType.Them, VoterType.Us],
-  [VoterType.Us, VoterType.Us, VoterType.Them, VoterType.Them, VoterType.Us],
-  [VoterType.Us, VoterType.Us, VoterType.Us, VoterType.Us, VoterType.Us],
-];
-
-import type { VoterMood } from '@/types/game';
-
-const WIN_STATE_MOODS: VoterMood[][] = [
-  ['elated', 'sad', 'sad', 'sad', 'elated'],
-  ['elated', 'sad', 'sad', 'sad', 'elated'],
-  ['elated', 'sad', 'sad', 'sad', 'elated'],
-];
-
-const WIN_STATE_BORDERS = [
-  [
-    { top: true, left: true, right: true },
-    { top: true, bottom: true },
-    { top: true },
-    { top: true, right: true },
-    { top: true, right: true },
-  ],
-  [
-    { left: true },
-    { right: true },
-    { bottom: true },
-    { bottom: true, right: true },
-    { right: true },
-  ],
-  [
-    { bottom: true, left: true },
-    { bottom: true, right: true },
-    { bottom: true },
-    { bottom: true },
-    { bottom: true, right: true },
-  ],
+const WINNING_MOVES: Move[] = [
+  {
+    voters: [
+      { row: 0, col: 0 },
+      { row: 1, col: 0 },
+      { row: 2, col: 0 },
+      { row: 1, col: 1 },
+      { row: 2, col: 1 },
+    ],
+  },
+  {
+    voters: [
+      { row: 0, col: 4 },
+      { row: 1, col: 4 },
+      { row: 2, col: 2 },
+      { row: 2, col: 3 },
+      { row: 2, col: 4 },
+    ],
+  },
+  {
+    voters: [
+      { row: 0, col: 1 },
+      { row: 0, col: 2 },
+      { row: 0, col: 3 },
+      { row: 1, col: 2 },
+      { row: 1, col: 3 },
+    ],
+  },
 ];
 
 export const metadata: Metadata = {
@@ -63,30 +55,13 @@ export default function Mission() {
         pronunciation="/ˈjerēˌmandəriNG/ (noun)"
         definition="The art of drawing districts so that politicians get to choose their voters — rather than the other way around."
       />
-      <Board interactive={false} style={{ marginBottom: '-1.5rem' }}>
-        <VoterGrid cols={5} rows={3}>
-          {LEVELS[1].voterGrid.map((row, rowIndex) =>
-            row.map((voter, colIndex) => {
-              const color = voter === VoterType.Us ? US : THEM;
-              const district =
-                WIN_STATE_DISTRICTS[rowIndex][colIndex] === VoterType.Us
-                  ? US
-                  : THEM;
-              const winner = district === US ? US : THEM;
-              return (
-                <VoterButton
-                  key={colIndex}
-                  color={color}
-                  size={7}
-                  borders={WIN_STATE_BORDERS[rowIndex][colIndex]}
-                  districtColor={winner}
-                  mood={WIN_STATE_MOODS[rowIndex][colIndex]}
-                />
-              );
-            }),
-          )}
-        </VoterGrid>
-      </Board>
+      <Board
+        interactive={false}
+        style={{ marginBottom: '-1.5rem' }}
+        moves={WINNING_MOVES}
+        initialLevel={LEVELS[1]}
+        party={US}
+      />
       <Text>Win the majority of districts!</Text>
       <div className="flex-center" style={{ marginTop: 'auto' }}>
         <Button href="/districts" ariaLabel="Previous: Districts">

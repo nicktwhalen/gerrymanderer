@@ -42,6 +42,10 @@ export interface Position {
   col: number;
 }
 
+export interface Move {
+  voters: Position[];
+}
+
 export interface GameResult {
   usWins: number;
   themWins: number;
