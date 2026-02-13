@@ -35,6 +35,9 @@ export default function GameStats({ party }: GameStatsProps) {
   const themDistricts = completedDistricts.filter(
     (d) => getDistrictMajority(d) === VoterType.Them,
   ).length;
+  const tiedDistricts = completedDistricts.filter(
+    (d) => getDistrictMajority(d) === 'tie',
+  ).length;
 
   const redDistricts = party === VoterColor.Red ? usDistricts : themDistricts;
   const blueDistricts = party === VoterColor.Red ? themDistricts : usDistricts;
@@ -56,7 +59,13 @@ export default function GameStats({ party }: GameStatsProps) {
       >
         <SettingsIcon />
       </Button>
-      <Meter red={redDistricts} blue={blueDistricts} total={totalDistricts} />
+      <Meter
+        red={redDistricts}
+        blue={blueDistricts}
+        purple={tiedDistricts}
+        total={totalDistricts}
+        party={party}
+      />
       <Button
         ariaLabel="Reset board"
         onClick={isPlayerWon ? undefined : resetGame}
