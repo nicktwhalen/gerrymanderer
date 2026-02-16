@@ -1,6 +1,7 @@
 export enum VoterColor {
   Red = 'red',
   Blue = 'blue',
+  Purple = 'purple',
   Empty = 'empty',
 }
 
